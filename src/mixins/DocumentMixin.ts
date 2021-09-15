@@ -1,6 +1,3 @@
-import $ from 'jquery'
-import axios from 'axios';
-
 class DocumentMixin {
   getUrlServer(){
     const url = window.location.hostname;
