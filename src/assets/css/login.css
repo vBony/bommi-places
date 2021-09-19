@@ -11,7 +11,6 @@
     width: 100%;
     padding: 10px;
     border-radius: 5px;
-
 }
 
 .ipt:focus {
@@ -38,23 +37,34 @@
 }
 
 #sub-cont-area {
-    margin-top: 250px;
     width: 500px;
-
 }
 
 #cont-area {
-    width: 100%;
-    height: 100%;
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px;
+    height: 100vh !important;
 }
 
 .is-invalid {
     border: 1px red solid !important;
+    color: red
+}
+
+.is-invalid::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: red;
+    opacity: 1; /* Firefox */
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed !important;
+    flex-direction: column;
+    z-index: 998;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.603);
+    transition: 0.2s;
 }
 
 @media (max-width: 505px){
