@@ -1,13 +1,47 @@
+import store from '@/store'
+import axios from 'axios'
+import router from '@/router'
+import $ from 'jquery'
+import Clientes from '@/entities/Clientes'
 class DocumentMixin {
-  getUrlServer(){
-    const url = window.location.hostname;
-    
-    if(url != 'localhost'){
-      return 'https://api.ubarber.com.br/'
-    }else {
-      return 'http://localhost:8012/'
-    }
-  }
+
+	public clientes = new Clientes()
+
+	getUrlServer(){
+		const url = window.location.hostname;
+		
+		if(url != 'localhost'){
+			return 'https://api.ubarber.com.br/'
+		}else {
+			return 'http://localhost:8012/'
+		}
+	}
+
+	showLoading(type = null){
+		if(!type){
+			$('.loading').fadeIn('fast')
+		}
+	}
+
+	hideLoading(type = null){
+		if(!type){
+			$('.loading').fadeOut('fast')
+		}
+	}
+
+	getUserDataByToken(){
+		const token = store.getters.getAccessToken
+
+		axios.post(this.getUrlServer()+'user/data', {access_token: token})
+		.then(response => {
+			store.dispatch('setAccessToken', response.data.access_token)
+			store.dispatch('setUserData', response.data.user_data)
+			store.dispatch('setSystemData', response.data.system)
+		})
+		.catch(() => {
+			router.replace('/login')
+		})
+	}
 }
 
 export default DocumentMixin

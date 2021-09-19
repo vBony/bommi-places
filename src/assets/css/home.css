@@ -1,0 +1,12 @@
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed !important;
+    flex-direction: column;
+    z-index: 998;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.603);
+    transition: 0.2s;
+}
