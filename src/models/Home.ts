@@ -1,14 +1,22 @@
 import DocumentMixin from '@/mixins/DocumentMixin'
 // import axios from 'axios'
-import {Vue} from 'vue-class-component'
+import {Vue, Options} from 'vue-class-component'
 import router from '@/router'
 // import Clientes from '@/entities/Clientes'
 import store from '@/store'
 import $ from 'jquery'
 import Swal from 'sweetalert2'
+import Header from '../components/Header.vue'
+
+@Options({
+    components: {
+      Header
+    },
+})
 
 class Login extends Vue{
     public dm = new DocumentMixin()
+    public url_server = this.dm.getUrlServer()
 
     public user = {}
     public system = {}
@@ -18,6 +26,10 @@ class Login extends Vue{
     public error = null
 
     public access_token = null
+
+    beforeCreate(){
+        document.querySelector('body')!.setAttribute('style', 'background-color:#F5F6FA !important')
+    }
     
     created(){
         this.getInicialData()
@@ -74,9 +86,9 @@ class Login extends Vue{
             showCancelButton: true,
             confirmButtonText: 'Sim 😥',
             cancelButtonText: `Não 🥰`,
-          }).then(async (result) => {
+          }).then( (result) => {
             if (result.isConfirmed) {
-                await $.ajax({
+                $.ajax({
                     type: "POST",
                     url: this.dm.getUrlServer()+'user/logout',
                     data: {access_token: token},
@@ -88,8 +100,6 @@ class Login extends Vue{
                     },
                     dataType: 'json',
                 });
-                
-                router.replace({name: 'Login'})
             }
         })
 

@@ -1,0 +1,18 @@
+#logo > img {
+    height: 70px;
+}
+
+.ajust-arrow:after{
+    margin-top: 3px !important;
+    margin-left: 10px;
+}
+
+#user_logged_avatar > img{
+    height: 50px;
+    object-fit: cover;
+}
+
+.header-app{
+    font-size: 16px !important;
+    /* color: #4a4a4a !important; */
+}
