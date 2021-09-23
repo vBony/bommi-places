@@ -10,3 +10,7 @@
     background-color: rgba(0, 0, 0, 0.603);
     transition: 0.2s;
 }
+
+body{
+    background-color: red !important;
+}
