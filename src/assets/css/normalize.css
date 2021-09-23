@@ -1,0 +1,16 @@
+*{
+    font-family: 'Nunito Sans', sans-serif, "Font Awesome 5 Free" !important;
+}
+
+.color-default-title {
+    color: #4a4a4a !important;
+    font-weight: bold;
+}
+
+.color-default{
+    color: #4a4a4a !important;
+}
+
+/* .container-app{
+    width: 1980px !important;
+} */
