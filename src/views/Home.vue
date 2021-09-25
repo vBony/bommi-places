@@ -19,7 +19,7 @@
 
 <div class="container mt-2">
     <div class="row">
-        <div class="col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2">
+        <div class="col-12 col-lg-3 col-mb-2 col-md-6 col-sm-12 mb-md-2 mb-sm-2 mb-2">
             <div class="items card border border-success p-4">
                 <div class="text-area">
                     <div class="tittle color-default-title">Vendas</div>
@@ -27,7 +27,7 @@
                 <div class="num">$800</div>
             </div>
         </div>
-        <div class=" col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2">
+        <div class=" col-12 col-lg-3 col-md-6 col-sm-12 mb-md-2 mb-sm-2 mb-2">
             <div class="items card border border-success p-4">
                 <div class="text-area">
                     <div class="tittle color-default-title">Avaliações</div>
@@ -35,7 +35,7 @@
                 <div class="num">$800</div>
             </div>
         </div>
-        <div class="col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2">
+        <div class="col-12 col-lg-3 col-md-6 col-sm-12 mb-md-2 mb-sm-2 mb-2">
             <div class="cor-borda card border border-warning p-4">
                 <div class="text-area">
                     <div class="tittle color-default-title">Clientes satisfeitos</div>
@@ -43,7 +43,7 @@
                 <div class="num">$800</div>
             </div>
         </div>
-        <div class="col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2">
+        <div class="col-12 col-lg-3 col-md-6 col-sm-12 mb-md-2 mb-sm-2 mb-2">
             <div class="borda-cor card border border-danger p-4">
                 <div class="text-area">
                     <div class="tittle color-default-title">Clientes não atendidos</div>
