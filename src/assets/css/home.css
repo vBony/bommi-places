@@ -24,3 +24,20 @@
 #logo-empresa > img{
     height: 80px;
 }
+
+.num {
+    font-size: 30px;
+}
+
+.items {
+    border-bottom: 5px solid #198754 !important;
+    
+}
+
+.cor-borda {
+    border-bottom: 5px solid #FFC107 !important;
+}
+
+.borda-cor {
+    border-bottom: 5px solid #DC3545 !important;
+}

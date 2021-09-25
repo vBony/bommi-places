@@ -17,6 +17,43 @@
     </div>
 </div>
 
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2">
+            <div class="items card border border-success p-4">
+                <div class="text-area">
+                    <div class="tittle color-default-title">Vendas</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+        <div class=" col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2">
+            <div class="items card border border-success p-4">
+                <div class="text-area">
+                    <div class="tittle color-default-title">Avaliações</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2">
+            <div class="cor-borda card border border-warning p-4">
+                <div class="text-area">
+                    <div class="tittle color-default-title">Clientes satisfeitos</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2">
+            <div class="borda-cor card border border-danger p-4">
+                <div class="text-area">
+                    <div class="tittle color-default-title">Clientes não atendidos</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <div class="row mt-4">
         <div class="card col-12">
@@ -97,50 +134,6 @@
     </div>
 </div>
  
-
-<div class="container mt-3">
-    <div class="row">
-        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2 p-3">
-            <div class="card p-3">
-                <div class="text-area">
-                    <div class="tittle">Vendas totais</div>
-                    <div>Últimas vendas do ano</div>
-                </div>
-                <div class="num">$800</div>
-            </div>
-        </div>
-        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2  p-3">
-            <div class="card p-3">
-                <div class="text-area">
-                    <div class="tittle">Vendas totais</div>
-                    <div>Últimas vendas do ano</div>
-                </div>
-                <div class="num">$800</div>
-            </div>
-        </div>
-        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2  p-3">
-            <div class="card p-3">
-                <div class="text-area">
-                    <div class="tittle">Vendas totais</div>
-                    <div>Últimas vendas do ano</div>
-                </div>
-                <div class="num">$800</div>
-            </div>
-        </div>
-        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2  p-3">
-            <div class="card p-3">
-                <div class="text-area">
-                    <div class="tittle">Vendas totais</div>
-                    <div>Últimas vendas do ano</div>
-                </div>
-                <div class="num">$800</div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
 <div class="loading w-100 h-100">
     <div class="spinner-border text-white" role="status">
         <span class="sr-only">Loading...</span>
