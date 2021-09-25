@@ -14,3 +14,11 @@
 body{
     background-color: red !important;
 }
+
+#subheader{
+    background-color: #F7F9FA;
+}
+
+#logo-empresa > img{
+    height: 80px;
+}
