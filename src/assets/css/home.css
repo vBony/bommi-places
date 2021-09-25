@@ -9,8 +9,21 @@
     left: 0;
     background-color: rgba(0, 0, 0, 0.603);
     transition: 0.2s;
+
 }
 
-body{
-    background-color: red !important;
+.tittle{
+    font-weight: bolder;
+    font-size: 16px;
+}
+
+.num {
+    font-size: 25px;
+    font-weight: bolder;
+}
+
+.items {
+    display: flex !important;
+    justify-content: space-between !important;
+
 }
