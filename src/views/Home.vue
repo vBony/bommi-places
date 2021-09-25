@@ -146,8 +146,8 @@
         <span class="sr-only">Loading...</span>
     </div>
 
-    <div class="text-white fs-4">Carregando...</div>
-</div>
+        <div class="text-white fs-4">Carregando...</div>
+    </div>
 </template>
 
 <style src="@/assets/css/home.css" scoped></style>
