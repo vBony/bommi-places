@@ -41,3 +41,13 @@
 .borda-cor {
     border-bottom: 5px solid #DC3545 !important;
 }
+
+#dropDownSistemas{
+    cursor: pointer;
+}
+
+#dropDownSistemas::after{
+    margin-bottom: -3px;
+    margin-left: 20px;
+    font-size: 25px;
+}
