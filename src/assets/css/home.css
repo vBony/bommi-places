@@ -17,13 +17,10 @@
     font-size: 16px;
 }
 
-.num {
-    font-size: 25px;
-    font-weight: bolder;
+#subheader{
+    background-color: #F7F9FA;
 }
 
-.items {
-    display: flex !important;
-    justify-content: space-between !important;
-
+#logo-empresa > img{
+    height: 80px;
 }
