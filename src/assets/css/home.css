@@ -27,3 +27,11 @@
     justify-content: space-between !important;
 
 }
+
+#subheader{
+    background-color: #F7F9FA;
+}
+
+#logo-empresa > img{
+    height: 80px;
+}

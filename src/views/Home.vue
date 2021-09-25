@@ -6,6 +6,17 @@
 />
 <!-- componente de header -->
 
+<div class="p-4" id="subheader">
+    <div class="container">
+        <div class="col-12 d-flex align-items-center">
+            <div id="logo-empresa" class="me-4">
+                <img :src="url_server+system.sys_logo" alt="">
+            </div>
+            <h3>{{system.sys_nome_empresa}}</h3>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <div class="row mt-4">
         <div class="card col-12">
@@ -85,6 +96,50 @@
         </div>
     </div>
 </div>
+ 
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2 p-3">
+            <div class="card p-3">
+                <div class="text-area">
+                    <div class="tittle">Vendas totais</div>
+                    <div>Últimas vendas do ano</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2  p-3">
+            <div class="card p-3">
+                <div class="text-area">
+                    <div class="tittle">Vendas totais</div>
+                    <div>Últimas vendas do ano</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2  p-3">
+            <div class="card p-3">
+                <div class="text-area">
+                    <div class="tittle">Vendas totais</div>
+                    <div>Últimas vendas do ano</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2  p-3">
+            <div class="card p-3">
+                <div class="text-area">
+                    <div class="tittle">Vendas totais</div>
+                    <div>Últimas vendas do ano</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 <div class="container mt-2">
