@@ -34,6 +34,7 @@ class Login extends Vue{
     created(){
         this.getInicialData()
         this.hideLoading()
+        window.document.title = "ubarber-admin"
     }
 
     mounted(){
