@@ -14,3 +14,21 @@
 body{
     background-color: red !important;
 }
+
+#subheader{
+    background-color: #F7F9FA;
+}
+
+#logo-empresa > img{
+    height: 80px;
+}
+
+#dropDownSistemas{
+    cursor: pointer;
+}
+
+#dropDownSistemas::after{
+    margin-bottom: -3px;
+    margin-left: 20px;
+    font-size: 25px;
+}

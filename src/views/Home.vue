@@ -6,6 +6,25 @@
 />
 <!-- componente de header -->
 
+<div class="p-4" id="subheader">
+    <div class="container">
+        <div class="col-12 d-flex align-items-center">
+            <div id="logo-empresa" class="me-4 shadow">
+                <img :src="url_server+system.sys_logo" alt="">
+            </div>
+            <div class="dropdown">
+                <h3 class="color-default-title dropdown-toggle" id="dropDownSistemas" data-bs-toggle="dropdown" aria-expanded="false">{{system.sys_nome_empresa}}</h3>
+
+                <ul class="dropdown-menu" aria-labelledby="dropDownSistemas">
+                    <li><a class="dropdown-item" href="#">Sistema 1</a></li>
+                    <li><a class="dropdown-item" href="#">Sistema 2</a></li>
+                    <li><a class="dropdown-item" href="#">Sistema 3</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <div class="row mt-4">
         <div class="card col-12">
@@ -85,6 +104,50 @@
         </div>
     </div>
 </div>
+ 
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2 p-3">
+            <div class="card p-3">
+                <div class="text-area">
+                    <div class="tittle">Vendas totais</div>
+                    <div>Últimas vendas do ano</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2  p-3">
+            <div class="card p-3">
+                <div class="text-area">
+                    <div class="tittle">Vendas totais</div>
+                    <div>Últimas vendas do ano</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2  p-3">
+            <div class="card p-3">
+                <div class="text-area">
+                    <div class="tittle">Vendas totais</div>
+                    <div>Últimas vendas do ano</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+        <div class="items col-12 col-lg-3 col-md-6 col-sm12 mb-md-2 mb-sm-2  p-3">
+            <div class="card p-3">
+                <div class="text-area">
+                    <div class="tittle">Vendas totais</div>
+                    <div>Últimas vendas do ano</div>
+                </div>
+                <div class="num">$800</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <div class="loading w-100 h-100">
     <div class="spinner-border text-white" role="status">
