@@ -9,10 +9,12 @@
     left: 0;
     background-color: rgba(0, 0, 0, 0.603);
     transition: 0.2s;
+
 }
 
-body{
-    background-color: red !important;
+.tittle{
+    font-weight: bolder;
+    font-size: 16px;
 }
 
 #subheader{
@@ -23,12 +25,19 @@ body{
     height: 80px;
 }
 
-#dropDownSistemas{
-    cursor: pointer;
+.num {
+    font-size: 30px;
 }
 
-#dropDownSistemas::after{
-    margin-bottom: -3px;
-    margin-left: 20px;
-    font-size: 25px;
+.items {
+    border-bottom: 5px solid #198754 !important;
+    
+}
+
+.cor-borda {
+    border-bottom: 5px solid #FFC107 !important;
+}
+
+.borda-cor {
+    border-bottom: 5px solid #DC3545 !important;
 }
