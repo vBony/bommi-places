@@ -17,9 +17,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle nav-link active d-flex align-items-center ajust-arrow color-default-title" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Sistema</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><a class="dropdown-item" href="#">Personalizar site</a></li>
+                        <li><a class="dropdown-item" href="#">Funcionários</a></li>
+                        <li><a class="dropdown-item" href="#">Serviços</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Separated link</a></li>
                     </ul>
