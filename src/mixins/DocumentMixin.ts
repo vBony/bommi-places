@@ -17,6 +17,20 @@ class DocumentMixin {
 		}
 	}
 
+	baseUrl(){
+		if(process.env.VUE_APP_BASE_URL != undefined){
+			return process.env.VUE_APP_BASE_URL
+		}else{
+			const url = window.location.hostname;
+
+			if(url != 'localhost'){
+				return 'https://api.ubarber.com.br/'
+			}else {
+				return 'https://ubarber.vercel.app/'
+			}
+		}
+	}
+
 	showLoading(type = null){
 		if(!type){
 			$('.loading').fadeIn('fast')
