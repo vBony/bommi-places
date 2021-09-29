@@ -20,8 +20,6 @@
                         <li><a class="dropdown-item" href="#">Personalizar site</a></li>
                         <li><router-link to="/cadastro/funcionario" class="dropdown-item" href="#">Funcionários</router-link></li>
                         <li><a class="dropdown-item" href="#">Serviços</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Separated link</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
