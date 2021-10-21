@@ -21,6 +21,10 @@ class CadastroFuncionario extends Vue {
         sistema: 0,
         countCadastros: 0,
     }
+
+    public jaTemUrl = false
+    public cadastrosRestantes = 0
+
     public sistemas = {}
     public user = new Clientes()
     public system = {
@@ -29,7 +33,10 @@ class CadastroFuncionario extends Vue {
 
     public loading = true
 
-    public error = null
+    public error = {
+        sistema: '',
+        countCadastros: '',
+    }
 
     public access_token = null
 
@@ -41,8 +48,6 @@ class CadastroFuncionario extends Vue {
         this.getInicialData()
        
         window.document.title = "ubarber-admin"
-        
-          
     }
 
     getInicialData(){
@@ -68,7 +73,7 @@ class CadastroFuncionario extends Vue {
             },
             dataType: 'json',
         });
-        
+
         $.ajax({
             type: "POST",
             url: this.dm.getUrlServer()+'sistema/buscar-por-usuario',
@@ -76,32 +81,53 @@ class CadastroFuncionario extends Vue {
             success: (response) => {
                 this.sistemas = response.sistemas
                 this.cadastroFuncionario.sistema = this.system.sys_id
-                
-            },
-            complete: () => {
-                this.hideLoading()
+
+                this.verificarSistema()
             },
             dataType: 'json',
         });
-         
     }
 
-    criarUrlCadastroFuncionario(){ 
-         $.ajax({
+    criarUrlCadastroFuncionario(){
+        this.showLoading()
+        $.ajax({
             type: "POST",
             url: this.dm.getUrlServer()+'funcionarios/criar-url-cadastro',
             data:{dados: this.cadastroFuncionario},
             success: (response) => {
-               console.log(response);
-               
-                
+               if(response.error){
+                   this.error = response.error
+               }
             },
             complete: () => {
                 this.hideLoading()
             },
             dataType: 'json',
         });
-        
+    }
+
+    verificarSistema(){
+        this.showLoading()
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/url-cadastro-disponivel',
+            data:{id: this.cadastroFuncionario.sistema},
+            success: (response) => {
+               if(response.cadastrosRestantes){
+                   this.cadastrosRestantes = response.cadastrosRestantes
+
+                   if(this.cadastrosRestantes > 0){
+                        this.jaTemUrl = true
+                   }else{
+                        this.jaTemUrl = false
+                   }
+               }
+            },
+            complete: () => {
+                this.hideLoading()
+            },
+            dataType: 'json',
+        });
     }
 
 
@@ -115,6 +141,10 @@ class CadastroFuncionario extends Vue {
         if(!type){
             $('.loading').fadeOut('fast')
         }
+    }
+
+    clearErrors($event){
+        $($event.target).removeClass('is-invalid')
     }
 }
 

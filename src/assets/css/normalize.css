@@ -4,13 +4,25 @@
 
 .color-default-title {
     color: #4a4a4a !important;
-    font-weight: bold;
+    font-weight: bold !important;
 }
 
 .color-default{
     color: #4a4a4a !important;
 }
 
-/* .container-app{
-    width: 1980px !important;
-} */
+.is-invalid {
+    border: 1px red solid !important;
+    color: red
+}
+
+.is-invalid::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: red;
+    opacity: 1; /* Firefox */
+}
+
+.is-invalid:focus {
+    border-color: red !important;
+    outline: 0 !important;
+    box-shadow: inset 0 1px 1px rgba(255,0,0,.075),0 0 8px rgba(255,0,0,.6) !important;
+}
