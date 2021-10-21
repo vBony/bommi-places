@@ -27,10 +27,6 @@
     width: 100%;
 }
 
-/* #sub-area-option {
-    width: 700px;
-} */
-
 .ipt {
     border: 1px solid #A6A6A6;
     border-width: thin;
@@ -61,10 +57,9 @@
     width: 100%;
 }
 
-#last-ipt {
-    max-width: 400px;;
+#ipt-area-2 {
+    width: 660px;
 }
-
 
 @media (max-width:768px) {
     #sub-area-option {
