@@ -118,6 +118,10 @@ class CadastroFuncionario extends Vue {
 
                    if(this.cadastrosRestantes > 0){
                         this.jaTemUrl = true
+
+                        // Limpando error
+                        this.error.countCadastros = ''
+                        this.error.sistema = ''
                    }else{
                         this.jaTemUrl = false
                    }
