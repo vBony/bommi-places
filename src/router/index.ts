@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from "../views/Home.vue"
 import Login from "../views/Login.vue"
-import Personalizar from "../views/Personalizar.vue"
 import CadastroFuncionario from "../views/CadastroFuncionario.vue"
+import Personalizar from "../views/Personalizar.vue"
 
 const routes: Array<RouteRecordRaw> = [
 	{

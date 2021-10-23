@@ -17,7 +17,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle nav-link active d-flex align-items-center ajust-arrow color-default-title" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Sistema</a>
                     <ul class="dropdown-menu">
-                        <router-link to="/personalizar" class="dropdown-item">Personalizar meu site</router-link>
+                        <li><router-link to="/personalizar" class="dropdown-item" href="#">Personalizar meu site</router-link></li>
                         <li><router-link to="/cadastro/funcionario" class="dropdown-item" href="#">Funcionários</router-link></li>
                         <li><a class="dropdown-item" href="#">Serviços</a></li>
                     </ul>
