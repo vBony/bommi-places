@@ -139,7 +139,9 @@
                 <div class="col-12">
                     <div id="head-services-area">
                         <div class="title-card-content outcard-title">Serviços</div>
-                        <div><button class="btn btn-secondary btn-sm">Editar serviços</button></div>
+                        <div>
+                            <button class="btn btn-secondary btn-sm" data-bs-target="#modal-servicos" data-bs-toggle="modal" @click="buscarServicos()">Editar serviços</button>
+                        </div>
                     </div>
 
                     <div id="lista-servicos">
@@ -372,14 +374,144 @@
 
     </div>
 
-
-
 </div>
 
 
 
 
 <!-- ELEMENTOS -->
+
+<!-- Modal Serviços -->
+<div class="modal fade" id="modal-servicos" tabindex="-1" aria-labelledby="modal-servicos" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Editar Serviços</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <transition name="no-mode-fade" mode="out-in">
+                    <div v-if="!alterandoServico && !criandoServico" class="fade-out" id="lista-serviços">
+                        <div class="row px-2 py-2">
+                            <div class="col-6 d-flex justify-content-start">
+                                <button class="btn btn-sm btn-dark" @click="abrirSessaoCadastroServico()"><i class="fas fa-plus"></i> Novo serviço</button>
+                            </div>
+
+                            <div class="col-6 d-flex justify-content-end">
+                                <input type="search" name="" class="ipt" id="" placeholder="Buscar um serviço">
+                            </div>
+                        </div>
+                        <div id="table-dad" class="col-12 mx-auto mb-4" @scroll="scrollHandleTransacoes($event)">
+                            <table class="table table-borderless align-middle" id="table-list">
+                                <thead class="py-4 bg-white" id="thead-servicos">
+                                    <tr>
+                                        <th>Serviço</th>
+                                        <th class="text-center">Valor</th>
+                                        <th class="text-center">Duração</th>
+                                        <th class="text-center">Exibir no site</th>
+                                        <th class="text-end">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-bottom" v-for="(servico, index) in servicos" :key="index">
+                                        <th class="text-start">
+                                            {{servico.svs_nome}}
+                                        </th>
+                                        <td class="text-center">
+                                            {{servico.svs_preco}}
+                                        </td>
+                                        <td class="text-center">{{servico.svs_duracao}}</td>
+                                        <td class="text-center text-bold">{{servico.svs_ativo}}</td>
+                                        <td class="text-end acoes">
+                                            <i class="far fa-edit mx-1 editar-icon"></i>
+                                            <i class="fas fa-trash-alt mx-1 deletar-icon"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div v-if="loading" class="text-center py-4">
+                                <div class="spinner-border text-dark" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <div class="text-dark fs-4">Carregando...</div>
+                            </div>
+
+                            <div v-if="servicoVazio" class="text-center py-4">
+                                <h5>Nenhum registro encontrado :(</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center" v-else-if="criandoServico">
+                        <div class="row py-2">
+                            <div class="col-6 d-flex justify-content-start">
+                                <button class="btn btn-secondary btn-sm" @click="abrirSessaoListagem()"><i class="fas fa-chevron-left me-2"></i>Voltar</button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-12 text-start mt-2">
+                                <label class="form-check-label color-default-title" for="exampleCheck1">
+                                    <input type="checkbox" class="form-check-input ipt-check me-2" v-model="servico.svs_ativo">
+                                    Ativo
+                                </label>
+                            </div>
+
+                            <div class="col-lg-8 col-md-8 col-sm-12 mt-2">
+                                <div class="label-ipt color-default-title required">Nome do serviço</div>
+                                <input type="text" v-bind:class="{'is-invalid': error.servicos.svs_nome}" class="form-control ipt" @change.self="clearErrors($event)" v-model="servico.svs_nome">
+                                <div class="invalid-feedback color-danger text-start">{{error.servicos.svs_nome}}</div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+                                <div class="label-ipt color-default-title required">Preço (R$)</div>
+                                <input type="text" id="precoServico" v-bind:class="{'is-invalid': error.servicos.svs_preco}" class="form-control ipt" @change.self="clearErrors($event); setValor()" v-model="servico.svs_preco">
+                                <div class="invalid-feedback color-danger text-start">{{error.servicos.svs_preco}}</div>
+                            </div>
+
+                            <div class="col-6 mt-2">
+                                <div class="label-ipt color-default-title required">Tempo de duração</div>
+                                <input type="text" id="tempoDuracaoServico" v-bind:class="{'is-invalid': error.servicos.svs_duracao}" class="form-control ipt" @change.self="clearErrors($event)" v-model="servico.svs_duracao">
+                                <div class="invalid-feedback color-danger text-start">{{error.servicos.svs_duracao}}</div>
+                            </div>
+
+                            <div class="col-6 mt-2">
+                                <div class="label-ipt color-default-title">
+                                    Tempo de retorno (dias)
+                                    <span tamanho="300px" tooltip="O tempo que seu cliente deve retornar para realizar o serviço. Será usado para avisar o seu cliente.">
+                                        <i class="fas fa-question-circle ms-1 text-dark"></i>
+                                    </span>
+                                </div>
+                                <input type="text" id="tempoRetorno" v-bind:class="{'is-invalid': error.servicos.svs_retorno}" class="form-control ipt" @change.self="clearErrors($event)" v-model="servico.svs_retorno">
+                                <div class="invalid-feedback color-danger text-start">{{error.servicos.svs_retorno}}</div>
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <div class="label-ipt color-default-title">
+                                    Descrição pública 
+                                </div>
+                                <textarea v-bind:class="{'is-invalid': error.servicos.sys_descricao}" class="form-control ipt" @change.self="clearErrors($event)" rows="3" v-model="servico.sys_descricao"></textarea>
+                                <div class="invalid-feedback color-danger text-start">{{error.servicos.sys_descricao}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+            </div>
+            <div class="modal-footer" v-if="criandoServico">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-dark" @click="salvarServico()" v-if="!loading">Salvar</button>
+                <button type="button" class="btn btn-dark" disabled v-if="loading">
+                    <div class="spinner-border text-light spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    Carregando...
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- LOADING -->
 <div class="loading w-100 h-100">
@@ -391,8 +523,9 @@
 
 </template>
 
-<style src="@/assets/css/personalizar.css" scoped></style>
 <style src="@/assets/css/normalize.css" scoped></style>
+<style src="@/assets/css/personalizar.css" scoped></style>
+<style src="@/assets/css/tooltips.css" scoped></style>
 
 <script lang="ts">
 import Personalizar from '@/models/Personalizar'

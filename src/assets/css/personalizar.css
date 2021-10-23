@@ -11,9 +11,14 @@
     transition: 0.2s;
 }
 
+#table-dad{
+    overflow: auto;
+    max-height: 200px;
+}
 
-
-
+#table-list{
+    min-width: 600px !important;
+}
 
 #criar-pub-mobile{
     display: none;
@@ -477,6 +482,31 @@
 
 #logo{
     animation: fadeInOut 1.5s infinite;
+}
+
+.modal-body{
+    transition: 0.7s !important;
+}
+
+.no-mode-fade-enter-active, .no-mode-fade-leave-active {
+    transition: opacity .5s
+}
+  
+.no-mode-fade-enter-from, .no-mode-fade-leave-to {
+    opacity: 0
+}
+
+.acoes > i{
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.editar-icon:hover{
+    color: #f0ad4e;
+}
+
+.deletar-icon:hover{
+    color: red;
 }
 
 @keyframes fadeInOut {
