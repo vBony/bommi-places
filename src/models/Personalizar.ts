@@ -83,6 +83,8 @@ class Personalizar extends Vue {
         this.alterandoServico = false
         this.criandoServico = true
 
+        this.error.servicos = new ServicosMessages()
+
         this.setMaskInputs()
     }
 
