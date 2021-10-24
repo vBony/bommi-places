@@ -418,13 +418,42 @@
                                             {{servico.svs_nome}}
                                         </th>
                                         <td class="text-center">
-                                            {{servico.svs_preco}}
+                                            {{'R$'+servico.svs_preco}}
                                         </td>
-                                        <td class="text-center">{{servico.svs_duracao}}</td>
-                                        <td class="text-center text-bold">{{servico.svs_ativo}}</td>
-                                        <td class="text-end acoes">
-                                            <i class="far fa-edit mx-1 editar-icon"></i>
-                                            <i class="fas fa-trash-alt mx-1 deletar-icon"></i>
+                                        <td class="text-center">{{servico.svs_duracao + 'h'}}</td>
+                                        <td class="text-center text-bold">{{servico.svs_ativo == 1 ? 'Sim' : 'Não'}}</td>
+                                        <td class="text-end acoes d-flex align-items-center justify-content-center" id="acoes">
+                                            <i class="far fa-edit mx-1 editar-icon" @click="alterarServico(servico.svs_id)"></i>
+                                            <Popper 
+                                                class="dark"
+                                                arrow
+                                                content="This is the Popper content 🍿"
+                                                placement="left"
+                                                :disabled="desativarPopper">
+                                                
+                                                <i class="fas fa-trash-alt deletar-icon" @click="desativarPopper = false" id="popcorn" aria-describedby="tooltip"></i>
+                                                <template #content >
+                                                    <div id="tooltip" role="tooltip">
+                                                        <div class="row mb-2">
+                                                            <div class="popover-title"> Tem certeza que deseja excluir esse serviço? </div>
+                                                        </div>
+
+                                                        <div class="d-flex justify-content-end">
+                                                            <div class="mx-start d-flex">
+                                                                <button type="button" class="btn btn-secondary popover-btn">Não</button>
+                                                                <button type="button" class="btn btn-danger popover-btn" @click="deletarServico(servico.svs_id, index)" v-if="!loadingList">Sim</button>
+
+                                                                <button type="button" class="btn btn-danger popover-btn" disabled v-if="loadingList">
+                                                                    <div class="spinner-border text-light spinner-border-sm" role="status">
+                                                                        <span class="visually-hidden">Loading...</span>
+                                                                    </div>
+                                                                    Carregando...
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </Popper>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -443,10 +472,10 @@
                         </div>
                     </div>
 
-                    <div class="text-center" v-else-if="criandoServico">
+                    <div class="text-center" v-else-if="criandoServico || alterandoServico">
                         <div class="row py-2">
                             <div class="col-6 d-flex justify-content-start">
-                                <button class="btn btn-secondary btn-sm" @click="abrirSessaoListagem()"><i class="fas fa-chevron-left me-2"></i>Voltar</button>
+                                <button class="btn btn-secondary btn-sm" @click="voltarSessaoListagem()"><i class="fas fa-chevron-left me-2"></i>Voltar</button>
                             </div>
                         </div>
 
@@ -509,6 +538,17 @@
                     Carregando...
                 </button>
             </div>
+
+            <div class="modal-footer" v-if="alterandoServico">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-dark" @click="salvarAteracaoServico()" v-if="!loading">Alterar</button>
+                <button type="button" class="btn btn-dark" disabled v-if="loading">
+                    <div class="spinner-border text-light spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    Carregando...
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -526,6 +566,7 @@
 <style src="@/assets/css/normalize.css" scoped></style>
 <style src="@/assets/css/personalizar.css" scoped></style>
 <style src="@/assets/css/tooltips.css" scoped></style>
+<style src="@/assets/css/popover.css" scoped></style>
 
 <script lang="ts">
 import Personalizar from '@/models/Personalizar'
