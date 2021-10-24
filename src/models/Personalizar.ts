@@ -114,7 +114,7 @@ class Personalizar extends Vue {
             data: {idSistema: sistema.sys_id},
             success: (response) => {
 
-                if(response.servicos.length > 0){
+                if(response.servicos != null){
                     this.servicos = response.servicos
                 }else{
                     this.servicoVazio = true
