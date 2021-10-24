@@ -7,11 +7,12 @@ import $ from 'jquery'
 import 'jquery-mask-plugin';
 import Servicos from '@/entities/Servicos'
 import ServicosMessages from '@/entities/ServicosMessages'
-import Swal from 'sweetalert2'
+import Popper from "vue3-popper";
 
 @Options({
     components: {
-      Header
+      Header,
+      Popper
     },
 })
 
@@ -25,15 +26,18 @@ class Personalizar extends Vue {
     public system = {}
 
     public loading = false
+    public loadingList = false
 
     public access_token = null
 
     public alterandoServico = false
     public criandoServico = false
+    public mostrarPopover = false
+    public desativarPopper = false
 
     public servico = new Servicos()
     public servicoVazio = false
-    public servicos = {}
+    public servicos = []
     public error = {
         servicos: new ServicosMessages()
     }
@@ -82,10 +86,26 @@ class Personalizar extends Vue {
         this.setMaskInputs()
     }
 
+    abrirSessaoAlterarServico(){
+        this.alterandoServico = true
+        this.criandoServico = false
+
+        this.setMaskInputs()
+    }
+
+    abrirSessaoListagemServico(){
+        this.alterandoServico = false
+        this.criandoServico = false
+
+        this.setMaskInputs()
+    }
+
     buscarServicos(){
         const sistema = store.getters.getSystemData
         this.servicoVazio = false
-        this.servicos = {}
+        this.servicos = []
+
+        this.abrirSessaoListagemServico()
 
         this.loading = true
         $.ajax({
@@ -108,7 +128,7 @@ class Personalizar extends Vue {
         });
     }
 
-    abrirSessaoListagem(){
+    voltarSessaoListagem(){
         this.alterandoServico = false
         this.criandoServico = false
 
@@ -123,7 +143,9 @@ class Personalizar extends Vue {
             'transform': `translateY(${scrollTop}px)`,
             'box-shadow': 'black 0px 0.3px 0px 0px',
         })
-    }
+
+        this.desativarPopper = true
+    }  
 
     setMaskInputs(): void{
         setTimeout(() => {
@@ -131,8 +153,6 @@ class Personalizar extends Vue {
             $('#tempoRetorno').mask('000');
             $('#precoServico').mask("0.000,00", {reverse: true});
         }, 1000);
-
-        console.log('Máscaras setadas');
     }
 
     salvarServico(){
@@ -148,7 +168,7 @@ class Personalizar extends Vue {
             success: (response) => {
                 if(response.status){
                     this.servicos = response.servicos
-                    this.abrirSessaoListagem()
+                    this.voltarSessaoListagem()
                     
                     this.Toast.fire({
                         icon: 'success',
@@ -160,6 +180,63 @@ class Personalizar extends Vue {
                     this.error.servicos = response.error
                 }
 
+            },
+            statusCode: {
+                401: () => {
+                    router.replace('/login')
+                }
+            },
+            complete: () => {
+                this.hideLoading('input')
+            },
+            dataType: 'json',
+        });
+    }
+
+    alterarServico(id){
+        this.servico = new Servicos()
+        this.abrirSessaoAlterarServico()
+
+        this.showLoading('input')
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/buscar-servico',
+            data: {id: id},
+            success: (response) => {
+                if(response.servico){
+                    this.servico = response.servico
+
+                    this.servico.svs_ativo = <unknown>this.servico.svs_ativo == 1 ? true : false
+                }
+            },
+            complete: () => {
+                this.hideLoading('input')
+            },
+            dataType: 'json',
+        });
+    }
+
+    salvarAteracaoServico(){
+        const token = store.getters.getAccessToken
+        const sistema = store.getters.getSystemData
+        this.servico.svs_system = sistema.sys_id
+
+        this.showLoading('input')
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/alterar-servico',
+            data: {servico: this.servico, token: token},
+            success: (response) => {
+                if(response.servicos){
+                    this.servicos = response.servicos
+
+                    this.Toast.fire({
+                        icon: 'success',
+                        title: 'Serviço criado com sucesso'
+                    })
+
+                    this.voltarSessaoListagem()
+                }
             },
             statusCode: {
                 401: () => {
@@ -191,7 +268,9 @@ class Personalizar extends Vue {
 
         if(type == 'input'){
             this.loading = false
-            $('input, textarea').prop('readonly', false);
+            setTimeout(() => {
+                $('input, textarea').prop('readonly', false);
+            }, 500);
         }
 	}
 
@@ -201,6 +280,38 @@ class Personalizar extends Vue {
 
     setValor(){
         this.servico.svs_preco = <string>$('#precoServico').val()
+    }
+
+    deletarServico(id, index){
+        const token = store.getters.getAccessToken
+        this.loadingList = true
+
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/deletar-servico',
+            data: {id: id, token: token},
+            success: () => {
+                this.desativarPopper = true
+            },
+            statusCode: {
+                401: () => {
+                    router.replace('/login')
+                },
+                200: () => {
+
+                    this.Toast.fire({
+                        icon: 'success',
+                        title: 'Serviço deletado com sucesso'
+                    })
+
+                    this.servicos.splice(index, 1)
+                }
+            },
+            complete: () => {
+                this.loadingList = false
+            },
+            dataType: 'json',
+        });
     }
 }
 export default Personalizar
