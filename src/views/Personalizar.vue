@@ -22,7 +22,7 @@
     <div id="company-data-area" class="content-area">
         <div id="comp-photo-area">
             <img :src="url_server+system.sys_logo" id="comp-photo">
-            <div id="cam-icon-photo" class="d-flex align-items-center">
+            <div id="cam-icon-photo" class="d-flex align-items-center" data-bs-target="#modal-foto-sistema" data-bs-toggle="modal">
                 <i class="fas fa-camera"></i>
             </div>
         </div>
@@ -145,9 +145,9 @@
                     </div>
 
                     <div id="lista-servicos">
-                        <div class="card-services card">
+                        <div class="card-services card" v-for="(servico, index) in servicos" :key="index">
                             <div class="card-services-info-area">
-                                <div class="card-services-title">Progressiva</div>
+                                <div class="card-services-title">{{servico.svs_nome}}</div>
                                 <div class="card-services-sub-title">Horarios disponíveis</div>
                                 <div class="card-services-schedules-area">
                                     <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
@@ -158,61 +158,7 @@
                             </div>
 
                             <div class="card-services-btn-area">
-                                <div class="csba-price">R$<span>50,00</span></div>
-                                <button type="button" class="btn btn-primary btn-sm btn-dark text-white">Agendar</button>
-                            </div>
-                        </div>
-
-                        <div class="card-services card">
-                            <div class="card-services-info-area">
-                                <div class="card-services-title">Degradê</div>
-                                <div class="card-services-sub-title">Horarios disponíveis</div>
-                                <div class="card-services-schedules-area">
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                </div>
-                            </div>
-
-                            <div class="card-services-btn-area">
-                                <div class="csba-price">R$<span>50,00</span></div>
-                                <button type="button" class="btn btn-primary btn-sm btn-dark text-white">Agendar</button>
-                            </div>
-                        </div>
-
-                        <div class="card-services card">
-                            <div class="card-services-info-area">
-                                <div class="card-services-title">Sobrancelha</div>
-                                <div class="card-services-sub-title">Horarios disponíveis</div>
-                                <div class="card-services-schedules-area">
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                </div>
-                            </div>
-
-                            <div class="card-services-btn-area">
-                                <div class="csba-price">R$<span>50,00</span></div>
-                                <button type="button" class="btn btn-primary btn-sm btn-dark text-white">Agendar</button>
-                            </div>
-                        </div>
-
-                        <div class="card-services card">
-                            <div class="card-services-info-area">
-                                <div class="card-services-title">Barba</div>
-                                <div class="card-services-sub-title">Horarios disponíveis</div>
-                                <div class="card-services-schedules-area">
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                    <button type="button" class="btn btn-outline-dark btn-sm rounded-pill me-1 ms-1 mt-1 btn-hrs">08:00</button>
-                                </div>
-                            </div>
-
-                            <div class="card-services-btn-area">
-                                <div class="csba-price">R$<span>50,00</span></div>
+                                <div class="csba-price">R$<span>{{servico.svs_preco}}</span></div>
                                 <button type="button" class="btn btn-primary btn-sm btn-dark text-white">Agendar</button>
                             </div>
                         </div>
@@ -269,111 +215,9 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="card my-2">
-                    <div class="d-flex justify-content-between align-items-center p-2 ">
-                        <div class="d-flex align-items-center">
-                            <div class="logo-posts"> 
-                                <img :src="url_server+system.sys_logo">
-                            </div>
-
-                            <div class="ms-2">
-                                <div class="fw-bold">{{system.sys_nome_empresa}}</div>
-                                <div class="text-muted hora-post">Ontem às 20:38</div>
-                            </div>
-                        </div>
-
-                        <div> <i class="fa fa-ellipsis-h option-post text-secondary"></i> </div>
-                    </div>
-
-                    <div class="p-2 descricao-post">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-                    </div> 
-
-                    <img src="https://picsum.photos/720/1280" class="foto-post">
-
-                    <div class="d-flex justify-content-between align-items-center p-2">
-                        <div class="d-flex flex-row icons d-flex align-items-center"> 
-                            <i class="far fa-heart post-like"></i>
-                            <div class="ms-2 fw-bold post-num-like">25mil</div>
-                        </div>
-                        <div class="d-flex flex-row muted-color"> 
-                            <div class="ml-2 fw-bold btn-compartilhar-post">Compartilhar</div> 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card my-2">
-                    <div class="d-flex justify-content-between align-items-center p-2 ">
-                        <div class="d-flex align-items-center">
-                            <div class="logo-posts"> 
-                                <img :src="url_server+system.sys_logo">
-                            </div>
-
-                            <div class="ms-2">
-                                <div class="fw-bold">{{system.sys_nome_empresa}}</div>
-                                <div class="text-muted hora-post">Ontem às 20:38</div>
-                            </div>
-                        </div>
-
-                        <div> <i class="fa fa-ellipsis-h option-post text-secondary"></i> </div>
-                    </div>
-
-                    <div class="p-2 descricao-post">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-                    </div> 
-
-                    <img src="https://picsum.photos/720/1280" class="foto-post">
-
-                    <div class="d-flex justify-content-between align-items-center p-2">
-                        <div class="d-flex flex-row icons d-flex align-items-center"> 
-                            <i class="far fa-heart post-like"></i>
-                            <div class="ms-2 fw-bold post-num-like">25mil</div>
-                        </div>
-                        <div class="d-flex flex-row muted-color"> 
-                            <div class="ml-2 fw-bold btn-compartilhar-post">Compartilhar</div> 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card my-2">
-                    <div class="d-flex justify-content-between align-items-center p-2 ">
-                        <div class="d-flex align-items-center">
-                            <div class="logo-posts"> 
-                                <img :src="url_server+system.sys_logo">
-                            </div>
-
-                            <div class="ms-2">
-                                <div class="fw-bold">{{system.sys_nome_empresa}}</div>
-                                <div class="text-muted hora-post">Ontem às 20:38</div>
-                            </div>
-                        </div>
-
-                        <div> <i class="fa fa-ellipsis-h option-post text-secondary"></i> </div>
-                    </div>
-
-                    <div class="p-2 descricao-post">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-                    </div> 
-
-                    <img src="https://picsum.photos/720/1280" class="foto-post">
-
-                    <div class="d-flex justify-content-between align-items-center p-2">
-                        <div class="d-flex flex-row icons d-flex align-items-center"> 
-                            <i class="far fa-heart post-like"></i>
-                            <div class="ms-2 fw-bold post-num-like">25mil</div>
-                        </div>
-                        <div class="d-flex flex-row muted-color"> 
-                            <div class="ml-2 fw-bold btn-compartilhar-post">Compartilhar</div> 
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
-
     </div>
-
 </div>
 
 
@@ -381,7 +225,7 @@
 
 <!-- ELEMENTOS -->
 
-<!-- Modal Serviços -->
+<!-- Modal Serviços [INICIO] -->
 <div class="modal fade" id="modal-servicos" tabindex="-1" aria-labelledby="modal-servicos" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -398,7 +242,7 @@
                             </div>
 
                             <div class="col-6 d-flex justify-content-end">
-                                <input type="search" name="" class="ipt" id="" placeholder="Buscar um serviço">
+                                <input type="search" name="" class="ipt" id="" placeholder="Buscar um serviço" @keyup="buscarServico()" v-model="palavraChave">
                             </div>
                         </div>
                         <div id="table-dad" class="col-12 mx-auto mb-4" @scroll="scrollHandleTransacoes($event)">
@@ -427,9 +271,10 @@
                                             <Popper 
                                                 class="dark"
                                                 arrow
-                                                content="This is the Popper content 🍿"
                                                 placement="left"
-                                                :disabled="desativarPopper">
+                                                :disabled="desativarPopper"
+                                                interactive>
+                                                
                                                 
                                                 <i class="fas fa-trash-alt deletar-icon" @click="desativarPopper = false" id="popcorn" aria-describedby="tooltip"></i>
                                                 <template #content >
@@ -441,9 +286,9 @@
                                                         <div class="d-flex justify-content-end">
                                                             <div class="mx-start d-flex">
                                                                 <button type="button" class="btn btn-secondary popover-btn">Não</button>
-                                                                <button type="button" class="btn btn-danger popover-btn" @click="deletarServico(servico.svs_id, index)" v-if="!loadingList">Sim</button>
+                                                                <button type="button" class="btn btn-danger popover-btn" @click.self="deletarServico(servico.svs_id, index)" v-show="!loadingList">Sim</button>
 
-                                                                <button type="button" class="btn btn-danger popover-btn" disabled v-if="loadingList">
+                                                                <button type="button" class="btn btn-danger popover-btn" disabled v-show="loadingList">
                                                                     <div class="spinner-border text-light spinner-border-sm" role="status">
                                                                         <span class="visually-hidden">Loading...</span>
                                                                     </div>
@@ -459,14 +304,14 @@
                                 </tbody>
                             </table>
 
-                            <div v-if="loading" class="text-center py-4">
+                            <div v-show="loading" class="text-center py-4">
                                 <div class="spinner-border text-dark" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                                 <div class="text-dark fs-4">Carregando...</div>
                             </div>
 
-                            <div v-if="servicoVazio" class="text-center py-4">
+                            <div v-show="servicoVazio" class="text-center py-4">
                                 <h5>Nenhum registro encontrado :(</h5>
                             </div>
                         </div>
@@ -502,7 +347,7 @@
 
                             <div class="col-6 mt-2">
                                 <div class="label-ipt color-default-title required">Tempo de duração</div>
-                                <input type="text" id="tempoDuracaoServico" v-bind:class="{'is-invalid': error.servicos.svs_duracao}" class="form-control ipt" @change.self="clearErrors($event)" v-model="servico.svs_duracao">
+                                <input type="text" id="tempoDuracaoServico" v-bind:class="{'is-invalid': error.servicos.svs_duracao}" class="form-control ipt" @change.self="clearErrors($event)" v-model="servico.svs_duracao" placeholder="hh:mm">
                                 <div class="invalid-feedback color-danger text-start">{{error.servicos.svs_duracao}}</div>
                             </div>
 
@@ -542,6 +387,32 @@
             <div class="modal-footer" v-if="alterandoServico">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-dark" @click="salvarAteracaoServico()" v-if="!loading">Alterar</button>
+                <button type="button" class="btn btn-dark" disabled v-if="loading">
+                    <div class="spinner-border text-light spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    Carregando...
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Serviços [FIM] -->
+
+<!-- Modal foto sistema -->
+<div class="modal fade" id="modal-foto-sistema" tabindex="-1" aria-labelledby="modal-foto-sistema" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Alterar foto do sistema</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="file" name="" id="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-dark" @click="salvarServico()" v-if="!loading">Salvar</button>
                 <button type="button" class="btn btn-dark" disabled v-if="loading">
                     <div class="spinner-border text-light spinner-border-sm" role="status">
                         <span class="visually-hidden">Loading...</span>

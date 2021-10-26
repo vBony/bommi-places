@@ -17,30 +17,34 @@ import Popper from "vue3-popper";
 })
 
 class Personalizar extends Vue {
+    // Variáveis gerais/globais
     public dm = new DocumentMixin()
     public url_server = this.dm.getUrlServer()
     public base_url = this.dm.baseUrl()
     public Toast = this.dm.getToast()
-
-    public user = {}
-    public system = {}
-
+    public access_token = null
+    public mostrarPopover = false
+    public desativarPopper = false
     public loading = false
     public loadingList = false
 
-    public access_token = null
+    // Usuário
+    public user = {}
 
+    // Sistema
+    public system = {}
+
+    // Serviço
     public alterandoServico = false
     public criandoServico = false
-    public mostrarPopover = false
-    public desativarPopper = false
-
     public servico = new Servicos()
     public servicoVazio = false
     public servicos = []
     public error = {
         servicos: new ServicosMessages()
     }
+    public palavraChave = ''
+
 
     beforeCreate(){
         document.querySelector('body')!.setAttribute('style', 'background-color:#F5F6FA !important')
@@ -61,9 +65,10 @@ class Personalizar extends Vue {
             success: (response) => {
                 store.dispatch('setAccessToken', response.access_token)
                 store.dispatch('setUserData', response.user_data)
-                store.dispatch('setSystemData', response.system)
+                store.dispatch('setSystemData', response.system.data)
 
                 this.system = store.getters.getSystemData
+                this.servicos = response.system.servicos
                 this.user = store.getters.getUserData
                 this.access_token = store.getters.getAccessToken
                 this.loading = false
@@ -105,7 +110,6 @@ class Personalizar extends Vue {
     buscarServicos(){
         const sistema = store.getters.getSystemData
         this.servicoVazio = false
-        this.servicos = []
 
         this.abrirSessaoListagemServico()
 
@@ -292,9 +296,6 @@ class Personalizar extends Vue {
             type: "POST",
             url: this.dm.getUrlServer()+'sistema/deletar-servico',
             data: {id: id, token: token},
-            success: () => {
-                this.desativarPopper = true
-            },
             statusCode: {
                 401: () => {
                     router.replace('/login')
@@ -306,7 +307,12 @@ class Personalizar extends Vue {
                         title: 'Serviço deletado com sucesso'
                     })
 
+                    this.desativarPopper = true
+
                     this.servicos.splice(index, 1)
+                    if(this.servicos.length == 0 || this.servicos == null){
+                        this.servicoVazio = true
+                    }
                 }
             },
             complete: () => {
@@ -314,6 +320,10 @@ class Personalizar extends Vue {
             },
             dataType: 'json',
         });
+    }
+
+    buscarServico(){
+        console.log(this.palavraChave);
     }
 }
 export default Personalizar
