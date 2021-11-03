@@ -73,6 +73,30 @@ class DocumentMixin {
 
 		return Toast
 	}
+
+	loggedIn(){
+		const token = store.getters.getAccessToken
+
+		return new Promise((resolve, reject) => {
+			if(token){
+				axios.post(this.getUrlServer()+'user/is-logged', {access_token: token})
+				.then(() => {
+					resolve(true)
+				})
+				.catch(() => {
+					resolve(false)
+				})
+			}else {
+				resolve(false)
+			}
+		})
+	}
+
+	logout(){
+        const token = store.getters.getAccessToken
+		store.commit('unsetAccessToken')
+		router.replace('login')
+    }
 }
 
 export default DocumentMixin
