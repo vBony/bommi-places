@@ -14,7 +14,7 @@ import Header from '../components/Header.vue'
     },
 })
 
-class Login extends Vue{
+class Home extends Vue{
     public dm = new DocumentMixin()
     public url_server = this.dm.getUrlServer()
 
@@ -51,7 +51,7 @@ class Login extends Vue{
             success: (response) => {
                 store.dispatch('setAccessToken', response.access_token)
                 store.dispatch('setUserData', response.user_data)
-                store.dispatch('setSystemData', response.system)
+                store.dispatch('setSystemData', response.system.data)
 
                 this.system = store.getters.getSystemData
                 this.user = store.getters.getUserData
@@ -78,33 +78,5 @@ class Login extends Vue{
 		}
 	}
 
-    logout(){
-        const token = store.getters.getAccessToken
-
-        Swal.fire({
-            icon: 'warning',
-            title: 'Vai me abandonar mesmo? 🥺',
-            showCancelButton: true,
-            confirmButtonText: 'Sim 😥',
-            cancelButtonText: `Não 🥰`,
-          }).then( (result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "POST",
-                    url: this.dm.getUrlServer()+'user/logout',
-                    data: {access_token: token},
-                    beforeSend: () => {
-                        this.showLoading()
-                    },
-                    complete: () => {
-                        this.hideLoading()
-                    },
-                    dataType: 'json',
-                });
-            }
-        })
-
-    }
-
 }
-export default Login
+export default Home
