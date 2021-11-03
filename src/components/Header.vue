@@ -61,7 +61,7 @@
                         <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdownMenuLink">
                             <li><a class="dropdown-item" href="#">Configurações</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Sair</a></li>
+                            <li><a class="dropdown-item" @click="logout()" href="#">Sair</a></li>
                         </ul>
                     </div>
                 </li>
@@ -76,6 +76,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import DocumentMixin from '../mixins/DocumentMixin'
 
 @Options({
   props: {
@@ -84,7 +85,10 @@ import { Options, Vue } from 'vue-class-component';
   }
 })
 
-export default class HelloWorld extends Vue {
-  msg!: string
+export default class Header extends Vue {
+    logout(){
+        const dm = new DocumentMixin()
+        dm.logout()
+    }
 }
 </script>
