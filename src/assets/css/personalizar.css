@@ -34,14 +34,18 @@
 
 #img-publicacao img{
     height: 50px;
+    width: 50px;
     border: 2px solid rgba(0,0,0,.125);
     border-radius: 100%;
+    object-fit: cover;
 }
 
 .logo-posts img{
     height: 45px !important;
+    width: 45px !important;
     border: 2px solid rgba(0,0,0,.125);
     border-radius: 100%;
+    object-fit: cover;
 }
 
 #lista-servicos{

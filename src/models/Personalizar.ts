@@ -335,23 +335,49 @@ class Personalizar extends Vue {
         const token = store.getters.getAccessToken
         const sistema = store.getters.getSystemData
 
-        const data = new FormData();
-        data.append('file', event.target.files[0]);
-        data.append('token', token)
-        data.append('idSistema', sistema.sys_id )
+        const maxSize = 1024 * 1024 * 2
 
-        $.ajax({
-            type: "POST",
-            url: this.dm.getUrlServer()+'sistema/upload-avatar',
-            data: data,
-            success: (response) => {
-                console.log(response);
-                
-            },
-            contentType: false,       
-            cache: false,             
-            processData:false,
-        });
+        if(event.target.files[0].size > maxSize){
+            this.Toast.fire({
+                icon: 'error',
+                title: "Só é permitido imagens menores que 2mb"
+            })
+        }else{
+            const data = new FormData();
+            data.append('file', event.target.files[0]);
+            data.append('token', token)
+            data.append('idSistema', sistema.sys_id )
+    
+            this.showLoading()
+            $.ajax({
+                type: "POST",
+                url: this.dm.getUrlServer()+'sistema/upload-avatar',
+                data: data,
+                success: (response) => {
+                    if(response.error){
+                        this.Toast.fire({
+                            icon: 'error',
+                            title: response.error
+                        })
+                    }else{
+                        sistema.sys_logo = response.file
+                        store.dispatch('setSystemData', sistema)
+
+                        this.Toast.fire({
+                            icon: 'success',
+                            title: "Imagem alterada com sucesso!"
+                        })
+                    }
+                },
+                complete: () => {
+                    this.hideLoading()
+                },
+                contentType: false,       
+                cache: false,             
+                processData:false,
+            });
+        }
+
     }
 }
 export default Personalizar
