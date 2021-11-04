@@ -22,9 +22,11 @@
     <div id="company-data-area" class="content-area">
         <div id="comp-photo-area">
             <img :src="url_server+system.sys_logo" id="comp-photo">
-            <div id="cam-icon-photo" class="d-flex align-items-center" data-bs-target="#modal-foto-sistema" data-bs-toggle="modal">
+            <div id="cam-icon-photo" class="d-flex align-items-center" @click="openEnviarFoto()">
                 <i class="fas fa-camera"></i>
             </div>
+
+            <input type="file" name="" id="input-foto" style="display:none" @change="uploadFoto($event)">
         </div>
         <div id="company-data">
             <div>
@@ -398,31 +400,6 @@
     </div>
 </div>
 <!-- Modal Serviços [FIM] -->
-
-<!-- Modal foto sistema -->
-<div class="modal fade" id="modal-foto-sistema" tabindex="-1" aria-labelledby="modal-foto-sistema" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Alterar foto do sistema</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="file" name="" id="">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-dark" @click="salvarServico()" v-if="!loading">Salvar</button>
-                <button type="button" class="btn btn-dark" disabled v-if="loading">
-                    <div class="spinner-border text-light spinner-border-sm" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    Carregando...
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- LOADING -->
 <div class="loading w-100 h-100">

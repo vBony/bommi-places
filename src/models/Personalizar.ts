@@ -4,10 +4,11 @@ import Header from '../components/Header.vue'
 import store from '@/store'
 import router from '@/router'
 import $ from 'jquery'
-import 'jquery-mask-plugin';
+import 'jquery-mask-plugin'
 import Servicos from '@/entities/Servicos'
 import ServicosMessages from '@/entities/ServicosMessages'
-import Popper from "vue3-popper";
+import Popper from "vue3-popper"
+import axios from 'axios'
 
 @Options({
     components: {
@@ -324,6 +325,33 @@ class Personalizar extends Vue {
 
     buscarServico(){
         console.log(this.palavraChave);
+    }
+
+    openEnviarFoto(){
+        $('#input-foto').trigger('click')
+    }
+
+    uploadFoto(event){
+        const token = store.getters.getAccessToken
+        const sistema = store.getters.getSystemData
+
+        const data = new FormData();
+        data.append('file', event.target.files[0]);
+        data.append('token', token)
+        data.append('idSistema', sistema.sys_id )
+
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/upload-avatar',
+            data: data,
+            success: (response) => {
+                console.log(response);
+                
+            },
+            contentType: false,       
+            cache: false,             
+            processData:false,
+        });
     }
 }
 export default Personalizar
