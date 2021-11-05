@@ -12,10 +12,12 @@
         <div id="cover" class="content-area-cover">
             <img :src="url_server+system.sys_capa" alt="" id="cover-img">
             <div id="btn-edit-cover-area" class="ms-auto">
-                <button id="btn-edit-cover">
+                <button id="btn-edit-cover" @click="openEnviarCapa()">
                     <i class="fas fa-camera me-1"></i>
-                    Editar
+                    Editar foto de capa
                 </button>
+
+                <input type="file" name="" id="input-capa" style="display:none" @change="uploadFotoCapa($event)">
             </div>
         </div>
     </div>

@@ -379,5 +379,57 @@ class Personalizar extends Vue {
         }
 
     }
+
+    openEnviarCapa(){
+        $('#input-capa').trigger('click')
+    }
+
+    uploadFotoCapa(event){
+        const token = store.getters.getAccessToken
+        const sistema = store.getters.getSystemData
+
+        const maxSize = 1024 * 1024 * 3
+
+        if(event.target.files[0].size > maxSize){
+            this.Toast.fire({
+                icon: 'error',
+                title: "Só é permitido imagens menores que 3mb"
+            })
+        }else{
+            const data = new FormData();
+            data.append('file', event.target.files[0]);
+            data.append('token', token)
+            data.append('idSistema', sistema.sys_id )
+    
+            this.showLoading()
+            $.ajax({
+                type: "POST",
+                url: this.dm.getUrlServer()+'sistema/upload-capa',
+                data: data,
+                success: (response) => {
+                    if(response.error){
+                        this.Toast.fire({
+                            icon: 'error',
+                            title: response.error
+                        })
+                    }else{
+                        sistema.sys_capa = response.file
+                        store.dispatch('setSystemData', sistema)
+
+                        this.Toast.fire({
+                            icon: 'success',
+                            title: "Imagem de capa alterada com sucesso!"
+                        })
+                    }
+                },
+                complete: () => {
+                    this.hideLoading()
+                },
+                contentType: false,       
+                cache: false,             
+                processData:false,
+            });
+        }
+    }
 }
 export default Personalizar

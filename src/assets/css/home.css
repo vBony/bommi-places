@@ -22,6 +22,8 @@
 
 #logo-empresa > img{
     height: 80px;
+    width: 80px;
+    object-fit: cover;
 }
 
 .num {
