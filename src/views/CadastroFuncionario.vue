@@ -1,8 +1,8 @@
 <template>
 <!-- componente de header -->
 <Header 
-    :username="user.cli_primeiro_nome"
-    :avatar_user="url_server+user.cli_avatar"
+    :username="user.fun_primeiro_nome"
+    :avatar_user="url_server+user.fun_avatar"
 />
 <!-- componente de header -->
 <div class="container">

@@ -1,8 +1,8 @@
 <template>
 <!-- componente de header -->
 <Header 
-    :username="user.cli_primeiro_nome"
-    :avatar_user="url_server+user.cli_avatar"
+    :username="user.fun_primeiro_nome"
+    :avatar_user="url_server+user.fun_avatar"
 />
 <!-- componente de header -->
 
@@ -69,13 +69,13 @@
                 Dados do usuário
             </div>
             <div class="card-body" v-if="loading == false">
-                <h4 class="color-default-title">Bem-vindo, {{user.cli_nome}}</h4>
+                <h4 class="color-default-title">Bem-vindo, {{user.fun_nome}}</h4>
                 <div class="row d-flex align-items-center mt-2">
                     <div class="col-1 text-center">
                         <i class="far fa-envelope"></i>
                     </div>
                     <div class="col-11">
-                        {{user.cli_email}}
+                        {{user.fun_email}}
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@
                         <i class="fas fa-phone"></i>
                     </div>
                     <div class="col-11">
-                        {{user.cli_telefone != '' ? user.cli_telefone : "Vazio"}}
+                        {{user.fun_telefone != '' ? user.fun_telefone : "Vazio"}}
                     </div>
                 </div>
 
