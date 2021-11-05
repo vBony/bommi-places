@@ -7,8 +7,8 @@ import $ from 'jquery'
 class Login extends Vue {
     public dm = new DocumentMixin()
     public user = {
-        cli_email: null,
-        cli_senha: null,
+        fun_email: null,
+        fun_senha: null,
     }
 
     public loading = false
