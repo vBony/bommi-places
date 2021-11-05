@@ -4,7 +4,7 @@ import DocumentMixin from '@/mixins/DocumentMixin'
 import store from '@/store'
 import router from '@/router'
 import $ from 'jquery'
-import Clientes from '../entities/Clientes'
+import Funcionarios from '../entities/Funcionarios'
 
 @Options({
     components: {
@@ -26,7 +26,7 @@ class CadastroFuncionario extends Vue {
     public cadastrosRestantes = 0
 
     public sistemas = {}
-    public user = new Clientes()
+    public user = new Funcionarios()
     public system = {
         sys_id: 0
     }

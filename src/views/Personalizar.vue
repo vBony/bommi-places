@@ -1,7 +1,7 @@
 <template>
     <Header 
-        :username="user.cli_primeiro_nome"
-        :avatar_user="url_server+user.cli_avatar"
+        :username="user.fun_primeiro_nome"
+        :avatar_user="url_server+user.fun_avatar"
     />
 
 
