@@ -18,9 +18,10 @@
     "jquery": "^3.6.0",
     "jquery-mask-plugin": "^1.14.16",
     "sweetalert2": "^11.1.5",
-    "vue": "^3.0.0",
+    "vue": "^3.2.20",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.0-0",
+    "vue3-popper": "^1.3.0",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {

@@ -1,18 +1,26 @@
 <template>
 <!-- componente de header -->
 <Header 
-    :username="user.cli_primeiro_nome"
-    :avatar_user="url_server+user.cli_avatar"
+    :username="user.fun_primeiro_nome"
+    :avatar_user="url_server+user.fun_avatar"
 />
 <!-- componente de header -->
 
 <div class="p-4" id="subheader">
     <div class="container">
         <div class="col-12 d-flex align-items-center">
-            <div id="logo-empresa" class="me-4">
+            <div id="logo-empresa" class="me-4 shadow">
                 <img :src="url_server+system.sys_logo" alt="">
             </div>
-            <h3>{{system.sys_nome_empresa}}</h3>
+            <div class="dropdown">
+                <h3 class="color-default-title dropdown-toggle" id="dropDownSistemas" data-bs-toggle="dropdown" aria-expanded="false">{{system.sys_nome_empresa}}</h3>
+
+                <ul class="dropdown-menu" aria-labelledby="dropDownSistemas">
+                    <li><a class="dropdown-item" href="#">Sistema 1</a></li>
+                    <li><a class="dropdown-item" href="#">Sistema 2</a></li>
+                    <li><a class="dropdown-item" href="#">Sistema 3</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
@@ -61,13 +69,13 @@
                 Dados do usuário
             </div>
             <div class="card-body" v-if="loading == false">
-                <h4 class="color-default-title">Bem-vindo, {{user.cli_nome}}</h4>
+                <h4 class="color-default-title">Bem-vindo, {{user.fun_nome}}</h4>
                 <div class="row d-flex align-items-center mt-2">
                     <div class="col-1 text-center">
                         <i class="far fa-envelope"></i>
                     </div>
                     <div class="col-11">
-                        {{user.cli_email}}
+                        {{user.fun_email}}
                     </div>
                 </div>
 
@@ -76,7 +84,7 @@
                         <i class="fas fa-phone"></i>
                     </div>
                     <div class="col-11">
-                        {{user.cli_telefone != '' ? user.cli_telefone : "Vazio"}}
+                        {{user.fun_telefone != '' ? user.fun_telefone : "Vazio"}}
                     </div>
                 </div>
 
