@@ -57,7 +57,7 @@ class Home extends Vue{
                 this.systems = response.systems
                 this.user = store.getters.getUserData
                 this.access_token = store.getters.getAccessToken
-                
+                this.loading = false
             },
             error: function(){
                 router.replace('/login')
