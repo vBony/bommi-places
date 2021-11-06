@@ -20,6 +20,7 @@ class Home extends Vue{
 
     public user = {}
     public system = {}
+    public systems = []
 
     public loading = true
 
@@ -32,18 +33,17 @@ class Home extends Vue{
     }
     
     created(){
-        this.getInicialData()
-        this.hideLoading()
         window.document.title = "ubarber-admin"
     }
 
     mounted(){
-        this.hideLoading()
+        this.getInicialData()
     }
 
     getInicialData(){
         const token = store.getters.getAccessToken
 
+        this.showLoading()
         $.ajax({
             type: "POST",
             url: this.dm.getUrlServer()+'user/data',
@@ -54,16 +54,40 @@ class Home extends Vue{
                 store.dispatch('setSystemData', response.system.data)
 
                 this.system = store.getters.getSystemData
+                this.systems = response.systems
                 this.user = store.getters.getUserData
                 this.access_token = store.getters.getAccessToken
-                this.loading = false
+                
             },
             error: function(){
                 router.replace('/login')
             },
+            complete: () => {
+                this.hideLoading()
+            },  
             dataType: 'json',
         });
 
+    }
+
+    changeSistema(index){
+        const user = store.getters.getUserData
+
+        this.showLoading()
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/change',
+            data: {idSistema: this.systems[index]['sys_id'], idUser: user.fun_id},
+            success: (response) => {
+                store.dispatch('setSystemData', response.system.data)
+                this.system = store.getters.getSystemData
+                this.systems = response.systems
+            },
+            complete: () => {
+                this.hideLoading()
+            },
+            dataType: 'json',
+        });
     }
 
     showLoading(type = null){
