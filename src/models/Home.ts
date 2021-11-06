@@ -33,18 +33,17 @@ class Home extends Vue{
     }
     
     created(){
-        this.getInicialData()
-        this.hideLoading()
         window.document.title = "ubarber-admin"
     }
 
     mounted(){
-        this.hideLoading()
+        this.getInicialData()
     }
 
     getInicialData(){
         const token = store.getters.getAccessToken
 
+        this.showLoading()
         $.ajax({
             type: "POST",
             url: this.dm.getUrlServer()+'user/data',
@@ -58,14 +57,14 @@ class Home extends Vue{
                 this.systems = response.systems
                 this.user = store.getters.getUserData
                 this.access_token = store.getters.getAccessToken
-                this.loading = false
-
-                console.log(this.systems.length);
                 
             },
             error: function(){
                 router.replace('/login')
             },
+            complete: () => {
+                this.hideLoading()
+            },  
             dataType: 'json',
         });
 
