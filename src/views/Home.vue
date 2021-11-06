@@ -1,8 +1,8 @@
 <template>
 <!-- componente de header -->
 <Header 
-    :username="user.cli_primeiro_nome"
-    :avatar_user="url_server+user.cli_avatar"
+    :username="user.fun_primeiro_nome"
+    :avatar_user="url_server+user.fun_avatar"
 />
 <!-- componente de header -->
 
@@ -12,15 +12,18 @@
             <div id="logo-empresa" class="me-4 shadow">
                 <img :src="url_server+system.sys_logo" alt="">
             </div>
-            <div class="dropdown">
+            <div class="dropdown" v-if="systems.length > 0" style="cursor:pointer">
                 <h3 class="color-default-title dropdown-toggle" id="dropDownSistemas" data-bs-toggle="dropdown" aria-expanded="false">{{system.sys_nome_empresa}}</h3>
 
-                <ul class="dropdown-menu" aria-labelledby="dropDownSistemas">
-                    <li><a class="dropdown-item" href="#">Sistema 1</a></li>
-                    <li><a class="dropdown-item" href="#">Sistema 2</a></li>
-                    <li><a class="dropdown-item" href="#">Sistema 3</a></li>
+                <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="dropDownSistemas">
+                    <li><h6 class="dropdown-header">Alterar sistema</h6></li>
+                    <li class="dropdown-item" v-for="(sistema, index) in systems" :key="index" :value="sistema.sys_id" @click.self="changeSistema(index)">
+                                {{sistema.sys_nome_empresa}}
+                    </li>
                 </ul>
             </div>
+
+            <h3 v-if="systems.length == 0" class="color-default-title">{{system.sys_nome_empresa}}</h3>
         </div>
     </div>
 </div>
@@ -69,13 +72,13 @@
                 Dados do usuário
             </div>
             <div class="card-body" v-if="loading == false">
-                <h4 class="color-default-title">Bem-vindo, {{user.cli_nome}}</h4>
+                <h4 class="color-default-title">Bem-vindo, {{user.fun_nome}}</h4>
                 <div class="row d-flex align-items-center mt-2">
                     <div class="col-1 text-center">
                         <i class="far fa-envelope"></i>
                     </div>
                     <div class="col-11">
-                        {{user.cli_email}}
+                        {{user.fun_email}}
                     </div>
                 </div>
 
@@ -84,7 +87,7 @@
                         <i class="fas fa-phone"></i>
                     </div>
                     <div class="col-11">
-                        {{user.cli_telefone != '' ? user.cli_telefone : "Vazio"}}
+                        {{user.fun_telefone != '' ? user.fun_telefone : "Vazio"}}
                     </div>
                 </div>
 

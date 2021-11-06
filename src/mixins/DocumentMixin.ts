@@ -2,11 +2,11 @@ import store from '@/store'
 import axios from 'axios'
 import router from '@/router'
 import $ from 'jquery'
-import Clientes from '@/entities/Clientes'
+import Funcionarios from '@/entities/Funcionarios'
 import Swal from 'sweetalert2'
 class DocumentMixin {
 
-	public clientes = new Clientes()
+	public funcionarios = new Funcionarios()
 
 	getUrlServer(){
 		const url = window.location.hostname;
