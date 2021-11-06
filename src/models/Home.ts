@@ -2,7 +2,7 @@ import DocumentMixin from '@/mixins/DocumentMixin'
 // import axios from 'axios'
 import {Vue, Options} from 'vue-class-component'
 import router from '@/router'
-// import Clientes from '@/entities/Clientes'
+// import Funcionarios from '@/entities/Funcionarios'
 import store from '@/store'
 import $ from 'jquery'
 import Swal from 'sweetalert2'
@@ -14,12 +14,13 @@ import Header from '../components/Header.vue'
     },
 })
 
-class Login extends Vue{
+class Home extends Vue{
     public dm = new DocumentMixin()
     public url_server = this.dm.getUrlServer()
 
     public user = {}
     public system = {}
+    public systems = []
 
     public loading = true
 
@@ -32,18 +33,17 @@ class Login extends Vue{
     }
     
     created(){
-        this.getInicialData()
-        this.hideLoading()
         window.document.title = "ubarber-admin"
     }
 
     mounted(){
-        this.hideLoading()
+        this.getInicialData()
     }
 
     getInicialData(){
         const token = store.getters.getAccessToken
 
+        this.showLoading()
         $.ajax({
             type: "POST",
             url: this.dm.getUrlServer()+'user/data',
@@ -51,9 +51,10 @@ class Login extends Vue{
             success: (response) => {
                 store.dispatch('setAccessToken', response.access_token)
                 store.dispatch('setUserData', response.user_data)
-                store.dispatch('setSystemData', response.system)
+                store.dispatch('setSystemData', response.system.data)
 
                 this.system = store.getters.getSystemData
+                this.systems = response.systems
                 this.user = store.getters.getUserData
                 this.access_token = store.getters.getAccessToken
                 this.loading = false
@@ -61,9 +62,32 @@ class Login extends Vue{
             error: function(){
                 router.replace('/login')
             },
+            complete: () => {
+                this.hideLoading()
+            },  
             dataType: 'json',
         });
 
+    }
+
+    changeSistema(index){
+        const user = store.getters.getUserData
+
+        this.showLoading()
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/change',
+            data: {idSistema: this.systems[index]['sys_id'], idUser: user.fun_id},
+            success: (response) => {
+                store.dispatch('setSystemData', response.system.data)
+                this.system = store.getters.getSystemData
+                this.systems = response.systems
+            },
+            complete: () => {
+                this.hideLoading()
+            },
+            dataType: 'json',
+        });
     }
 
     showLoading(type = null){
@@ -78,33 +102,5 @@ class Login extends Vue{
 		}
 	}
 
-    logout(){
-        const token = store.getters.getAccessToken
-
-        Swal.fire({
-            icon: 'warning',
-            title: 'Vai me abandonar mesmo? 🥺',
-            showCancelButton: true,
-            confirmButtonText: 'Sim 😥',
-            cancelButtonText: `Não 🥰`,
-          }).then( (result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "POST",
-                    url: this.dm.getUrlServer()+'user/logout',
-                    data: {access_token: token},
-                    beforeSend: () => {
-                        this.showLoading()
-                    },
-                    complete: () => {
-                        this.hideLoading()
-                    },
-                    dataType: 'json',
-                });
-            }
-        })
-
-    }
-
 }
-export default Login
+export default Home

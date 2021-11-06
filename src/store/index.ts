@@ -2,14 +2,14 @@ import { createStore } from 'vuex'
 
 export default createStore({
 	state: {
-		access_token: localStorage.getItem('access_token') != null ? localStorage.getItem('access_token') : '',
+		access_token: localStorage.getItem('at_7219371239871') != null ? localStorage.getItem('at_7219371239871') : '',
 		user: {},
 		system: {}
 	},
 	mutations: {
 		setAccessToken(state, payload:string){
 			state.access_token = payload
-			localStorage.setItem('access_token', state.access_token)
+			localStorage.setItem('at_7219371239871', state.access_token)
 		},
 
 		setUserData(state, payload:any){
@@ -18,6 +18,10 @@ export default createStore({
 
 		setSystemData(state, payload:any){
 			state.system = payload
+		},
+
+		unsetAccessToken(){
+			localStorage.removeItem('at_7219371239871')
 		}
 	},
 	actions: {

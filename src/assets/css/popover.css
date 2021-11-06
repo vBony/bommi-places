@@ -1,0 +1,24 @@
+.dark {
+    --popper-theme-background-color: #333333;
+    --popper-theme-background-color-hover: #333333;
+    --popper-theme-text-color: white;
+    --popper-theme-border-width: 0px;
+    --popper-theme-border-radius: 6px;
+    --popper-theme-padding: 10px;
+    --popper-theme-box-shadow: 0 6px 30px -6px rgba(0, 0, 0, 0.25);
+}
+
+:deep(.popper #arrow::before) {
+    margin-left: -10px;
+}
+
+.popover-title{
+    font-size: 16px !important;
+}
+
+.popover-btn{
+    min-width: 60px !important;
+    font-size: 12px !important;
+    padding: 3px 6px !important;
+    margin: 0px 3px;
+}
