@@ -81,8 +81,6 @@
 </div>
 
 <div class="content-area box-content">
-
-
     <div class="row d-flex mx-auto" >
         <div class="col-sm-12 col-md-6 col-lg-6 mb-sm-4 mb-4" id="criar-pub-mobile">
             <div class="col-12">
@@ -116,8 +114,11 @@
                         </div>
                         <div id="info-area">
                             <div class="about-icon"> <i class="fas fa-info-circle"></i> </div>
-                            <div id="text-ia" class="text-break"> 
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                            <div id="text-ia" class="text-break" v-show="system.sys_descricao"> 
+                                {{system.sys_descricao}}
+                            </div>
+                            <div id="text-ia" class="text-break" v-show="!system.sys_descricao"> 
+                                <a class="link-dark" data-bs-target="#modal-info-empresa" data-bs-toggle="modal" @click="getDataInfoSistema()">Criar descrição</a>
                             </div>
                         </div>
                         <div class="about-child">
@@ -132,7 +133,7 @@
                         </div>
 
                         <div class="about-child mt-4">
-                            <button class="btn btn-secondary mx-auto">Editar informações da empresa</button>
+                            <button class="btn btn-secondary mx-auto btn-sm" data-bs-target="#modal-info-empresa" data-bs-toggle="modal" @click="getDataInfoSistema()">Editar informações da empresa</button>
                         </div>
                     </div>
                 </div>
@@ -370,8 +371,8 @@
                                 <div class="label-ipt color-default-title">
                                     Descrição pública 
                                 </div>
-                                <textarea v-bind:class="{'is-invalid': error.servicos.sys_descricao}" class="form-control ipt" @change.self="clearErrors($event)" rows="3" v-model="servico.sys_descricao"></textarea>
-                                <div class="invalid-feedback color-danger text-start">{{error.servicos.sys_descricao}}</div>
+                                <textarea v-bind:class="{'is-invalid': error.servicos.svs_descricao}" class="form-control ipt" @change.self="clearErrors($event)" rows="3" v-model="servico.svs_descricao"></textarea>
+                                <div class="invalid-feedback color-danger text-start">{{error.servicos.svs_descricao}}</div>
                             </div>
                         </div>
                     </div>
@@ -402,6 +403,104 @@
     </div>
 </div>
 <!-- Modal Serviços [FIM] -->
+
+<!-- Modal info da empresa [INICIO] -->
+<div class="modal fade" id="modal-info-empresa" tabindex="-1" aria-labelledby="modal-info-empresa" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-default-title" id="staticBackdropLabel">Editar Informações da empresa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-geral-tab" data-bs-toggle="pill" data-bs-target="#pills-geral" type="button" role="tab" aria-controls="pills-geral" aria-selected="true">
+                            <i class="fas fa-info-circle"></i>
+                            Geral
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-contato-tab" data-bs-toggle="pill" data-bs-target="#pills-contato" type="button" role="tab" aria-controls="pills-contato" aria-selected="false">
+                            <i class="fas fa-address-card"></i>
+                            Contato
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-localizacao-tab" data-bs-toggle="pill" data-bs-target="#pills-localizacao" type="button" role="tab" aria-controls="pills-localizacao" aria-selected="false">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Localização
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-geral" role="tabpanel" aria-labelledby="pills-geral-tab">
+                        <div class="row">
+                            <div class="col-12 mt-2">
+                                <h5 class="color-default-title">Geral</h5>
+                                <span class="text-muted info-input">
+                                    As alterações são salvas automaticamente.
+                                </span>
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <div class="label-ipt color-default-title">Nome da empresa</div>
+                                <input id="editNomeEmpresa" type="text" class="form-control ipt" v-bind:class="{'is-invalid': error.system.sys_nome_empresa}" @change.self="clearErrors($event); alterarNomeSistema($event)" v-model="systemEdit.sys_nome_empresa">
+                                <div class="invalid-feedback color-danger text-start">{{error.system.sys_nome_empresa}}</div>
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <div class="label-ipt color-default-title">Nome da usuário</div>
+                                <input id="editNomeUsuario" type="text" class="form-control ipt" v-bind:class="{'is-invalid': error.system.sys_dominio}" @change.self="clearErrors($event); alterarNomeUsuarioSistema($event)" @keyup="setDomain()" v-model="systemEdit.sys_dominio">
+                                <div class="invalid-feedback color-danger text-start">{{error.system.sys_dominio}}</div>
+                            </div>
+
+                            <div class="col-12 mt-2">
+                                <div class="label-ipt color-default-title">
+                                    Descrição
+                                </div>
+                                <textarea maxlength = "255" style="resize: vertical;" v-bind:class="{'is-invalid': error.system.sys_descricao}" class="form-control ipt" @change.self="clearErrors($event); alterarDescricaoSistema($event)" @focus="messages.system.descricao = true" rows="3" v-model="systemEdit.sys_descricao"></textarea>
+                                <div class="invalid-feedback color-danger text-start">{{error.servicos.sys_descricao}}</div>
+                                <div class="text-muted info-input" v-show="messages.system.descricao">
+                                    Um breve resumo da sua empresa. O limite é de 255 caracteres. <br>
+                                    Você pode escrever um breve resumo sobre esta empresa ou informar 
+                                    as pessoas sobre seus serviços, o que pode ajudar a sua empresa 
+                                    a ser descoberta com mais frequência.
+                                </div>
+                            </div>
+
+                            <div class="col-12" style="margin-top:50px">
+                                <h5 class="color-default-title">Categorias</h5>
+
+                                <div class="col-12 mt-2">
+                                    <div class="label-ipt color-default-title">Selecione uma categoria</div>
+                                    <select name="" id="" class="form-control ipt" v-bind:class="{'is-invalid': error.system.sys_categoria}" @change.self="clearErrors($event)" v-model="systemEdit.sys_categoria">
+                                        <option disabled>Selecione uma categoria</option>
+                                        <option :value="categoria.cat_id" v-for="(categoria, index) in categorias_sistema" :key="index">{{categoria.cat_descricao}}</option>
+                                        <option :value="idCatOutros">Outros</option>
+                                    </select>
+                                    <div class="invalid-feedback color-danger text-start">{{error.system.sys_categoria}}</div>
+                                </div>
+
+                                <div class="col-12 mt-2" v-show="idCatOutros == systemEdit.sys_categoria">
+                                    <div class="label-ipt color-default-title">Digite o nome da categoria</div>
+                                    <input type="text" class="form-control ipt" v-bind:class="{'is-invalid': error.system.sys_nome}" @change.self="clearErrors($event)" @keyup="setDomain()" v-model="novaCategoria">
+                                    <div class="invalid-feedback color-danger text-start">{{error.system.sys_nome}}</div>
+                                    <div class="text-muted info-input">
+                                        Caso seja uma categoria relevante, criaremos ela, e o <b>{{systemEdit.sys_nome_empresa}}</b> será incluido na categoria. Iremos te avisar caso isso aconteça.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-contato" role="tabpanel" aria-labelledby="pills-contato-tab">...</div>
+                    <div class="tab-pane fade" id="pills-localizacao" role="tabpanel" aria-labelledby="pills-localizacao-tab">...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal info da empresa [FIM] -->
 
 <!-- LOADING -->
 <div class="loading w-100 h-100">

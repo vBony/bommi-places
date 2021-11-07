@@ -2,8 +2,12 @@
     font-family: 'Nunito Sans', sans-serif, "Font Awesome 5 Free", "Font Awesome 6 Brands" !important;
 }
 
+:root {
+    --color-default-title: #4a4a4a;
+}
+
 .color-default-title {
-    color: #4a4a4a !important;
+    color: var(--color-default-title) !important;
     font-weight: bold !important;
 }
 
@@ -64,3 +68,20 @@
     color: red;
     margin-right: 2px;
 }
+
+/* PILLS [INICIO] */
+.nav-pills .nav-link{
+    background-color: #f0f0f0;
+    color: var(--color-default-title);
+    border-radius: unset;
+}
+
+.nav-pills .nav-link.active{
+    background-color: var(--bs-dark);
+    color: white;
+}
+
+.info-input{
+    font-size: 12px;
+}
+/* #212529 */
