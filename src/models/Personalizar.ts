@@ -7,8 +7,9 @@ import $ from 'jquery'
 import 'jquery-mask-plugin'
 import Servicos from '@/entities/Servicos'
 import ServicosMessages from '@/entities/ServicosMessages'
+import System from '@/entities/System'
+import SystemMessages from '@/entities/SystemMessages'
 import Popper from "vue3-popper"
-import axios from 'axios'
 
 @Options({
     components: {
@@ -23,6 +24,7 @@ class Personalizar extends Vue {
     public url_server = this.dm.getUrlServer()
     public base_url = this.dm.baseUrl()
     public Toast = this.dm.getToast()
+    public NotificationToast = this.dm.getToastBottom()
     public access_token = null
     public mostrarPopover = false
     public desativarPopper = false
@@ -33,7 +35,8 @@ class Personalizar extends Vue {
     public user = {}
 
     // Sistema
-    public system = {}
+    public system = new System()
+    public systemEdit = new System()
 
     // Serviço
     public alterandoServico = false
@@ -42,7 +45,20 @@ class Personalizar extends Vue {
     public servicoVazio = false
     public servicos = []
     public error = {
-        servicos: new ServicosMessages()
+        servicos: new ServicosMessages(),
+        system: new SystemMessages(),
+        novaCategoria: ''
+    }
+
+    //Alterar sistema
+    public idCatOutros = 8
+    public categorias_sistema = {}
+    public novaCategoria = ''
+
+    public messages = {
+        system: {
+            descricao: false
+        }
     }
     public palavraChave = ''
 
@@ -69,6 +85,7 @@ class Personalizar extends Vue {
                 store.dispatch('setSystemData', response.system.data)
 
                 this.system = store.getters.getSystemData
+                this.systemEdit = this.system
                 this.servicos = response.system.servicos
                 this.user = store.getters.getUserData
                 this.access_token = store.getters.getAccessToken
@@ -430,6 +447,130 @@ class Personalizar extends Vue {
                 processData:false,
             });
         }
+    }
+
+    setDomain(){
+        this.systemEdit.sys_dominio = this.dm.string_to_slug(this.systemEdit.sys_dominio)
+    }
+
+    getDataInfoSistema(){
+
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/editar',
+            success: (response) => {
+                if(response.categorias){
+                    this.categorias_sistema = response.categorias
+                }
+            },
+            complete: () => {
+                this.hideLoading()
+            },
+            contentType: false,       
+            cache: false,             
+            processData:false,
+        });
+    }
+
+
+    // Alterações do sistema
+    alterarNomeSistema(event){
+        const token = store.getters.getAccessToken
+        const sistema = store.getters.getSystemData
+
+        $(event.target).prop('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/auto-save',
+            data: {token:token, idSistema: sistema.sys_id, nomeEmpresa: this.systemEdit.sys_nome_empresa},
+            success: (response)=>{
+                if(response.error){
+                    this.error.system = response.error
+                }else{
+                    this.system.sys_nome_empresa = this.systemEdit.sys_nome_empresa
+
+                    this.NotificationToast.fire({
+                        icon: 'success',
+                        title: "Nome de empresa alterado com sucesso!"
+                    })
+                }
+            },
+            statusCode: {
+                401: () => {
+                    router.replace('/login')
+                }
+            },
+            complete: () => {
+                $(event.target).prop('disabled', false);
+            },
+            dataType: 'json',
+        });
+    }
+
+    alterarNomeUsuarioSistema(event){
+        const token = store.getters.getAccessToken
+        const sistema = store.getters.getSystemData
+
+        $(event.target).prop('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/auto-save',
+            data: {token:token, idSistema: sistema.sys_id, nomeUsuario: this.systemEdit.sys_dominio},
+            success: (response)=>{
+                if(response.error){
+                    this.error.system = response.error
+                }else{
+                    this.system.sys_dominio = this.systemEdit.sys_dominio
+
+                    this.NotificationToast.fire({
+                        icon: 'success',
+                        title: "Nome de usuário alterado com sucesso!"
+                    })
+                }
+            },
+            statusCode: {
+                401: () => {
+                    router.replace('/login')
+                }
+            },
+            complete: () => {
+                $(event.target).prop('disabled', false);
+            },
+            dataType: 'json',
+        });
+    }
+
+    alterarDescricaoSistema(event){
+        const token = store.getters.getAccessToken
+        const sistema = store.getters.getSystemData
+
+        $(event.target).prop('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/auto-save',
+            data: {token:token, idSistema: sistema.sys_id, descricao: this.systemEdit.sys_descricao},
+            success: (response)=>{
+                if(response.error){
+                    this.error.system = response.error
+                }else{
+                    this.system.sys_descricao = this.systemEdit.sys_descricao
+
+                    this.NotificationToast.fire({
+                        icon: 'success',
+                        title: "Descrição alterada com sucesso!"
+                    })
+                }
+            },
+            statusCode: {
+                401: () => {
+                    router.replace('/login')
+                }
+            },
+            complete: () => {
+                $(event.target).prop('disabled', false);
+            },
+            dataType: 'json',
+        });
     }
 }
 export default Personalizar

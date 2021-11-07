@@ -7,7 +7,7 @@ class Servicos {
     public svs_retorno = 0
     public svs_ativo = true
     public svs_system = 0	
-    public sys_descricao = ''
+    public svs_descricao = ''
 
 }
 

@@ -32,15 +32,23 @@ class DocumentMixin {
 		}
 	}
 
-	showLoading(type = null){
-		if(!type){
+	showLoading(type:any = 0, element = ''){
+		if(type == 0){
 			$('.loading').fadeIn('fast')
+		}
+
+		if(type == 'input'){
+			$(element).prop('disabled', true);
 		}
 	}
 
-	hideLoading(type = null){
-		if(!type){
+	hideLoading(type:any = 0, element = ''){
+		if(type == 0){
 			$('.loading').fadeOut('fast')
+		}
+
+		if(type == 'input'){
+			$(element).prop('disabled', false);
 		}
 	}
 
@@ -74,6 +82,18 @@ class DocumentMixin {
 		return Toast
 	}
 
+	getToastBottom(){
+		const Toast = Swal.mixin({
+			toast: true,
+			position: 'bottom-start',
+			showConfirmButton: false,
+			timer: 5000,
+			timerProgressBar: true,
+		})
+
+		return Toast
+	}
+
 	loggedIn(){
 		const token = store.getters.getAccessToken
 
@@ -97,6 +117,26 @@ class DocumentMixin {
 		store.commit('unsetAccessToken')
 		router.replace('login')
     }
+
+	string_to_slug(str:string):string {
+		str = str.replace(/^\s+|\s+$/g, "-"); // trim
+		str = str.toLowerCase();
+
+		// remove accents, swap ñ for n, etc
+		const from = "åàáãäâèéëêìíïîòóöôùúüûñç·/_,:;";
+		const to = "aaaaaaeeeeiiiioooouuuunc------";
+
+		for (let i = 0, l = from.length; i < l; i++) {
+			str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
+		}
+
+		str = str
+		.replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+		.replace(/\s+/g, "-") // collapse whitespace and replace by -
+		.replace(/-+/g, "-"); // collapse dashes
+
+		return str;
+	}
 }
 
 export default DocumentMixin
