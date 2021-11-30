@@ -507,14 +507,14 @@
                         <div class="col-12 mt-2" style="margin-top:50px !important">
                             <h5 class="color-default-title">Redes sociais</h5>
 
-                            <div class="row">
-                                <div class="col-6 mt-2">
+                            <div class="d-flex flex-row">
+                                <div class="col-6 mt-2 me-2">
                                     <div class="label-ipt color-default-title">URL</div>
                                     <input type="text" id="urlRedeSocial" class="form-control ipt inputsRedeSocial" v-model="redeSocial.rss_url" v-bind:class="{'is-invalid': error.redeSocial.rss_url}" @change.self="clearErrors($event)">
                                     <div class="invalid-feedback color-danger text-start">{{error.redeSocial.rss_url}}</div>
                                 </div>
 
-                                <div class="col-4 mt-2">
+                                <div class="col-4 mt-2 me-2">
                                     <div class="label-ipt color-default-title">Rede social</div>
                                     <select name="" id="selectRedeSocial" class="form-control ipt inputsRedeSocial" v-model="redeSocial.rss_res_id" v-bind:class="{'is-invalid': error.redeSocial.rss_res_id}" @change.self="clearErrors($event)">
                                         <option disabled>Selecione uma Rede Social</option>
@@ -523,11 +523,22 @@
                                     <div class="invalid-feedback color-danger text-start">{{error.redeSocial.rss_res_id}}</div>
                                 </div>
 
-                                <div class="col-2 d-flex">
+                                <div class="col-2 d-flex align-items-end">
                                     <button class="btn btn-dark" @click="inserirRedeSocial()">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
+                            </div>
+
+                            <div class="d-flex flex-row">
+                                <!-- <div class="col-12" v-for="(redesSociaisSystem, index) in redeSocial" :key="index">
+                                    <div class="col-10">
+
+                                    </div>
+                                    <div class="col-2">
+
+                                    </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

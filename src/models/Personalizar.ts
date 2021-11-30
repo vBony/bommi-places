@@ -58,6 +58,7 @@ class Personalizar extends Vue {
     public idCatOutros = 8
     public categorias_sistema = {}
     public redesSociais = {}
+    public redesSociaisSystem = {}
     public redeSocial = {
         rss_res_id: '',
         rss_url: ''
@@ -623,6 +624,9 @@ class Personalizar extends Vue {
             success: (response) => {
                 if(response.messages){
                     this.error.redeSocial = response.messages
+                }else{
+                    this.redesSociaisSystem = response.redesSociaisSystem
+                    this.redesSociais = response.redesSociais
                 }
             },
             error: function(){
