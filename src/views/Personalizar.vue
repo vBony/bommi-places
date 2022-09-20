@@ -474,7 +474,7 @@
 
                                 <div class="col-12 mt-2">
                                     <div class="label-ipt color-default-title">Selecione uma categoria</div>
-                                    <select name="" id="" class="form-control ipt" v-bind:class="{'is-invalid': error.system.sys_categoria}" @change.self="clearErrors($event)" v-model="systemEdit.sys_categoria">
+                                    <select name="" id="" class="form-control ipt" v-bind:class="{'is-invalid': error.system.sys_categoria}" @change.self="clearErrors($event); alterarCategoriaSistema($event)" v-model="systemEdit.sys_categoria">
                                         <option disabled>Selecione uma categoria</option>
                                         <option :value="categoria.cat_id" v-for="(categoria, index) in categorias_sistema" :key="index">{{categoria.cat_descricao}}</option>
                                         <option :value="idCatOutros">Outros</option>
@@ -493,7 +493,55 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="pills-contato" role="tabpanel" aria-labelledby="pills-contato-tab">...</div>
+                    <div class="tab-pane fade" id="pills-contato" role="tabpanel" aria-labelledby="pills-contato-tab">
+                        <div class="col-12 mt-2">
+                            <h5 class="color-default-title">Contato</h5>
+
+                            <div class="col-12 mt-2">
+                                <div class="label-ipt color-default-title">Número de telefone</div>
+                                <input type="text" class="form-control ipt" v-bind:class="{'is-invalid': error.system.sys_telefone}" @change.self="clearErrors($event)" v-model="systemEdit.sys_telefone">
+                                <div class="invalid-feedback color-danger text-start">{{error.system.sys_telefone}}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-2" style="margin-top:50px !important">
+                            <h5 class="color-default-title">Redes sociais</h5>
+
+                            <div class="d-flex flex-row">
+                                <div class="col-6 mt-2 me-2">
+                                    <div class="label-ipt color-default-title">URL</div>
+                                    <input type="text" id="urlRedeSocial" class="form-control ipt inputsRedeSocial" v-model="redeSocial.rss_url" v-bind:class="{'is-invalid': error.redeSocial.rss_url}" @change.self="clearErrors($event)">
+                                    <div class="invalid-feedback color-danger text-start">{{error.redeSocial.rss_url}}</div>
+                                </div>
+
+                                <div class="col-4 mt-2 me-2">
+                                    <div class="label-ipt color-default-title">Rede social</div>
+                                    <select name="" id="selectRedeSocial" class="form-control ipt inputsRedeSocial" v-model="redeSocial.rss_res_id" v-bind:class="{'is-invalid': error.redeSocial.rss_res_id}" @change.self="clearErrors($event)">
+                                        <option disabled>Selecione uma Rede Social</option>
+                                        <option :value="redeSocial.res_id" v-for="(redeSocial, index) in redesSociais" :key="index">{{redeSocial.res_descricao}}</option>
+                                    </select>
+                                    <div class="invalid-feedback color-danger text-start">{{error.redeSocial.rss_res_id}}</div>
+                                </div>
+
+                                <div class="col-2 d-flex align-items-end">
+                                    <button class="btn btn-dark" @click="inserirRedeSocial()">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-row">
+                                <!-- <div class="col-12" v-for="(redesSociaisSystem, index) in redeSocial" :key="index">
+                                    <div class="col-10">
+
+                                    </div>
+                                    <div class="col-2">
+
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
                     <div class="tab-pane fade" id="pills-localizacao" role="tabpanel" aria-labelledby="pills-localizacao-tab">...</div>
                 </div>
             </div>

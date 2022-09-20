@@ -47,12 +47,23 @@ class Personalizar extends Vue {
     public error = {
         servicos: new ServicosMessages(),
         system: new SystemMessages(),
-        novaCategoria: ''
+        novaCategoria: '',
+        redeSocial: {
+            rss_res_id: '',
+            rss_url: ''
+        }
     }
 
     //Alterar sistema
     public idCatOutros = 8
     public categorias_sistema = {}
+    public redesSociais = {}
+    public redesSociaisSystem = {}
+    public redeSocial = {
+        rss_res_id: '',
+        rss_url: ''
+    }
+    public idRedeSocial = ''
     public novaCategoria = ''
 
     public messages = {
@@ -458,17 +469,17 @@ class Personalizar extends Vue {
         $.ajax({
             type: "POST",
             url: this.dm.getUrlServer()+'sistema/editar',
+            data: {idSistema: this.system.sys_id},
+            dataType: 'json',
             success: (response) => {
                 if(response.categorias){
                     this.categorias_sistema = response.categorias
+                    this.redesSociais = response.redesSociais
                 }
             },
             complete: () => {
                 this.hideLoading()
-            },
-            contentType: false,       
-            cache: false,             
-            processData:false,
+            }
         });
     }
 
@@ -568,6 +579,62 @@ class Personalizar extends Vue {
             },
             complete: () => {
                 $(event.target).prop('disabled', false);
+            },
+            dataType: 'json',
+        });
+    }
+
+    alterarCategoriaSistema(event){
+        const token = store.getters.getAccessToken
+        const sistema = store.getters.getSystemData
+
+        $(event.target).prop('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/auto-save',
+            data: {token:token, idSistema: sistema.sys_id, categoria: this.systemEdit.sys_categoria},
+            success: (response)=>{
+                if(response.error){
+                    this.error.system = response.error
+                }else{
+                    this.system.sys_categoria = this.systemEdit.sys_categoria
+                }
+            },
+            statusCode: {
+                401: () => {
+                    router.replace('/login')
+                }
+            },
+            complete: () => {
+                $(event.target).prop('disabled', false);
+            },
+            dataType: 'json',
+        });
+    }
+
+    inserirRedeSocial(){
+        const token = store.getters.getAccessToken
+        const sistema = store.getters.getSystemData
+
+        $('.inputsRedeSocial').prop('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: this.dm.getUrlServer()+'sistema/inserir-rede-social',
+            data: {access_token: token, redeSocial: this.redeSocial, idSistema: sistema.sys_id},
+            success: (response) => {
+                if(response.messages){
+                    this.error.redeSocial = response.messages
+                }else{
+                    this.redesSociaisSystem = response.redesSociaisSystem
+                    this.redesSociais = response.redesSociais
+                }
+            },
+            error: function(){
+                router.replace('/login')
+            },
+            complete: () => {
+                this.hideLoading()
+                $('.inputsRedeSocial').prop('disabled', false);
             },
             dataType: 'json',
         });
