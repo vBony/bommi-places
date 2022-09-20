@@ -26,7 +26,7 @@ class DocumentMixin {
 
 			if(url != 'localhost'){
 				return 'https://ubarber-server.vbony.xyz/'
-			}else {
+			}else { 
 				return 'https://ubarber.vercel.app/'
 			}
 		}
