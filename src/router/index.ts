@@ -4,6 +4,7 @@ import Login from "../views/Login.vue"
 import CadastroFuncionario from "../views/CadastroFuncionario.vue"
 import Personalizar from "../views/Personalizar.vue"
 import DocumentMixin from '@/mixins/DocumentMixin'
+import HomeView from '../views/HomeView.vue'
 // import store from '@/store'
 
 const routes: Array<RouteRecordRaw> = [
@@ -68,6 +69,12 @@ const routes: Array<RouteRecordRaw> = [
 				next('login')
 			}
 		}
+	},
+
+	{
+		path: '/vuetify',
+		name: 'Vuetify',
+		component: HomeView
 	}
 ]
 

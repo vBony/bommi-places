@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
 *:not(.fa, .fas, .fab, .far){
-    font-family: 'Nunito Sans', sans-serif, "Font Awesome 5 Free", "Font Awesome 6 Brands" !important;
+    font-family: 'Poppins', sans-serif, "Font Awesome 5 Free", "Font Awesome 6 Brands" !important;
 }
 
 :root {
