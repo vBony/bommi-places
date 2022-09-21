@@ -3,7 +3,7 @@
     <div class="container">
         <router-link to="/" class="navbar-brand">
             <div id="logo">
-                <img src="../assets/imgs/logo-black.png" alt="">
+                <img src="/imgs/logo-black.png" alt="">
             </div>
         </router-link>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">

@@ -2,7 +2,7 @@
 <div id="cont-area" class="w-100 h-100 d-flex justify-content-center align-items-center">
     <div id="sub-cont-area" class="p-4">
         <form @submit.prevent="login()">
-            <div id="logo"><img  src="../assets/imgs/logo-black.png" alt="50px"></div>
+            <div id="logo"><img  src="/imgs/logo-black.png" alt="50px"></div>
             <h2 class="mb-4">Login como gerenciador</h2>
             <div class="ipt-sub-area mb-4">
                 <v-text-field
@@ -16,10 +16,12 @@
             <div class="ipt-sub-area mb-4">
                 <v-text-field
                     v-model="user.fun_senha"
-                    :type="'password'"
+                    :append-inner-icon="mostrarSenha ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="mostrarSenha ? 'text' : 'password'"
                     label="Senha"
                     name="fun_senha"
                     :error-messages="error.fun_senha"
+                    @click:append-inner="mostrarSenha = !mostrarSenha"
                 ></v-text-field>
             </div>
             <div class="d-grid gap-2">

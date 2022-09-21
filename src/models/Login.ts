@@ -11,6 +11,8 @@ class Login extends Vue {
         fun_senha: null,
     }
 
+    public mostrarSenha = false
+
     public loading = false
     public access_token = ''
 
