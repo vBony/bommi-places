@@ -45,35 +45,23 @@ class CadastroFuncionario extends Vue {
     }
 
     created(){
-        this.getInicialData()
+        this.init()
        
         window.document.title = "ubarber-admin"
     }
 
+    init(){
+        this.fetchDataFromStore()
+    }
+
+    fetchDataFromStore(){
+        this.system = store.getters.getSystemData
+        this.user = store.getters.getUserData
+        this.access_token = store.getters.getAccessToken
+        this.loading = false
+    }
+
     getInicialData(){
-        const token = store.getters.getAccessToken
-
-        $.ajax({
-            type: "POST",
-            url: this.dm.getUrlServer()+'user/data',
-            data: {access_token: token},
-            success: (response) => {
-                store.dispatch('setAccessToken', response.access_token)
-                store.dispatch('setUserData', response.user_data)
-                store.dispatch('setSystemData', response.system)
-
-                this.system = store.getters.getSystemData
-                this.user = store.getters.getUserData
-                this.access_token = store.getters.getAccessToken
-                this.loading = false
-                
-            },
-            error: function(){
-                router.replace('/login')
-            },
-            dataType: 'json',
-        });
-
         $.ajax({
             type: "POST",
             url: this.dm.getUrlServer()+'sistema/buscar-por-usuario',

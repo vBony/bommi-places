@@ -80,7 +80,11 @@ class DocumentMixin {
 		return new Promise((resolve, reject) => {
 			if(token){
 				axios.post(this.getUrlServer()+'user/is-logged', {access_token: token})
-				.then(() => {
+				.then((response) => {
+					store.dispatch('setAccessToken', response.data.access_token)
+					store.dispatch('setUserData', response.data.user_data)
+					store.dispatch('setSystemData', response.data.system)
+					
 					resolve(true)
 				})
 				.catch(() => {
