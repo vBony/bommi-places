@@ -64,7 +64,7 @@
                 <p class="h5">Criar código de cadastro</p>
                 <p class="text-muted">
                     Crie o código de cadastro e informe o mesmo ao seu
-                    funcionário no momento de cadastro.
+                    funcionário no momento de cadastro. 
                 </p>
 
                 <div class="col-12">
