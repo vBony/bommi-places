@@ -19,6 +19,7 @@ const routes: Array<RouteRecordRaw> = [
 			 * aguardando a resposta do backend, onde verifica
 			 * se o usuário está logado ou não
 			 */
+			dm.showLoading()
 			const response = await dm.loggedIn()
 			if(response){
 				next()
@@ -43,6 +44,7 @@ const routes: Array<RouteRecordRaw> = [
 			 * aguardando a resposta do backend, onde verifica
 			 * se o usuário está logado ou não
 			 */
+			dm.showLoading()
 			const response = await dm.loggedIn()
 			if(response){
 				next()

@@ -5,6 +5,7 @@ import store from '@/store'
 import router from '@/router'
 import $ from 'jquery'
 import Funcionarios from '../entities/Funcionarios'
+import axios from 'axios'
 
 @Options({
     components: {
@@ -22,10 +23,8 @@ class CadastroFuncionario extends Vue {
         countCadastros: 0,
     }
 
-    public jaTemUrl = false
     public cadastrosRestantes = 0
 
-    public sistemas = {}
     public user = new Funcionarios()
     public system = {
         sys_id: 0
@@ -40,6 +39,10 @@ class CadastroFuncionario extends Vue {
 
     public access_token = null
 
+    public modalFuncionario = false
+
+    public codigosCadastro = []
+
     beforeCreate(){
         document.querySelector('body')!.setAttribute('style', 'background-color:#F5F6FA !important')
     }
@@ -52,6 +55,11 @@ class CadastroFuncionario extends Vue {
 
     init(){
         this.fetchDataFromStore()
+        
+        axios.post(this.dm.getUrlServer()+'funcionarios/', {idSistema: this.system.sys_id})
+        .then((resp) => {
+            this.codigosCadastro = resp.data.codigosCadastro
+        })
     }
 
     fetchDataFromStore(){
@@ -61,19 +69,8 @@ class CadastroFuncionario extends Vue {
         this.loading = false
     }
 
-    getInicialData(){
-        $.ajax({
-            type: "POST",
-            url: this.dm.getUrlServer()+'sistema/buscar-por-usuario',
-            data:{token: store.getters.getAccessToken},
-            success: (response) => {
-                this.sistemas = response.sistemas
-                this.cadastroFuncionario.sistema = this.system.sys_id
-
-                this.verificarSistema()
-            },
-            dataType: 'json',
-        });
+    copiarCodigo(){
+        console.log('copiado');
     }
 
     criarUrlCadastroFuncionario(){
@@ -93,35 +90,6 @@ class CadastroFuncionario extends Vue {
             dataType: 'json',
         });
     }
-
-    verificarSistema(){
-        this.showLoading()
-        $.ajax({
-            type: "POST",
-            url: this.dm.getUrlServer()+'sistema/url-cadastro-disponivel',
-            data:{id: this.cadastroFuncionario.sistema},
-            success: (response) => {
-               if(response.cadastrosRestantes){
-                   this.cadastrosRestantes = response.cadastrosRestantes
-
-                   if(this.cadastrosRestantes > 0){
-                        this.jaTemUrl = true
-
-                        // Limpando error
-                        this.error.countCadastros = ''
-                        this.error.sistema = ''
-                   }else{
-                        this.jaTemUrl = false
-                   }
-               }
-            },
-            complete: () => {
-                this.hideLoading()
-            },
-            dataType: 'json',
-        });
-    }
-
 
     showLoading(type = null){
         if(!type){

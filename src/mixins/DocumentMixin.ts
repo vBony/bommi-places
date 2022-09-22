@@ -103,7 +103,7 @@ class DocumentMixin {
 				.then((response) => {
 					store.dispatch('setAccessToken', response.data.access_token)
 					store.dispatch('setUserData', response.data.user_data)
-					store.dispatch('setSystemData', response.data.system)
+					store.dispatch('setSystemData', response.data.system.data)
 					
 					resolve(true)
 				})
