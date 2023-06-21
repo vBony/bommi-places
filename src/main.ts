@@ -1,10 +1,20 @@
-import { createApp } from 'vue'
+/**
+ * main.ts
+ *
+ * Bootstraps Vuetify and other plugins then mounts the App`
+ */
+
+// Components
 import App from './App.vue'
-import router from './router'
-import store from './store'
 
-import dotenv from 'dotenv'
+// Composables
+import { createApp } from 'vue'
 
-dotenv.config()
+// Plugins
+import { registerPlugins } from '@/plugins'
 
-createApp(App).use(store).use(router).mount('#app')
+const app = createApp(App)
+
+registerPlugins(app)
+
+app.mount('#app')

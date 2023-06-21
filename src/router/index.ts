@@ -1,79 +1,73 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Home from "../views/Home.vue"
-import Login from "../views/Login.vue"
-import CadastroFuncionario from "../views/CadastroFuncionario.vue"
-import Personalizar from "../views/Personalizar.vue"
-import DocumentMixin from '@/mixins/DocumentMixin'
-// import store from '@/store'
+// Composables
+import { createRouter, createWebHistory } from 'vue-router'
 
-const routes: Array<RouteRecordRaw> = [
-	{
-		path: '/',
-		name: 'Home',
-		component: Home,
-		beforeEnter: async (to, from, next) => {
-			const dm = new DocumentMixin()
+const routes = [
+  {
+    path: '/',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Home',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+      },
+    ],
+  },
+  {
+    path: '/api-tester',
+    // component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'ApiTester',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/ApiTester.vue'),
+      },
+    ],
+  },
+  {
+    path: '/admin/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/admin/Login.vue')
+  },
+  // {
+  //   path: '/',
+  //   name: 'Encontre',
+  //   component: Encontre
+  // },
+  // {
+  //   path: '/place/:estabelecimento',
+  //   name: 'Home',
+  //   component: '@/views/Home.vue'
+  // },
+  // {
+  //   path: '/cadastro',
+  //   name: 'Cadastro',
+  //   component: Cadastro
+  // },
+  // {
+  //   path:'/nao-encontrado',
+  //   name: 'NotFound',
+  //   component: NotFound
+  // }
 
-			/**
-			 * aguardando a resposta do backend, onde verifica
-			 * se o usuário está logado ou não
-			 */
-			const response = await dm.loggedIn()
-			if(response){
-				next()
-			}else{
-				next('login')
-			}
-		}
-	},
-	{
-		path: '/login',
-		name: 'Login',
-		component: Login,
-	},
-	{
-		path: '/cadastro/funcionario',
-		name: 'CadastroFuncionario',
-		component: CadastroFuncionario,
-		beforeEnter: async (to, from, next) => {
-			const dm = new DocumentMixin()
-
-			/**
-			 * aguardando a resposta do backend, onde verifica
-			 * se o usuário está logado ou não
-			 */
-			const response = await dm.loggedIn()
-			if(response){
-				next()
-			}else{
-				next('login')
-			}
-		}
-	},
-	{
-		path: '/personalizar',
-		name: 'Personalizar',
-		component: Personalizar,
-		beforeEnter: async (to, from, next) => {
-			const dm = new DocumentMixin()
-
-			/**
-			 * aguardando a resposta do backend, onde verifica
-			 * se o usuário está logado ou não
-			 */
-			const response = await dm.loggedIn()
-			if(response){
-				next()
-			}else{
-				next('login')
-			}
-		}
-	}
+  { 
+    path: "/:catchAll(.*)", 
+    name: 'Not Found',
+    component: {
+      template: '<p>Page Not Found</p>'
+    }
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
 })
 
 export default router
