@@ -46,7 +46,7 @@
                     </v-col>
 
                     <v-col cols="12" class="px-0 py-0 mt-5">
-                        <p class="text-center">Não tem cadastro? <a href="" class="text-black font-weight-bold">Cadastre seu Salão</a></p>
+                        <p class="text-center">Não tem cadastro? <router-link to="/register" class="text-black font-weight-bold">Cadastre seu Salão</router-link></p>
                     </v-col>
                 </v-form>
 
