@@ -37,6 +37,7 @@
                                 
                             <v-col cols="12" class="px-0 py-0 mt-4">
                                 <v-text-field 
+                                    v-model="cadastro.usuario.cpf"
                                     label="CPF do responsável legal" 
                                     variant="outlined"
                                     hide-details="auto"
@@ -65,7 +66,7 @@
                             <v-col cols="12" class="px-0 py-0 mt-4">
                                 <v-select
                                     v-model="cadastro.loja.temCnpj"
-                                    item-text="text" 
+                                    item-title="text" 
                                     item-value="value"
                                     label="Possui CNPJ?"
                                     :items="simNao"
@@ -75,7 +76,8 @@
                             </v-col>
 
                             <v-col cols="12" class="px-0 py-0 mt-4" v-if="cadastro.loja.temCnpj === 0">
-                                <v-text-field 
+                                <v-text-field
+                                    v-model="cadastro.usuario.cpf"
                                     disabled
                                     label="CPF do responsável legal" 
                                     variant="outlined"
@@ -142,7 +144,7 @@ const App = defineComponent({
         cadastro:{
             usuario: {
                 nome: null,
-                cpf: null
+                cpf: ""
             },
             loja: {
                 temCnpj: null
