@@ -25,7 +25,7 @@
                     </v-col>
                     <v-form :disabled="loading" @submit.prevent="login()" class="mt-10">
                         <!-- Dados do responsável -->
-                        <div v-show="step.currentStep == 0">
+                        <div v-show="step.currentStep == 1">
                             <h1>Dados pessoais do responsável 🤵</h1>
                             <p class="text-disabled">
                                 Informe os seus dados pessoais
@@ -57,7 +57,7 @@
                         <!-- FIM dados do responsável -->
 
                         <!-- Inicio dados do estabelecimento -->
-                        <div v-show="step.currentStep == 1">
+                        <div v-show="step.currentStep == 2">
                             <h1>Informações do estabelecimento 🏬</h1>
                             <p class="text-disabled">
                                 Preencha com os dados do seu negócio
@@ -97,12 +97,108 @@
 
                             <v-col cols="12" class="px-0 py-0 mt-4">
                                 <v-text-field 
-                                    label="Data de nascimento" 
+                                    label="Nome do estabelecimento" 
+                                    variant="outlined"
+                                    hide-details="auto"
+                                    type="text"
+                                    hint="Como aparecerá no app"
+                                ></v-text-field>
+                            </v-col>
+
+                            <v-col cols="12" class="px-0 py-0 mt-4">
+                                <v-text-field 
+                                    label="Telefone ou Celular do estabelecimento" 
+                                    variant="outlined"
+                                    hide-details="auto"
+                                    type="text"
+                                    hint="Como aparecerá no app"
+                                ></v-text-field>
+                            </v-col>
+
+                            <v-col cols="12" class="px-0 py-0 mt-4">
+                                <v-select
+                                    item-title="text" 
+                                    item-value="value"
+                                    label="Segmento"
+                                    :items="segmentos"
+                                    variant="outlined"
+                                    hide-details="auto"
+                                ></v-select>
+                            </v-col>
+                        </div>
+
+                        <div v-show="step.currentStep == 3">
+                            <h1>Endereço 🏬</h1>
+                            <p class="text-disabled">
+                                Preencha as informações de endereço do seu negócio
+                            </p>
+
+                            <v-col cols="12" class="px-0 py-0 mt-4">
+                                <v-text-field
+                                    label="CEP" 
+                                    variant="outlined"
+                                    hide-details="auto"
+                                    type="text"
+                                ></v-text-field>
+                                <a 
+                                    href="https://buscacepinter.correios.com.br/app/endereco/index.php" 
+                                    class="text-black font-weight-bold"
+                                    target="_blank"
+                                >
+                                    Não sei meu CEP
+                                </a>
+                            </v-col>
+
+                            <v-row class="px-0 py-0 mt-4">
+                                <v-col cols="12" lg="3" md="3">
+                                    <v-text-field
+                                        disabled
+                                        label="Estado" 
+                                        variant="outlined"
+                                        hide-details="auto"
+                                        type="text"
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" lg="9" md="9">
+                                    <v-text-field
+                                        disabled
+                                        label="Cidade" 
+                                        variant="outlined"
+                                        hide-details="auto"
+                                        type="text"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+
+                            <v-col cols="12" class="px-0 py-0 mt-4">
+                                <v-text-field
+                                    label="Bairro" 
                                     variant="outlined"
                                     hide-details="auto"
                                     type="text"
                                 ></v-text-field>
                             </v-col>
+
+                            <v-row class="px-0 py-0 mt-4">
+                                <v-col cols="12" lg="3" md="3" class="pt-0">
+                                    <v-text-field
+                                        label="Número" 
+                                        variant="outlined"
+                                        hide-details="auto"
+                                        type="text"
+                                    ></v-text-field>
+                                </v-col>
+
+                                <v-col cols="12" lg="9" md="9" class="pt-0">
+                                    <v-text-field
+                                        label="Complemento (Opcional)" 
+                                        variant="outlined"
+                                        hide-details="auto"
+                                        type="text"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
                         </div>
 
                         <v-col cols="12" class="px-0 py-0 mt-5">
@@ -113,7 +209,6 @@
                             <p class="text-center">Já possui uma conta? <router-link to="/login" class="text-black font-weight-bold">Entre agora</router-link></p>
                         </v-col>
                     </v-form>
-
                 </v-card>
             </v-col>
         </v-row>
@@ -136,8 +231,8 @@ const App = defineComponent({
         serverUrl: import.meta.env.VITE_SERVER_URL,
         loading: false,
         step: {
-          totalSteps: 1,
-          currentStep: 0,
+          totalSteps: 3,
+          currentStep: 1,
           progress: 0
         },
 
@@ -154,6 +249,14 @@ const App = defineComponent({
         simNao: [
             { text: 'Sim', value: 1 },
             { text: 'Não', value: 0 }
+        ],
+
+        segmentos: [
+            { text: 'Barbearia', value: 1 },
+            { text: 'Salão de beleza', value: 2 },
+            { text: 'Esmalteria', value: 3 },
+            { text: 'Estética', value: 4 },
+            { text: 'Clínica', value: 5 }
         ]
     };
   },
