@@ -211,6 +211,36 @@
                             </v-row>
                         </div>
 
+                        <div v-show="step.currentStep == 4">
+                            <h1>Dados de acesso 🔐</h1>
+                            <p class="text-disabled">
+                                Os dados informados abaixo serão para acessar o sistema
+                            </p>
+
+                            <v-col cols="12" class="px-0 py-0 mt-4">
+                                <v-text-field 
+                                    v-model="entidade.usuario.email"
+                                    label="E-mail" 
+                                    variant="outlined" 
+                                    type="email" 
+                                    hide-details="auto" 
+                                    error-messages=""
+                                >
+                                </v-text-field>
+                            </v-col>
+
+                            <v-col cols="12" class="px-0 py-0 mt-4">
+                                <v-text-field 
+                                    label="Senha" 
+                                    variant="outlined" 
+                                    :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                                    :type="visible ? 'text' : 'password'"
+                                    @click:append-inner="visible = !visible"
+                                    hide-details="auto"
+                                ></v-text-field>
+                            </v-col>
+                        </div>
+
                         <v-row class="mt-10 d-flex justify-space-between mb-10">
                             <v-btn @click="previous()" variant="tonal" size="large">Voltar</v-btn>
                             <v-btn color="black" size="large" @click="next()">Próximo</v-btn>
@@ -242,10 +272,12 @@ const App = defineComponent({
     return {
         serverUrl: import.meta.env.VITE_SERVER_URL,
         loading: false,
+        visible: false,
         step: {
-          totalSteps: 3,
+          totalSteps: 4,
           currentStep: 1,
-          progress: 0
+          progress: 0,
+          percentagePerStep: 0
         },
 
         entidade:{
@@ -253,6 +285,8 @@ const App = defineComponent({
                 nome: null,
                 cpf: null,
                 dataNascimento: null,
+                email: null,
+                senha: null
             },
             estabelecimento: {
                 temCnpj: null,
@@ -287,36 +321,22 @@ const App = defineComponent({
   },
   created(){
     // Starting progress bar in step 1
-    let percentagePerStep = 100 / this.step.totalSteps
-    this.step.progress = percentagePerStep
+    this.step.percentagePerStep = 100 / this.step.totalSteps
+    this.step.progress = this.step.percentagePerStep
   },
   methods: {
     next(){
-        let percentagePerStep = 100 / this.step.totalSteps
-
         if(this.step.currentStep < this.step.totalSteps){
-            if(this.step.progress < 100){
-                this.step.progress += percentagePerStep * this.step.currentStep
-
-                if(this.step.progress > 100){
-                    this.step.progress = 100
-                }
-            }
-
+            this.step.progress += this.step.percentagePerStep
             this.step.currentStep++
         }
     },
 
     previous(){
-        let percentagePerStep = 100 / this.step.totalSteps
-        
         if(this.step.currentStep > 1){
-            this.step.progress -= percentagePerStep
-
+            this.step.progress -= this.step.percentagePerStep
             this.step.currentStep--
         }
-
-        console.log(this.step.progress)
     }
   },
 
