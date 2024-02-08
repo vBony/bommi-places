@@ -22,7 +22,7 @@
                             height="10"
                         ></v-progress-linear>
                     </v-col>
-                    <v-form :disabled="loading" @submit.prevent="login()" class="mt-10">
+                    <v-form :disabled="loading" @submit.prevent="register()" class="mt-10">
                         <!-- Dados do responsável -->
                         <div v-show="step.currentStep == 1">
                             <h1>Dados pessoais do responsável 🤵</h1>
@@ -30,9 +30,16 @@
                                 Informe os seus dados pessoais
                             </p>
 
-                            <v-col cols="12" class="px-0 py-0 mt-4">
-                                <v-text-field label="Nome completo" variant="outlined" type="text" hide-details="auto" error-messages=""></v-text-field>
-                            </v-col>
+                            <v-row class="px-0 py-0 mt-4">
+                                <v-col cols="12" lg="6" md="6">
+                                    <v-text-field label="Nome" variant="outlined" type="text" hide-details="auto" error-messages=""></v-text-field>
+                                </v-col>
+    
+                                <v-col cols="12" lg="6" md="6" sm="12">
+                                    <v-text-field label="Sobrenome" variant="outlined" type="text" hide-details="auto" error-messages=""></v-text-field>
+                                </v-col>
+                            </v-row>
+
                                 
                             <v-col cols="12" class="px-0 py-0 mt-4">
                                 <v-text-field 
@@ -337,6 +344,10 @@ const App = defineComponent({
             this.step.progress -= this.step.percentagePerStep
             this.step.currentStep--
         }
+    },
+
+    register(){
+        axios.post('')
     }
   },
 
