@@ -40,6 +40,11 @@ const routes = [
     name: 'Singup',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Register.vue')
   },
+  {
+    path: '/places/register',
+    name: 'Singup Places',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/RegisterPlaces.vue')
+  },
   // {
   //   path: '/',
   //   name: 'Encontre',
