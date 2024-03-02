@@ -32,7 +32,7 @@
                                         variant="outlined" 
                                         type="text" 
                                         hide-details="auto" 
-                                        error-messages=""
+                                        :error-messages="messages.emp_first_name"
                                     ></v-text-field>
                                 </v-col>
     
@@ -43,7 +43,7 @@
                                         variant="outlined" 
                                         type="text" 
                                         hide-details="auto" 
-                                        error-messages=""
+                                        :error-messages="messages.emp_last_name"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -51,12 +51,12 @@
                                 
                             <v-col cols="12" class="px-0 py-0 mt-4">
                                 <v-text-field 
-                                    v-facade="'#-#'"
                                     v-model="entidade.emp_cpf"
                                     label="CPF do responsável legal" 
                                     variant="outlined"
                                     hide-details="auto"
                                     type="text"
+                                    :error-messages="messages.emp_cpf"
                                 ></v-text-field>
 
                             </v-col>
@@ -68,6 +68,7 @@
                                     variant="outlined"
                                     hide-details="auto"
                                     type="text"
+                                    :error-messages="messages.emp_birthdate"
                                 ></v-text-field>
                             </v-col>
 
@@ -83,7 +84,7 @@
                                     variant="outlined" 
                                     type="email" 
                                     hide-details="auto" 
-                                    error-messages=""
+                                    :error-messages="messages.emp_email"
                                 >
                                 </v-text-field>
                             </v-col>
@@ -97,6 +98,7 @@
                                     :type="visible ? 'text' : 'password'"
                                     @click:append-inner="visible = !visible"
                                     hide-details="auto"
+                                    :error-messages="messages.emp_password"
                                 ></v-text-field>
                             </v-col>
                         </div>
@@ -121,8 +123,7 @@
 import { defineComponent } from 'vue';
 import HelloWorld from '@/components/HelloWorld.vue'
 import axios from 'axios'
-import { facade as vFacade } from 'vue-input-facade'
-
+import { useUserStore } from '../store/user'
 
 const App = defineComponent({
   components: {
@@ -145,6 +146,16 @@ const App = defineComponent({
             emp_cpf: null,
         },
 
+        messages:{
+            emp_first_name: "",
+            emp_last_name: "",
+            emp_email: "",
+            emp_password: "",
+            emp_phone_number: "",
+            emp_birthdate: "",
+            emp_cpf: "",
+        },
+
         simNao: [
             { text: 'Sim', value: 1 },
             { text: 'Não', value: 0 }
@@ -155,7 +166,28 @@ const App = defineComponent({
   },
   methods: {
     register(){
-        axios.post('')
+        const userStore = useUserStore()
+
+        this.loading = true
+        axios.post(this.serverUrl+'/api/auth/employee', this.entidade)
+        .then((response) => {
+            this.loading = false
+            if(response.data.user !== undefined){
+                userStore.setUser(response.data.user)
+
+                if(response.data.token !== undefined){
+                    userStore.setToken(response.data.token)
+                    
+                    this.$router.replace('/places/register')
+                }
+            }
+        })
+        .catch((reason) => {
+            this.loading = false
+            if(reason.response.data.errors !== undefined){
+                this.messages = reason.response.data.errors
+            }
+        })
     }
   },
 
