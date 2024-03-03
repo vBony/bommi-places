@@ -19,9 +19,16 @@
                 <p class="text-disabled">
                     Para continuar, realize o login em sua conta
                 </p>
-                <v-form :disabled="loading" @submit.prevent="login()" class="mt-10">
+                <v-form :disabled="loading" class="mt-10">
                     <v-col cols="12" class="px-0 py-0">
-                        <v-text-field label="E-mail" variant="outlined" type="email" hide-details="auto" error-messages=""></v-text-field>
+                        <v-text-field 
+                          label="E-mail" 
+                          variant="outlined" 
+                          type="email" 
+                          hide-details="auto" 
+                          :error-messages="messages.emp_email"
+                          v-model="entity.emp_email"
+                        ></v-text-field>
                     </v-col>
                     
                     <v-col cols="12" class="px-0 py-0 mt-4">
@@ -32,6 +39,8 @@
                             :type="visible ? 'text' : 'password'"
                             @click:append-inner="visible = !visible"
                             hide-details="auto"
+                            :error-messages="messages.emp_password"
+                            v-model="entity.emp_password"
                         ></v-text-field>
                     </v-col>
 
@@ -42,7 +51,7 @@
                     </v-col>
 
                     <v-col cols="12" class="px-0 py-0 mt-5">
-                        <v-btn color="black" size="large" block>Entrar</v-btn>
+                        <v-btn color="black" size="large" block @click="login()">Entrar</v-btn>
                     </v-col>
 
                     <v-col cols="12" class="px-0 py-0 mt-5">
@@ -60,6 +69,7 @@
 import { defineComponent } from 'vue';
 import HelloWorld from '@/components/HelloWorld.vue'
 import axios from 'axios'
+import { useUserStore } from '../store/user'
 
 const App = defineComponent({
   components: {
@@ -74,6 +84,14 @@ const App = defineComponent({
         consultaExecutada: false,
         serverUrl: import.meta.env.VITE_SERVER_URL,
         loading: false,
+        messages: {
+          emp_email: "",
+          emp_password: ""
+        },
+        entity: {
+          emp_email: null,
+          emp_password: null
+        }
     };
   },
   methods: {
@@ -99,7 +117,27 @@ const App = defineComponent({
     },
 
     login(){
-        alert('Logged!')
+      const userStore = useUserStore()
+
+      this.loading = true
+      axios.post(this.serverUrl+'/api/auth/employee/login', this.entity)
+      .then((response) => {
+          this.loading = false
+          if(response.data.user !== undefined){
+              userStore.setUser(response.data.user)
+
+              if(response.data.token !== undefined){
+                  userStore.setToken(response.data.token)
+                  this.$router.replace('/places/register')
+              }
+          }
+      })
+      .catch((reason) => {
+          this.loading = false
+          if(reason.response.data.errors !== undefined){
+              this.messages = reason.response.data.errors
+          }
+      })
     },
 
     resetMessages(){
