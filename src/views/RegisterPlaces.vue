@@ -43,17 +43,18 @@
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-select
-                                        v-model="temCnpj"
+                                        v-model="place.pla_has_cnpj"
                                         item-title="text" 
                                         item-value="value"
                                         label="Possui CNPJ?"
                                         :items="simNao"
                                         variant="outlined"
                                         hide-details="auto"
+                                        :error-messages="messages.place.pla_has_cnpj"
                                     ></v-select>
                                 </v-col>
     
-                                <v-col cols="12" class="px-0 py-0 mt-4" v-if="temCnpj === 0">
+                                <v-col cols="12" class="px-0 py-0 mt-4" v-if="place.pla_has_cnpj == 0">
                                     <v-text-field
                                         v-model="user.emp_cpf"
                                         disabled
@@ -64,17 +65,21 @@
                                     ></v-text-field>
                                 </v-col>
     
-                                <v-col cols="12" class="px-0 py-0 mt-4" v-if="temCnpj === 1">
+                                <v-col cols="12" class="px-0 py-0 mt-4" v-if="place.pla_has_cnpj == 1">
                                     <v-text-field 
+                                        v-model="place.pla_cnpj"
+                                        :error-messages="messages.place.pla_cnpj"
                                         label="CNPJ" 
                                         variant="outlined"
                                         hide-details="auto"
-                                        type="text"
+                                        type="text"                                        
                                     ></v-text-field>
                                 </v-col>
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-text-field 
+                                        v-model="place.pla_name"
+                                        :error-messages="messages.place.pla_name"
                                         label="Nome do estabelecimento" 
                                         variant="outlined"
                                         hide-details="auto"
@@ -86,6 +91,8 @@
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-text-field 
+                                        v-model="place.pla_phone_number"
+                                        :error-messages="messages.place.pla_phone_number"
                                         label="Telefone ou Celular do estabelecimento" 
                                         variant="outlined"
                                         hide-details="auto"
@@ -114,6 +121,8 @@
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-text-field
+                                        v-model="placeAddress.plad_cep"
+                                        :error-messages="messages.placeAddress.plad_cep"
                                         label="CEP" 
                                         variant="outlined"
                                         hide-details="auto"
@@ -131,6 +140,8 @@
                                 <v-row class="px-0 py-0 mt-4">
                                     <v-col cols="12" lg="3" md="3">
                                         <v-text-field
+                                            v-model="placeAddress.plad_uf"
+                                            :error-messages="messages.placeAddress.plad_uf"
                                             disabled
                                             label="Estado" 
                                             variant="outlined"
@@ -141,6 +152,8 @@
     
                                     <v-col cols="12" lg="9" md="9">
                                         <v-text-field
+                                            v-model="placeAddress.plad_city"
+                                            :error-messages="messages.placeAddress.plad_city"
                                             disabled
                                             label="Cidade" 
                                             variant="outlined"
@@ -152,6 +165,8 @@
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-text-field
+                                        v-model="placeAddress.plad_district"
+                                        :error-messages="messages.placeAddress.plad_district"
                                         label="Bairro" 
                                         variant="outlined"
                                         hide-details="auto"
@@ -162,6 +177,8 @@
                                 <v-row class="px-0 py-0 mt-4">
                                     <v-col cols="12" lg="3" md="3" class="pt-0">
                                         <v-text-field
+                                            v-model="placeAddress.plad_number"
+                                            :error-messages="messages.placeAddress.plad_number"
                                             label="Número" 
                                             variant="outlined"
                                             hide-details="auto"
@@ -171,6 +188,8 @@
     
                                     <v-col cols="12" lg="9" md="9" class="pt-0">
                                         <v-text-field
+                                            v-model="placeAddress.plad_number"
+                                            :error-messages="messages.placeAddress.plad_number"
                                             label="Complemento (Opcional)" 
                                             variant="outlined"
                                             hide-details="auto"
@@ -193,10 +212,14 @@
     </template>
     
 <script lang='ts'>
+// @ts-nocheck
 import { defineComponent } from 'vue';
 import HelloWorld from '@/components/HelloWorld.vue'
 import axios from 'axios'
 import { useUserStore } from '../store/user'
+import UserModel from '../entities/User'
+import Place from '@/entities/Place';
+import PlaceAddress from '@/entities/PlaceAddress';
 
 const App = defineComponent({
     components: {
@@ -215,30 +238,20 @@ return {
         percentagePerStep: 0
     },
 
-    user:{
-        emp_first_name: null,
-        emp_last_name: null,
-        emp_email: null,
-        emp_password: null,
-        emp_phone_number: null,
-        emp_birthdate: null,
-        emp_cpf: null,
-    },
+    user: new UserModel(),
 
-    temCnpj: null,
+    place: new Place(),
+    placeAddress: new PlaceAddress(),
+
+    messages: {
+        place: new Place(),
+        placeAddress: new PlaceAddress()
+    },
 
     simNao: [
         { text: 'Sim', value: 1 },
         { text: 'Não', value: 0 }
     ],
-
-    segmentos: [
-        { text: 'Barbearia', value: 1 },
-        { text: 'Salão de beleza', value: 2 },
-        { text: 'Esmalteria', value: 3 },
-        { text: 'Estética', value: 4 },
-        { text: 'Clínica', value: 5 }
-    ]
 };
 },
 created(){

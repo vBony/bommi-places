@@ -124,6 +124,7 @@ import { defineComponent } from 'vue';
 import HelloWorld from '@/components/HelloWorld.vue'
 import axios from 'axios'
 import { useUserStore } from '../store/user'
+import UserModel from '../entities/User'
 
 const App = defineComponent({
   components: {
@@ -136,25 +137,9 @@ const App = defineComponent({
         loading: false,
         visible: false,
 
-        entidade:{
-            emp_first_name: null,
-            emp_last_name: null,
-            emp_email: null,
-            emp_password: null,
-            emp_phone_number: null,
-            emp_birthdate: null,
-            emp_cpf: null,
-        },
+        entidade: new UserModel(),
 
-        messages:{
-            emp_first_name: "",
-            emp_last_name: "",
-            emp_email: "",
-            emp_password: "",
-            emp_phone_number: "",
-            emp_birthdate: "",
-            emp_cpf: "",
-        },
+        messages: new UserModel(),
 
         simNao: [
             { text: 'Sim', value: 1 },
