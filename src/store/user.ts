@@ -14,7 +14,7 @@ export const useUserStore = defineStore('user', {
                 emp_cpf: null,
             },
 
-            token: null,
+            token: "",
             prefix: 'bommi_'
         }
     },
@@ -34,7 +34,7 @@ export const useUserStore = defineStore('user', {
             let token = localStorage.getItem(this.prefix+'token')
 
             if(token) {
-                return JSON.parse(token)
+                return token
             }else{
                 return state.token
             }

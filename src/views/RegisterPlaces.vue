@@ -103,10 +103,12 @@
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-select
-                                        item-title="text" 
-                                        item-value="value"
+                                        v-model="place.pla_category_id"
+                                        :error-messages="messages.place.pla_category_id"
+                                        item-title="capl_name" 
+                                        item-value="capl_id"
                                         label="Segmento"
-                                        :items="segmentos"
+                                        :items="categories"
                                         variant="outlined"
                                         hide-details="auto"
                                     ></v-select>
@@ -127,6 +129,7 @@
                                         variant="outlined"
                                         hide-details="auto"
                                         type="text"
+                                        @change="searchAddress()"
                                     ></v-text-field>
                                     <a 
                                         href="https://buscacepinter.correios.com.br/app/endereco/index.php" 
@@ -171,6 +174,7 @@
                                         variant="outlined"
                                         hide-details="auto"
                                         type="text"
+                                        disabled
                                     ></v-text-field>
                                 </v-col>
     
@@ -188,9 +192,9 @@
     
                                     <v-col cols="12" lg="9" md="9" class="pt-0">
                                         <v-text-field
-                                            v-model="placeAddress.plad_number"
-                                            :error-messages="messages.placeAddress.plad_number"
-                                            label="Complemento (Opcional)" 
+                                            v-model="placeAddress.plad_complement"
+                                            :error-messages="messages.placeAddress.plad_complement"
+                                            label="Complemento" 
                                             variant="outlined"
                                             hide-details="auto"
                                             type="text"
@@ -243,6 +247,8 @@ return {
     place: new Place(),
     placeAddress: new PlaceAddress(),
 
+    categories: [],
+
     messages: {
         place: new Place(),
         placeAddress: new PlaceAddress()
@@ -252,6 +258,8 @@ return {
         { text: 'Sim', value: 1 },
         { text: 'Não', value: 0 }
     ],
+
+    userStore: useUserStore()
 };
 },
 created(){
@@ -259,28 +267,120 @@ created(){
     this.step.percentagePerStep = 100 / this.step.totalSteps
     this.step.progress = this.step.percentagePerStep
 
-    const userStore = useUserStore()
-    console.log(userStore.getUser)
-    Object.assign(this.user, userStore.getUser);
+    Object.assign(this.user, this.userStore.getUser);
+    
+    this.init()
 },
 methods: {
-next(){
-    if(this.step.currentStep < this.step.totalSteps){
-        this.step.progress += this.step.percentagePerStep
-        this.step.currentStep++
-    }
-},
+    init(){
+        this.getCategories()
+    },
 
-previous(){
-    if(this.step.currentStep > 1){
-        this.step.progress -= this.step.percentagePerStep
-        this.step.currentStep--
-    }
-},
+    next(){
+        if(this.step.currentStep < this.step.totalSteps){
+            this.step.progress += this.step.percentagePerStep
+            this.step.currentStep++
+        }else{
+            this.register()
+        }
+    },
 
-register(){
-    axios.post('')
-}
+    previous(){
+        if(this.step.currentStep > 1){
+            this.step.progress -= this.step.percentagePerStep
+            this.step.currentStep--
+        }
+    },
+
+    register(){
+
+        const config = {
+            headers: { Authorization: `Bearer ${this.userStore.getToken}` }
+        };
+
+        axios.post(this.serverUrl+'/api/place', {place: this.place, placeAddress: this.placeAddress}, config)
+        .then( (response) => {
+            this.resetMessages()
+            console.log(response)
+        })
+        .catch( (reason) => {
+            this.loading = false
+            if(reason.response.data.errors !== undefined){
+                this.messages = reason.response.data.errors
+
+                if(reason.response.data.errors.place !== undefined){
+                    this.previous()
+                }else{
+                    this.resetPlaceMessage()
+                }
+
+                if(reason.response.data.errors.placeAddress === undefined){
+                    console.log('entrou aqui')
+                    this.resetAddressMessages()
+                }
+            }
+        })
+    },
+
+    searchAddress(){
+        this.placeAddress.plad_cep = this.placeAddress.plad_cep.replace(/\D/g, '')
+
+        if (this.placeAddress.plad_cep != "") {
+            let validaCep = /^[0-9]{8}$/
+            let errorMessage = "Houve um problema na requisicao, tente novamente mais tarde."
+            this.resetAddressMessages()
+
+
+            if(validaCep.test(this.placeAddress.plad_cep)){
+                this.loading = true
+
+                axios.get("https://viacep.com.br/ws/"+ this.placeAddress.plad_cep +"/json/")
+                .then( (response) => {
+                    this.loading = false
+                    let data = response.data
+
+                    if(data){
+                        this.placeAddress.plad_district = data.bairro
+                        this.placeAddress.plad_city = data.localidade
+                        this.placeAddress.plad_uf = data.uf
+                        this.placeAddress.plad_complement = data.complemento
+                    }else{
+                        this.messages.placeAddress.plad_cep = errorMessage
+                    }
+                })
+                .catch( (response) => {
+                    this.loading = false
+                    this.messages.placeAddress.plad_cep = errorMessage
+                })
+            }
+        }
+    },
+
+    getCategories(){
+        const config = {
+            headers: { Authorization: `Bearer ${this.userStore.getToken}` }
+        };
+
+        axios.get(this.serverUrl+'/api/place/categories', config)
+        .then( (response) => {
+            this.categories = response.data.categories
+        })
+    },
+
+    resetMessages(){
+        this.messages = {
+            place: new Place(),
+            placeAddress: new PlaceAddress()
+        }
+    },
+
+    resetPlaceMessage(){
+        this.messages.place = new Place()
+    },
+
+    resetAddressMessages(){
+        this.messages.placeAddress = new PlaceAddress()
+    }
 },
 
 mounted(){
