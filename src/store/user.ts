@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import router from '@/router'
 
 export const useUserStore = defineStore('user', {
     state: () => {
@@ -26,7 +27,7 @@ export const useUserStore = defineStore('user', {
             if(user) {
                 return JSON.parse(user)
             }else{
-                return state.user
+                router.replace('/login')
             }
         },
 
@@ -36,7 +37,7 @@ export const useUserStore = defineStore('user', {
             if(token) {
                 return token
             }else{
-                return state.token
+                router.replace('/login')
             }
         }
     },
@@ -45,6 +46,8 @@ export const useUserStore = defineStore('user', {
         setUser(userDestiny:object) {
             Object.assign(this.user, userDestiny);
             localStorage.setItem(this.prefix+'user', JSON.stringify(this.user))
+
+            console.log(JSON.stringify(this.user))
         },
 
         setToken(token:string){

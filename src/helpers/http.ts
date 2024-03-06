@@ -1,18 +1,25 @@
 import axios from 'axios'
-class Http {    
-    public serverUrl = import.meta.env.VITE_SERVER_URL
+import { useUserStore } from '@/store/user';
 
-    post(type:string, url:string, data:object, config:object){
-        axios({
-            method: type,
-            url: this.serverUrl+url,
-            data: data,
-            headers: {
-               'Access-Control-Allow-Origin': '*',
-               'Content-type': 'application/json',
-            }
-        })
-    }
-}
-
-export default Http
+const req = () => {
+    const defaultOptions = {
+        baseURL: import.meta.env.VITE_SERVER_URL,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+  
+    // Create instance
+    let instance = axios.create(defaultOptions);
+  
+    // Set the AUTH token for any request
+    instance.interceptors.request.use(function (config) {
+        const token = useUserStore().getToken;
+        config.headers.Authorization =  token ? `Bearer ${token}` : '';
+        return config;
+    });
+  
+    return instance;
+};
+  
+export default req();

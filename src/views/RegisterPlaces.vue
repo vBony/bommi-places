@@ -219,7 +219,7 @@
 // @ts-nocheck
 import { defineComponent } from 'vue';
 import HelloWorld from '@/components/HelloWorld.vue'
-import axios from 'axios'
+import req from '../helpers/http'
 import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
 import Place from '@/entities/Place';
@@ -293,12 +293,7 @@ methods: {
     },
 
     register(){
-
-        const config = {
-            headers: { Authorization: `Bearer ${this.userStore.getToken}` }
-        };
-
-        axios.post(this.serverUrl+'/api/place', {place: this.place, placeAddress: this.placeAddress}, config)
+        req.post(this.serverUrl+'/api/place', {place: this.place, placeAddress: this.placeAddress}, config)
         .then( (response) => {
             this.resetMessages()
             this.$router.replace('/dashboard')
@@ -315,7 +310,6 @@ methods: {
                 }
 
                 if(reason.response.data.errors.placeAddress === undefined){
-                    console.log('entrou aqui')
                     this.resetAddressMessages()
                 }
             }
@@ -334,7 +328,7 @@ methods: {
             if(validaCep.test(this.placeAddress.plad_cep)){
                 this.loading = true
 
-                axios.get("https://viacep.com.br/ws/"+ this.placeAddress.plad_cep +"/json/")
+                req.get("https://viacep.com.br/ws/"+ this.placeAddress.plad_cep +"/json/")
                 .then( (response) => {
                     this.loading = false
                     let data = response.data
@@ -357,11 +351,7 @@ methods: {
     },
 
     getCategories(){
-        const config = {
-            headers: { Authorization: `Bearer ${this.userStore.getToken}` }
-        };
-
-        axios.get(this.serverUrl+'/api/place/categories', config)
+        req.get(this.serverUrl+'/api/place/categories', config)
         .then( (response) => {
             this.categories = response.data.categories
         })
