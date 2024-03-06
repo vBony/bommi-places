@@ -45,27 +45,11 @@ const routes = [
     name: 'Singup Places',
     component: () => import(/* webpackChunkName: "home" */ '@/views/RegisterPlaces.vue')
   },
-  // {
-  //   path: '/',
-  //   name: 'Encontre',
-  //   component: Encontre
-  // },
-  // {
-  //   path: '/place/:estabelecimento',
-  //   name: 'Home',
-  //   component: '@/views/Home.vue'
-  // },
-  // {
-  //   path: '/cadastro',
-  //   name: 'Cadastro',
-  //   component: Cadastro
-  // },
-  // {
-  //   path:'/nao-encontrado',
-  //   name: 'NotFound',
-  //   component: NotFound
-  // }
-
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Dashboard.vue')
+  },
   { 
     path: "/:catchAll(.*)", 
     name: 'Not Found',

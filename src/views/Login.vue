@@ -128,7 +128,12 @@ const App = defineComponent({
 
               if(response.data.token !== undefined){
                   userStore.setToken(response.data.token)
-                  this.$router.replace('/places/register')
+
+                  if(response.status == 206){
+                    this.$router.replace('/places/register')
+                  }else{
+                    this.$router.replace('/dashboard')
+                  }
               }
           }
       })

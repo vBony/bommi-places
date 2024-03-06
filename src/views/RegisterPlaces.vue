@@ -301,7 +301,7 @@ methods: {
         axios.post(this.serverUrl+'/api/place', {place: this.place, placeAddress: this.placeAddress}, config)
         .then( (response) => {
             this.resetMessages()
-            console.log(response)
+            this.$router.replace('/dashboard')
         })
         .catch( (reason) => {
             this.loading = false
