@@ -14,16 +14,10 @@
                         class="mt-12 mt-sm-0 pa-4"
                     >
                         <v-col cols="12" class="px-0 py-0 mb-10 d-flex justify-end">
-                            <v-chip
-                                link
-                                pill
-                            >
-                                {{ user.emp_first_name }}
-                                
-                                <v-avatar end>
-                                    <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-                                </v-avatar>
-                            </v-chip>
+                            <UserMenu 
+                                :first_name="user.emp_first_name"
+                                :user_type="user.emp_type_name"
+                            />
                         </v-col>
                         <v-col cols="12" class="px-0 py-0 mb-10">
                             <h2 class="text-center">Ubarber Places</h2>
@@ -224,43 +218,45 @@ import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
 import Place from '@/entities/Place';
 import PlaceAddress from '@/entities/PlaceAddress';
+import UserMenu from '@/components/UserMenu.vue';
 
 const App = defineComponent({
-    components: {
-    HelloWorld
-    },
+components: {
+    HelloWorld,
+    UserMenu
+},
 
 data() {
-return {
-    serverUrl: import.meta.env.VITE_SERVER_URL,
-    loading: false,
-    visible: false,
-    step: {
-        totalSteps: 2,
-        currentStep: 1,
-        progress: 0,
-        percentagePerStep: 0
-    },
+    return {
+        serverUrl: import.meta.env.VITE_SERVER_URL,
+        loading: false,
+        visible: false,
+        step: {
+            totalSteps: 2,
+            currentStep: 1,
+            progress: 0,
+            percentagePerStep: 0
+        },
 
-    user: new UserModel(),
+        user: new UserModel(),
 
-    place: new Place(),
-    placeAddress: new PlaceAddress(),
-
-    categories: [],
-
-    messages: {
         place: new Place(),
-        placeAddress: new PlaceAddress()
-    },
+        placeAddress: new PlaceAddress(),
 
-    simNao: [
-        { text: 'Sim', value: 1 },
-        { text: 'Não', value: 0 }
-    ],
+        categories: [],
 
-    userStore: useUserStore()
-};
+        messages: {
+            place: new Place(),
+            placeAddress: new PlaceAddress()
+        },
+
+        simNao: [
+            { text: 'Sim', value: 1 },
+            { text: 'Não', value: 0 }
+        ],
+
+        userStore: useUserStore()
+    };
 },
 created(){
     // Starting progress bar in step 1
@@ -293,7 +289,7 @@ methods: {
     },
 
     register(){
-        req.post(this.serverUrl+'/api/place', {place: this.place, placeAddress: this.placeAddress}, config)
+        req.post(this.serverUrl+'/api/place', {place: this.place, placeAddress: this.placeAddress})
         .then( (response) => {
             this.resetMessages()
             this.$router.replace('/dashboard')
@@ -351,7 +347,7 @@ methods: {
     },
 
     getCategories(){
-        req.get(this.serverUrl+'/api/place/categories', config)
+        req.get(this.serverUrl+'/api/place/categories')
         .then( (response) => {
             this.categories = response.data.categories
         })

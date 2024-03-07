@@ -7,7 +7,10 @@
             </div> 
     
             <div>
-                Teste
+                <UserMenu
+                    :first_name="user.emp_first_name"
+                    :user_type="user.emp_type_name"
+                />
             </div> 
         </v-row>
     </v-app-bar>
@@ -16,17 +19,26 @@
 <script lang="ts">
 // @ts-nocheck
 import { useDisplay } from 'vuetify'
+import UserMenu from './UserMenu.vue'
+import { useUserStore } from '../store/user'
+import UserModel from '../entities/User'
 
 export default {
+    components: {
+        UserMenu
+    },
+
     data () {
         return {
             display: useDisplay(),
-            showVerticalMenu: false
+            showVerticalMenu: false,
+            userStore: useUserStore(),
+            user: new UserModel()
         }
     },
 
     created(){
-        console.log(this.display.mdAndDown)
+        this.user = this.userStore.getUser ?? new UserModel()
     },
 
     methods: {

@@ -8,6 +8,7 @@ class User {
     emp_birthdate: ""
     emp_cpf: ""
     emp_type: ""
+    emp_type_name: ""
 }
 
 export default User
