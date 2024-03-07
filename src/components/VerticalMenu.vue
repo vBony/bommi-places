@@ -1,6 +1,8 @@
 <template>
     <v-navigation-drawer
         class="border-0"
+        :model-value="display.lg.value == true || showVerticalMenu == true"
+        :temporary="display.lg.value == false"
     >
         <v-list-item
             prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
@@ -25,12 +27,18 @@
 // @ts-nocheck
 import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
+import { useDisplay } from 'vuetify'
 
 export default {
+    props: {
+        showVerticalMenu: false
+    },
+
     data () {
         return {
             userStore: useUserStore(),
             user: new UserModel(),
+            display: useDisplay()
         }
     },
 

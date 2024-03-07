@@ -1,9 +1,9 @@
 <template>
 <v-app>
     <v-layout class="rounded rounded-md">
-        <AppBar />
+        <AppBar @setToggleVerticalMenu="setToggleVerticalMenu" />
         
-        <VerticalMenu />
+        <VerticalMenu :showVerticalMenu="showVerticalMenu" />
     
         <v-main class="d-flex mx-4 my-4" style="min-height: 300px;">
             <div cols="12" >
@@ -53,6 +53,7 @@ const App = defineComponent({
         return {
             serverUrl: import.meta.env.VITE_SERVER_URL,
             loading: false,
+            showVerticalMenu: false,
             userStore: useUserStore(),
             user: new UserModel(),
             place: new Place(),
@@ -76,7 +77,9 @@ const App = defineComponent({
         })
     },
     methods: {
-    
+        setToggleVerticalMenu(data){
+            this.showVerticalMenu = data
+        }
     },
 
     mounted(){
