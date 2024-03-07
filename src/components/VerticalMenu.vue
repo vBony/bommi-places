@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer
         class="border-0"
-        :model-value="display.lg.value == true || showVerticalMenu == true"
+        :model-value="this.display.lgAndUp == true || showVerticalMenu == true"
         :temporary="display.lg.value == false"
     >
         <v-list-item
