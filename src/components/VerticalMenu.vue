@@ -16,9 +16,30 @@
         </v-list-item>
 
         <v-list density="comfortable" nav>
-            <v-list-item prepend-icon="mdi-home-city" title="Home" value="home"></v-list-item>
-            <v-list-item prepend-icon="mdi-account" title="My Account" value="account"></v-list-item>
-            <v-list-item prepend-icon="mdi-account-group-outline" title="Users" value="users"></v-list-item>
+            <v-list-item 
+                prepend-icon="mdi-view-dashboard" 
+                title="Dashboard" 
+                value="home"
+                to="/dashboard"
+            ></v-list-item>
+            <v-list-group value="Cadastros">
+                <template v-slot:activator="{ props }">
+                    <v-list-item
+                        v-bind="props"
+                        prepend-icon="mdi-archive-edit-outline"
+                        title="Cadastros"
+                    ></v-list-item>
+                </template>
+
+                <v-list-item 
+                    title="Funcionários"
+                    prepend-icon="mdi-badge-account-horizontal-outline"
+                    style="padding-inline-start: 25px !important"
+                    link
+                    variant="tonal"
+                    to="/cadastros/funcionarios"
+                ></v-list-item>
+            </v-list-group>
         </v-list>
     </v-navigation-drawer>
 </template>
