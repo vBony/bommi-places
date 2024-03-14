@@ -18,8 +18,39 @@
                         </v-col>
                         
                         <v-col cols="12" md="8" sm="12">
-                            <v-card class="elevation-4 px-5 py-5">
-                                Lorem Ipsum
+                            <v-card class="elevation-4 pa-10">
+                                <v-row class="d-flex justify-space-between">
+                                    <v-col cols="12" md="6" lg="4" class="pa-0">
+                                        <v-text-field
+                                            type="text"
+                                            prepend-inner-icon="mdi-magnify"
+                                            density="compact"
+                                        ></v-text-field>
+                                    </v-col>    
+    
+                                    <v-col cols="12" md="4" lg="2" class="pa-0">
+                                        <v-btn
+                                            prepend-icon="mdi-plus"
+                                            variant="flat"
+                                            color="green"
+                                            block
+                                        >
+                                            Novo
+                                        </v-btn>
+                                    </v-col>
+
+                                    <!-- <v-col cols="2">
+                                        <v-btn
+                                            variant="flat"
+                                            color="green"
+                                            block
+                                        >
+                                            <v-icon icon="mdi-plus">
+                                                
+                                            </v-icon>
+                                        </v-btn>
+                                    </v-col> -->
+                                </v-row>
                             </v-card>
                         </v-col>
                     </v-row>
