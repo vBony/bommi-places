@@ -28,7 +28,7 @@
                                         ></v-text-field>
                                     </v-col>    
     
-                                    <v-col cols="12" md="4" lg="2" class="pa-0">
+                                    <v-col cols="12" md="4" lg="2" class="pa-0" v-if="this.display.mdAndUp">
                                         <v-btn
                                             prepend-icon="mdi-plus"
                                             variant="flat"
@@ -38,18 +38,19 @@
                                             Novo
                                         </v-btn>
                                     </v-col>
+                                </v-row>
 
-                                    <!-- <v-col cols="2">
+                                <v-row v-if="this.display.smAndDown">
+                                    <v-col cols="4" class="ms-auto pa-0">
                                         <v-btn
+                                            prepend-icon="mdi-plus"
                                             variant="flat"
                                             color="green"
                                             block
                                         >
-                                            <v-icon icon="mdi-plus">
-                                                
-                                            </v-icon>
+                                            Novo
                                         </v-btn>
-                                    </v-col> -->
+                                    </v-col>
                                 </v-row>
                             </v-card>
                         </v-col>
@@ -70,6 +71,7 @@ import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
 import Place from '@/entities/Place';
 import PlaceAddress from '@/entities/PlaceAddress';
+import { useDisplay } from 'vuetify'
         
 const App = defineComponent({
 components: {
@@ -84,6 +86,7 @@ data() {
         showVerticalMenu: false,
         userStore: useUserStore(),
         user: new UserModel(),
+        display: useDisplay()
     };
 },
 
