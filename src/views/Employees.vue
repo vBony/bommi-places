@@ -80,7 +80,7 @@
                     <v-btn
                         icon="mdi-close"
                         variant="text"
-                        @click="isActive.value = false"
+                        @click="displayEmployeeRegister = false"
                     ></v-btn>
                 </v-card-title>
 
@@ -101,13 +101,18 @@
 
                         <v-row>
                             <v-col cols="12" class="pb-0">
-                                <v-text-field
-                                    label="CPF" 
+
+                                <v-combobox
+                                    v-model="employeeSearch.cpf"
+                                    label="CPF"
                                     type="text"
                                     prepend-inner-icon="mdi-magnify"
                                     density="compact"
                                     title="CPF"
-                                ></v-text-field>
+                                    :items="employeeSearch.list"
+                                    :loading="loading"
+                                    @input="searchEmployeeByCPF()"
+                                ></v-combobox>
                             </v-col>
                         </v-row>
     
@@ -244,8 +249,13 @@ data() {
         display: useDisplay(),
         displayEmployeeRegister: false,
         visible: false,
-
-        employeeTypes: []
+        
+        employeeTypes: [],
+        employeeSearch: {
+            founded: false,
+            cpf: '',
+            list: []
+        }
     };
 },
 
@@ -269,6 +279,20 @@ methods: {
             this.employeeTypes = response.data.employeeTypes
             console.log(this.employeeTypes)
         })
+    },
+
+    searchEmployeeByCPF(){
+        this.employeeSearch.cpf = this.employeeSearch.cpf.replace(/\D/g, '')
+
+        if(this.employeeSearch.cpf.length == 11){
+            this.loading = true
+            req.get(this.serverUrl+'/api/employee/search-by-owner/?cpf='+this.employeeSearch.cpf)
+            .then( (response) => {
+                this.loading = false
+            }).catch ( (reason) => {
+                this.loading = false
+            })
+        }
     },
 
     init(){
