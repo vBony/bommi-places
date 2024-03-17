@@ -105,13 +105,15 @@
                                 <v-combobox
                                     v-model="employeeSearch.cpf"
                                     label="CPF"
-                                    type="text"
                                     prepend-inner-icon="mdi-magnify"
                                     density="compact"
-                                    title="CPF"
                                     :items="employeeSearch.list"
                                     :loading="loading"
-                                    @input="searchEmployeeByCPF()"
+                                    item-title="emp_first_name" 
+                                    item-value="emp_id"
+                                    @keyup="searchEmployeeByCPF()"
+                                    no-data-text="Nenhum funcionário encontrado"
+                                    :hide-no-data="true"
                                 ></v-combobox>
                             </v-col>
                         </v-row>
@@ -254,7 +256,8 @@ data() {
         employeeSearch: {
             founded: false,
             cpf: '',
-            list: []
+            list: [],
+            selected: {}
         }
     };
 },
@@ -284,13 +287,11 @@ methods: {
     searchEmployeeByCPF(){
         this.employeeSearch.cpf = this.employeeSearch.cpf.replace(/\D/g, '')
 
-        if(this.employeeSearch.cpf.length == 11){
-            this.loading = true
+        if(this.employeeSearch.cpf.length >= 3 && this.employeeSearch.cpf.length <= 11){
             req.get(this.serverUrl+'/api/employee/search-by-owner/?cpf='+this.employeeSearch.cpf)
             .then( (response) => {
-                this.loading = false
+                this.employeeSearch.list = response.data.employees
             }).catch ( (reason) => {
-                this.loading = false
             })
         }
     },
