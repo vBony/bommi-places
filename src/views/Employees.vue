@@ -91,7 +91,7 @@
                         <v-row>
                             <v-col cols="12" class="pb-0 mb-8">
                                 <v-text-field 
-                                    v-model="employeeSearch"
+                                    v-model="employee.emp_cpf"
                                     label="CPF" 
                                     type="text" 
                                     hide-details="auto" 
@@ -105,6 +105,8 @@
                         <v-row>
                             <v-col cols="12" lg="6" md="6" class="pb-0">
                                 <v-text-field 
+                                    v-model="employee.emp_first_name"
+                                    :disabled="!employeeFounded"
                                     label="Nome" 
                                     type="text" 
                                     hide-details="auto" 
@@ -114,6 +116,8 @@
     
                             <v-col cols="12" lg="6" md="6" class="pb-0">
                                 <v-text-field 
+                                    v-model="employee.emp_last_name"
+                                    :disabled="!employeeFounded"
                                     label="Sobrenome" 
                                     type="text" 
                                     hide-details="auto" 
@@ -125,6 +129,8 @@
                         <v-row>
                             <v-col cols="12" class="pb-0">
                                 <v-text-field 
+                                    v-model="employee.emp_birthdate"
+                                    :disabled="!employeeFounded"
                                     label="Data de nascimento" 
                                     type="date" 
                                     hide-details="auto" 
@@ -143,12 +149,19 @@
                         <v-row>
                             <v-col cols="12">
                                 <v-select
+                                    :v-model="employee.emp_type"
+                                    :disabled="!employeeFounded && !employee.emp_cpf"
                                     label="Tipos"
                                     :items="employeeTypes"
                                     item-title="text" 
                                     item-value="value"
                                     density="compact"
+                                    hide-details
                                 ></v-select>
+
+                                <select v-model="employee.emp_type">
+                                    <option v-for="(item, index) in employeeTypes" :key="index" :value="item.value">{{ item.text }}</option>
+                                </select>
                             </v-col>
                         </v-row>
 
@@ -162,6 +175,8 @@
                         <v-row>
                             <v-col cols="12" class="pb-0">
                                 <v-text-field 
+                                    :v-model="employee.emp_email"
+                                    :disabled="!employeeFounded"
                                     label="E-mail" 
                                     type="email" 
                                     hide-details="auto"
@@ -180,6 +195,8 @@
                                     @click:append-inner="visible = !visible"
                                     hide-details="auto"
                                     density="compact"
+                                    v-model="employee.emp_password"
+                                    :disabled="!employeeFounded"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -237,7 +254,8 @@ data() {
         visible: false,
         
         employeeTypes: [],
-        employeeSearch: null
+        employeeFounded: null,
+        employee: new UserModel()
     };
 },
 
@@ -259,18 +277,20 @@ methods: {
         req.get(this.serverUrl+'/api/employees/init')
         .then( (response) => {
             this.employeeTypes = response.data.employeeTypes
-            console.log(this.employeeTypes)
         })
     },
 
     searchEmployeeByCPF(){
-        this.employeeSearch = this.employeeSearch.replace(/\D/g, '')
+        this.employee.emp_cpf = this.employee.emp_cpf.replace(/\D/g, '')
 
-        if(this.employeeSearch.length >= 3 && this.employeeSearch.length <= 11){
-            req.get(this.serverUrl+'/api/employee/?cpf='+this.employeeSearch)
+        if(this.employee.emp_cpf.length >= 3 && this.employee.emp_cpf.length <= 11){
+            this.loading = true
+            req.get(this.serverUrl+'/api/employee/?cpf='+this.employee.emp_cpf)
             .then( (response) => {
-                this.employeeSearch.list = response.data.employees
+                this.loading = false
+                this.employee = response.data.employee
             }).catch ( (reason) => {
+                this.loading = false
             })
         }
     },
