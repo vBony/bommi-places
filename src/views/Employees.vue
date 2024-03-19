@@ -20,29 +20,18 @@
                         <v-col cols="12" md="8" sm="12">
                             <v-card class="elevation-4 pa-10">
                                 <v-row class="d-flex justify-space-between">
-                                    <v-col cols="12" md="6" lg="4" class="pa-0">
+                                    <v-col cols="12" md="12" lg="12" class="pa-0">
                                         <v-text-field
                                             type="text"
                                             prepend-inner-icon="mdi-magnify"
                                             density="compact"
+                                            label="Procurar"
                                         ></v-text-field>
                                     </v-col>    
-    
-                                    <v-col cols="12" md="4" lg="2" class="pa-0" v-if="this.display.mdAndUp">
-                                        <v-btn
-                                            prepend-icon="mdi-plus"
-                                            variant="flat"
-                                            color="green"
-                                            block
-                                            @click="displayEmployeeRegister = true"
-                                        >
-                                            Novo
-                                        </v-btn>
-                                    </v-col>
                                 </v-row>
 
-                                <v-row v-if="this.display.smAndDown">
-                                    <v-col cols="4" class="ms-auto pa-0">
+                                <v-row>
+                                    <v-col cols="12" md="4" lg="2" class="pa-0">
                                         <v-btn
                                             prepend-icon="mdi-plus"
                                             variant="flat"
@@ -100,21 +89,16 @@
                         </div>
 
                         <v-row>
-                            <v-col cols="12" class="pb-0">
-
-                                <v-combobox
-                                    v-model="employeeSearch.cpf"
-                                    label="CPF"
+                            <v-col cols="12" class="pb-0 mb-8">
+                                <v-text-field 
+                                    v-model="employeeSearch"
+                                    label="CPF" 
+                                    type="text" 
+                                    hide-details="auto" 
                                     prepend-inner-icon="mdi-magnify"
-                                    density="compact"
-                                    :items="employeeSearch.list"
                                     :loading="loading"
-                                    item-title="emp_first_name" 
-                                    item-value="emp_id"
-                                    @keyup="searchEmployeeByCPF()"
-                                    no-data-text="Nenhum funcionário encontrado"
-                                    :hide-no-data="true"
-                                ></v-combobox>
+                                    @change="searchEmployeeByCPF()"
+                                ></v-text-field>
                             </v-col>
                         </v-row>
     
@@ -253,12 +237,7 @@ data() {
         visible: false,
         
         employeeTypes: [],
-        employeeSearch: {
-            founded: false,
-            cpf: '',
-            list: [],
-            selected: {}
-        }
+        employeeSearch: null
     };
 },
 
@@ -285,10 +264,10 @@ methods: {
     },
 
     searchEmployeeByCPF(){
-        this.employeeSearch.cpf = this.employeeSearch.cpf.replace(/\D/g, '')
+        this.employeeSearch = this.employeeSearch.replace(/\D/g, '')
 
-        if(this.employeeSearch.cpf.length >= 3 && this.employeeSearch.cpf.length <= 11){
-            req.get(this.serverUrl+'/api/employee/search-by-owner/?cpf='+this.employeeSearch.cpf)
+        if(this.employeeSearch.length >= 3 && this.employeeSearch.length <= 11){
+            req.get(this.serverUrl+'/api/employee/?cpf='+this.employeeSearch)
             .then( (response) => {
                 this.employeeSearch.list = response.data.employees
             }).catch ( (reason) => {
