@@ -31,12 +31,12 @@
                                 </v-row>
 
                                 <v-row>
-                                    <v-col cols="12" md="4" lg="2" class="pa-0">
+                                    <v-col cols="12" md="2" lg="2" class="pa-0">
                                         <v-btn
-                                            prepend-icon="mdi-plus"
-                                            variant="flat"
-                                            color="green"
+                                            prepend-icon="mdi-account-multiple-plus"
+                                            color="black"
                                             block
+                                            size="small"
                                             @click="displayEmployeeRegister = true"
                                         >
                                             Novo
@@ -77,7 +77,7 @@
 
                 <v-card-text>
                     <div class="text-medium-emphasis mb-4">
-                        Crie novos funcionários para trabalhar em seu estabelecimento. <br> Também é possível importar funcionários de seus outros sistemas informando o CPF.
+                        Crie novos funcionários para trabalhar em seu estabelecimento.
                     </div>
 
                     <v-form :disabled="loading" class="pa-0 pa-lg-2 pa-md-2 mb-8">
@@ -106,7 +106,7 @@
                             <v-col cols="12" lg="6" md="6" class="pb-0">
                                 <v-text-field 
                                     v-model="employee.emp_first_name"
-                                    :disabled="!employeeFounded"
+                                    :disabled="employeeFounded"
                                     label="Nome" 
                                     type="text" 
                                     hide-details="auto" 
@@ -117,7 +117,7 @@
                             <v-col cols="12" lg="6" md="6" class="pb-0">
                                 <v-text-field 
                                     v-model="employee.emp_last_name"
-                                    :disabled="!employeeFounded"
+                                    :disabled="employeeFounded"
                                     label="Sobrenome" 
                                     type="text" 
                                     hide-details="auto" 
@@ -130,7 +130,7 @@
                             <v-col cols="12" class="pb-0">
                                 <v-text-field 
                                     v-model="employee.emp_birthdate"
-                                    :disabled="!employeeFounded"
+                                    :disabled="employeeFounded"
                                     label="Data de nascimento" 
                                     type="date" 
                                     hide-details="auto" 
@@ -149,8 +149,8 @@
                         <v-row>
                             <v-col cols="12">
                                 <v-select
-                                    :v-model="employee.emp_type"
-                                    :disabled="!employeeFounded && !employee.emp_cpf"
+                                    v-model="employee.emp_type"
+                                    :disabled="employeeFounded && !employee.emp_cpf"
                                     label="Tipos"
                                     :items="employeeTypes"
                                     item-title="text" 
@@ -158,10 +158,6 @@
                                     density="compact"
                                     hide-details
                                 ></v-select>
-
-                                <select v-model="employee.emp_type">
-                                    <option v-for="(item, index) in employeeTypes" :key="index" :value="item.value">{{ item.text }}</option>
-                                </select>
                             </v-col>
                         </v-row>
 
@@ -175,14 +171,13 @@
                         <v-row>
                             <v-col cols="12" class="pb-0">
                                 <v-text-field 
-                                    :v-model="employee.emp_email"
-                                    :disabled="!employeeFounded"
+                                    v-model="employee.emp_email"
+                                    :disabled="employeeFounded"
                                     label="E-mail" 
                                     type="email" 
-                                    hide-details="auto"
-                                    density="compact" 
-                                >
-                                </v-text-field>
+                                    hide-details="auto" 
+                                    density="compact"
+                                ></v-text-field>
                             </v-col>
                         </v-row>
 
@@ -196,7 +191,7 @@
                                     hide-details="auto"
                                     density="compact"
                                     v-model="employee.emp_password"
-                                    :disabled="!employeeFounded"
+                                    :disabled="employeeFounded"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -254,7 +249,7 @@ data() {
         visible: false,
         
         employeeTypes: [],
-        employeeFounded: null,
+        employeeFounded: true,
         employee: new UserModel()
     };
 },
@@ -288,9 +283,17 @@ methods: {
             req.get(this.serverUrl+'/api/employee/?cpf='+this.employee.emp_cpf)
             .then( (response) => {
                 this.loading = false
+                this.employeeFounded = true
+
                 this.employee = response.data.employee
+                this.employee.emp_type = null
+                this.employee.emp_type_name = null
             }).catch ( (reason) => {
                 this.loading = false
+
+                if(reason.request.status == 404){
+                    this.employeeFounded = false
+                }
             })
         }
     },
