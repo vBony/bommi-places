@@ -165,7 +165,6 @@
                                     item-title="text" 
                                     item-value="value"
                                     density="compact"
-                                    hide-details
                                     :error-messages="employeeMessages.emp_type"
                                 ></v-select>
                             </v-col>
@@ -232,6 +231,22 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <v-snackbar v-model="employeeSnackbar">
+            <v-icon color="green">mdi-check-circle-outline</v-icon>
+
+            Funcionário cadastrado com sucesso
+
+            <template v-slot:actions>
+                <v-btn
+                    color="green"
+                    variant="text"
+                    @click="employeeSnackbar = false"
+                >
+                Close
+                </v-btn>
+            </template>
+        </v-snackbar>
     </v-app>
     </template>
         
@@ -257,15 +272,20 @@ data() {
         loading: false,
         showVerticalMenu: false,
         userStore: useUserStore(),
-        user: new UserModel(),
         display: useDisplay(),
+
+        
         displayEmployeeRegister: false,
         visible: false,
         
+        user: new UserModel(),
+
         employeeTypes: [],
         employeeFounded: true,
         employee: new UserModel(),
-        employeeMessages: new UserModel()
+        employeeMessages: new UserModel(),
+        employees: [],
+        employeeSnackbar: false
     };
 },
 
@@ -293,9 +313,10 @@ methods: {
     searchEmployeeByCPF(){
         this.employee.emp_cpf = this.employee.emp_cpf.replace(/\D/g, '')
 
-        if(this.employee.emp_cpf.length >= 3 && this.employee.emp_cpf.length <= 11){
+        const cpf = structuredClone(this.employee.emp_cpf)
+        if(cpf.length >= 3 && cpf.length <= 11){
             this.loading = true
-            req.get(this.serverUrl+'/api/employee/?cpf='+this.employee.emp_cpf)
+            req.get(this.serverUrl+'/api/employee/?cpf='+cpf)
             .then( (response) => {
                 this.loading = false
                 this.employeeFounded = true
@@ -315,6 +336,8 @@ methods: {
 
                 if(reason.request.status == 404){
                     this.employeeFounded = false
+                    this.employee = new UserModel()
+                    this.employee.emp_cpf = cpf
                 }
             })
         }
@@ -325,6 +348,11 @@ methods: {
         req.post(this.serverUrl+'/api/employee/', {employee: this.employee, reuse: this.employeeFounded})
         .then( (response) => {
             this.loading = false
+            if(response.data.employee){
+                this.resetModal()
+                this.employees.unshift(response.data.employee)
+                this.employeeSnackbar = true
+            }
         }).catch ( (reason) => {
             this.loading = false
 
@@ -334,6 +362,13 @@ methods: {
                 this.employeeMessages = new UserModel()
             }
         })
+    },
+
+    resetModal(){
+        this.displayEmployeeRegister = false,
+        this.employeeFounded = true
+        this.employee = new UserModel()
+        this.employeeMessages = new UserModel()
     },
 
     init(){
