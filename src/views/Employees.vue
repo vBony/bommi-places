@@ -94,10 +94,12 @@
                                     v-model="employee.emp_cpf"
                                     label="CPF" 
                                     type="text" 
+                                    variant="outlined"
                                     hide-details="auto" 
                                     prepend-inner-icon="mdi-magnify"
                                     :loading="loading"
                                     @change="searchEmployeeByCPF()"
+                                    :error-messages="employeeMessages.emp_cpf"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -109,8 +111,10 @@
                                     :disabled="employeeFounded"
                                     label="Nome" 
                                     type="text" 
+                                    variant="outlined"
                                     hide-details="auto" 
                                     density="compact"
+                                    :error-messages="employeeMessages.emp_first_name"
                                 ></v-text-field>
                             </v-col>
     
@@ -120,8 +124,10 @@
                                     :disabled="employeeFounded"
                                     label="Sobrenome" 
                                     type="text" 
+                                    variant="outlined"
                                     hide-details="auto" 
                                     density="compact"
+                                    :error-messages="employeeMessages.emp_last_name"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -133,8 +139,10 @@
                                     :disabled="employeeFounded"
                                     label="Data de nascimento" 
                                     type="date" 
+                                    variant="outlined"
                                     hide-details="auto" 
                                     density="compact"
+                                    :error-messages="employeeMessages.emp_birthdate"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -152,11 +160,13 @@
                                     v-model="employee.emp_type"
                                     :disabled="employeeFounded && !employee.emp_cpf"
                                     label="Tipos"
+                                    variant="outlined"
                                     :items="employeeTypes"
                                     item-title="text" 
                                     item-value="value"
                                     density="compact"
                                     hide-details
+                                    :error-messages="employeeMessages.emp_type"
                                 ></v-select>
                             </v-col>
                         </v-row>
@@ -175,8 +185,10 @@
                                     :disabled="employeeFounded"
                                     label="E-mail" 
                                     type="email" 
+                                    variant="outlined"
                                     hide-details="auto" 
                                     density="compact"
+                                    :error-messages="employeeMessages.emp_email"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -190,8 +202,10 @@
                                     @click:append-inner="visible = !visible"
                                     hide-details="auto"
                                     density="compact"
+                                    variant="outlined"
                                     v-model="employee.emp_password"
                                     :disabled="employeeFounded"
+                                    :error-messages="employeeMessages.emp_password"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -213,7 +227,7 @@
                         text="Incluir"
                         variant="tonal"
                         class="px-4"
-                        @click="displayEmployeeRegister = false"
+                        @click="create()"
                     ></v-btn>
                 </v-card-actions>
             </v-card>
@@ -250,7 +264,8 @@ data() {
         
         employeeTypes: [],
         employeeFounded: true,
-        employee: new UserModel()
+        employee: new UserModel(),
+        employeeMessages: new UserModel()
     };
 },
 
@@ -284,6 +299,7 @@ methods: {
             .then( (response) => {
                 this.loading = false
                 this.employeeFounded = true
+                this.employeeMessages = new UserModel()
 
                 this.employee = response.data.employee
                 this.employee.emp_type = null
@@ -291,11 +307,33 @@ methods: {
             }).catch ( (reason) => {
                 this.loading = false
 
+                if(reason.response.data.errors){
+                    this.employeeMessages = reason.response.data.errors
+                }else{
+                    this.employeeMessages = new UserModel()
+                }
+
                 if(reason.request.status == 404){
                     this.employeeFounded = false
                 }
             })
         }
+    },
+
+    create(){
+        this.loading = true
+        req.post(this.serverUrl+'/api/employee/', {employee: this.employee, reuse: this.employeeFounded})
+        .then( (response) => {
+            this.loading = false
+        }).catch ( (reason) => {
+            this.loading = false
+
+            if(reason.response.data.errors){
+                this.employeeMessages = reason.response.data.errors
+            }else{
+                this.employeeMessages = new UserModel()
+            }
+        })
     },
 
     init(){
