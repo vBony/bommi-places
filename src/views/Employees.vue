@@ -43,6 +43,45 @@
                                         </v-btn>
                                     </v-col>
                                 </v-row>
+
+                                <v-row>
+                                    <v-col cols="12" class="pa-0">
+                                        <v-table
+                                            height="300px"
+                                            fixed-header
+                                            hover
+                                        >
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-left" width="280">
+                                                        Nome
+                                                    </th>
+                                                    <th class="text-left" width="80">
+                                                        CPF
+                                                    </th>
+                                                    <th class="text-left" width="150">
+                                                        Tipo
+                                                    </th>
+                                                    <th class="text-left" width="20">
+                                                        
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr
+                                                    v-for="item in employees"
+                                                    :key="item.emp_id"
+                                                >
+                                                    <td width="280">{{ item.emp_first_name }} {{ item.emp_last_name }}</td>
+                                                    <td width="80">{{ item.emp_cpf }}</td>
+                                                    <td width="150">{{ item.emp_type_name }}</td>
+                                                    <td width="20"><v-btn elevation="0" icon="mdi-delete" size="small"></v-btn></td>
+                                                </tr>
+                                            </tbody>
+    
+                                        </v-table>
+                                    </v-col>
+                                </v-row>
                             </v-card>
                         </v-col>
                     </v-row>
@@ -285,7 +324,10 @@ data() {
         employee: new UserModel(),
         employeeMessages: new UserModel(),
         employees: [],
-        employeeSnackbar: false
+        employeeSnackbar: false,
+        table: {
+            itemsPerPage: 5
+        }
     };
 },
 
@@ -371,8 +413,21 @@ methods: {
         this.employeeMessages = new UserModel()
     },
 
+    getEmployees(){
+        req.get(this.serverUrl+'/api/admin/employees', {employee: this.employee, reuse: this.employeeFounded})
+        .then( (response) => {
+            if(response.data.employees){
+                this.resetModal()
+                this.employees = response.data.employees
+
+                console.log(this.employees)
+            }
+        })
+    },
+
     init(){
         this.getEmployeeTypes()
+        this.getEmployees()
     }
 },
 
@@ -381,6 +436,6 @@ mounted(){
 }
 });
         
-    export default App
-    </script>
+export default App
+</script>
         
