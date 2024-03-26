@@ -37,7 +37,7 @@
                                             color="black"
                                             block
                                             size="small"
-                                            @click="displayEmployeeRegister = true"
+                                            @click="registerDialog = true"
                                         >
                                             Novo
                                         </v-btn>
@@ -75,7 +75,14 @@
                                                     <td width="280">{{ item.emp_first_name }} {{ item.emp_last_name }}</td>
                                                     <td width="80">{{ item.emp_cpf }}</td>
                                                     <td width="150">{{ item.emp_type_name }}</td>
-                                                    <td width="20"><v-btn elevation="0" icon="mdi-delete" size="small"></v-btn></td>
+                                                    <td width="20">
+                                                        <v-btn 
+                                                            elevation="0" 
+                                                            icon="mdi-delete" 
+                                                            size="small"
+                                                            @click="openDeleteDialog(item)"
+                                                        ></v-btn>
+                                                    </td>
                                                 </tr>
                                             </tbody>
     
@@ -90,7 +97,7 @@
         </v-layout>
 
         <v-dialog
-            v-model="displayEmployeeRegister"
+            v-model="registerDialog"
             width="auto"
             max-width="800"
             transition="dialog-bottom-transition"
@@ -108,7 +115,7 @@
                     <v-btn
                         icon="mdi-close"
                         variant="text"
-                        @click="displayEmployeeRegister = false"
+                        @click="registerDialog = false"
                     ></v-btn>
                 </v-card-title>
 
@@ -138,7 +145,7 @@
                                     prepend-inner-icon="mdi-magnify"
                                     :loading="loading"
                                     @change="searchEmployeeByCPF()"
-                                    :error-messages="employeeMessages.emp_cpf"
+                                    :error-messages="messages.emp_cpf"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -147,26 +154,26 @@
                             <v-col cols="12" lg="6" md="6" class="pb-0">
                                 <v-text-field 
                                     v-model="employee.emp_first_name"
-                                    :disabled="employeeFounded"
+                                    :disabled="founded"
                                     label="Nome" 
                                     type="text" 
                                     variant="outlined"
                                     hide-details="auto" 
                                     density="compact"
-                                    :error-messages="employeeMessages.emp_first_name"
+                                    :error-messages="messages.emp_first_name"
                                 ></v-text-field>
                             </v-col>
     
                             <v-col cols="12" lg="6" md="6" class="pb-0">
                                 <v-text-field 
                                     v-model="employee.emp_last_name"
-                                    :disabled="employeeFounded"
+                                    :disabled="founded"
                                     label="Sobrenome" 
                                     type="text" 
                                     variant="outlined"
                                     hide-details="auto" 
                                     density="compact"
-                                    :error-messages="employeeMessages.emp_last_name"
+                                    :error-messages="messages.emp_last_name"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -175,13 +182,13 @@
                             <v-col cols="12" class="pb-0">
                                 <v-text-field 
                                     v-model="employee.emp_birthdate"
-                                    :disabled="employeeFounded"
+                                    :disabled="founded"
                                     label="Data de nascimento" 
                                     type="date" 
                                     variant="outlined"
                                     hide-details="auto" 
                                     density="compact"
-                                    :error-messages="employeeMessages.emp_birthdate"
+                                    :error-messages="messages.emp_birthdate"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -197,14 +204,14 @@
                             <v-col cols="12">
                                 <v-select
                                     v-model="employee.emp_type"
-                                    :disabled="employeeFounded && !employee.emp_cpf"
+                                    :disabled="founded && !employee.emp_cpf"
                                     label="Tipos"
                                     variant="outlined"
-                                    :items="employeeTypes"
+                                    :items="types"
                                     item-title="text" 
                                     item-value="value"
                                     density="compact"
-                                    :error-messages="employeeMessages.emp_type"
+                                    :error-messages="messages.emp_type"
                                 ></v-select>
                             </v-col>
                         </v-row>
@@ -220,13 +227,13 @@
                             <v-col cols="12" class="pb-0">
                                 <v-text-field 
                                     v-model="employee.emp_email"
-                                    :disabled="employeeFounded"
+                                    :disabled="founded"
                                     label="E-mail" 
                                     type="email" 
                                     variant="outlined"
                                     hide-details="auto" 
                                     density="compact"
-                                    :error-messages="employeeMessages.emp_email"
+                                    :error-messages="messages.emp_email"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -242,8 +249,8 @@
                                     density="compact"
                                     variant="outlined"
                                     v-model="employee.emp_password"
-                                    :disabled="employeeFounded"
-                                    :error-messages="employeeMessages.emp_password"
+                                    :disabled="founded"
+                                    :error-messages="messages.emp_password"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -257,7 +264,7 @@
                         text="Cancelar"
                         variant="plain"
                         class="px-4"
-                        @click="displayEmployeeRegister = false"
+                        @click="registerDialog = false"
                     ></v-btn>
 
                     <v-btn
@@ -271,16 +278,63 @@
             </v-card>
         </v-dialog>
 
-        <v-snackbar v-model="employeeSnackbar">
-            <v-icon color="green">mdi-check-circle-outline</v-icon>
+        <v-dialog
+            v-model="deleteDialog"
+            width="auto"
+        >
+            <v-card
+                max-width="600"
+            >
+                <v-card-title class="d-flex justify-space-between align-center">
+                    <div class="text-h6 font-weight-black text-medium-emphasis ps-2">
+                        <v-icon class="me-2"> mdi-account-multiple-minus </v-icon>
+                        Excluir funcionário
+                    </div>
 
-            Funcionário cadastrado com sucesso
+                    <v-btn
+                        icon="mdi-close"
+                        variant="text"
+                        @click="deleteDialog = false"
+                    ></v-btn>
+                </v-card-title>
+                <v-card-text>
+                    <p>Confirma a exclusão do funcionário <b class="text-decoration-underline">{{ this.delete.emp_first_name }}</b> ?</p>
+                    <p class="text-disabled">
+                        Essa ação é irreversível
+                    </p>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        text="Cancelar"
+                        variant="tonal"
+                        class="px-4 mr-4"
+                        @click="deleteDialog = false"
+                    ></v-btn>
+
+                    <v-btn
+                        :disabled="deleteLoading"
+                        :loading="deleteLoading"
+                        class="ms-auto"
+                        text="Sim, excluir"
+                        color="red"
+                        variant="tonal"
+                        @click="deleteEmployee()"
+                    ></v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <v-snackbar v-model="snackbar.show">
+            <v-icon color="green">{{ snackbar.data.icon }}</v-icon>
+
+            {{ snackbar.data.text }}
 
             <template v-slot:actions>
                 <v-btn
                     color="green"
                     variant="text"
-                    @click="employeeSnackbar = false"
+                    @click="snackbar.show = false"
                 >
                 Close
                 </v-btn>
@@ -314,19 +368,26 @@ data() {
         display: useDisplay(),
 
         
-        displayEmployeeRegister: false,
+        registerDialog: false,
+        deleteDialog: false,
+        deleteLoading: false,
         visible: false,
         
         user: new UserModel(),
 
-        employeeTypes: [],
-        employeeFounded: true,
+        types: [],
+        founded: true,
         employee: new UserModel(),
-        employeeMessages: new UserModel(),
+        messages: new UserModel(),
         employees: [],
-        employeeSnackbar: false,
-        table: {
-            itemsPerPage: 5
+        delete: new UserModel(),
+
+        snackbar: {
+            show: false,
+            data: {
+                icon: 'mdi-check-circle-outline',
+                text: null
+            }
         }
     };
 },
@@ -345,10 +406,10 @@ methods: {
         this.showVerticalMenu = data
     },
 
-    getEmployeeTypes(){
+    gettypes(){
         req.get(this.serverUrl+'/api/employees/init')
         .then( (response) => {
-            this.employeeTypes = response.data.employeeTypes
+            this.types = response.data.employeeTypes
         })
     },
 
@@ -361,8 +422,8 @@ methods: {
             req.get(this.serverUrl+'/api/employee/?cpf='+cpf)
             .then( (response) => {
                 this.loading = false
-                this.employeeFounded = true
-                this.employeeMessages = new UserModel()
+                this.founded = true
+                this.messages = new UserModel()
 
                 this.employee = response.data.employee
                 this.employee.emp_type = null
@@ -371,13 +432,13 @@ methods: {
                 this.loading = false
 
                 if(reason.response.data.errors){
-                    this.employeeMessages = reason.response.data.errors
+                    this.messages = reason.response.data.errors
                 }else{
-                    this.employeeMessages = new UserModel()
+                    this.messages = new UserModel()
                 }
 
                 if(reason.request.status == 404){
-                    this.employeeFounded = false
+                    this.founded = false
                     this.employee = new UserModel()
                     this.employee.emp_cpf = cpf
                 }
@@ -387,34 +448,44 @@ methods: {
 
     create(){
         this.loading = true
-        req.post(this.serverUrl+'/api/employee/', {employee: this.employee, reuse: this.employeeFounded})
+        req.post(this.serverUrl+'/api/employee/', {employee: this.employee, reuse: this.founded})
         .then( (response) => {
             this.loading = false
             if(response.data.employee){
                 this.resetModal()
                 this.employees.unshift(response.data.employee)
-                this.employeeSnackbar = true
+                
+                this.snackBar("Funcionário cadastrado com sucesso")
             }
         }).catch ( (reason) => {
             this.loading = false
 
             if(reason.response.data.errors){
-                this.employeeMessages = reason.response.data.errors
+                this.messages = reason.response.data.errors
             }else{
-                this.employeeMessages = new UserModel()
+                this.messages = new UserModel()
             }
         })
     },
 
+    snackBar(text, icon = null){
+        if(icon){
+            this.snackbar.data.icon = icon
+        }
+
+        this.snackbar.data.text = text
+        this.snackbar.show = true
+    },
+
     resetModal(){
-        this.displayEmployeeRegister = false,
-        this.employeeFounded = true
+        this.registerDialog = false,
+        this.founded = true
         this.employee = new UserModel()
-        this.employeeMessages = new UserModel()
+        this.messages = new UserModel()
     },
 
     getEmployees(){
-        req.get(this.serverUrl+'/api/admin/employees', {employee: this.employee, reuse: this.employeeFounded})
+        req.get(this.serverUrl+'/api/admin/employees', {employee: this.employee, reuse: this.founded})
         .then( (response) => {
             if(response.data.employees){
                 this.resetModal()
@@ -425,8 +496,34 @@ methods: {
         })
     },
 
+    openDeleteDialog(employee){
+        this.delete = employee
+        this.deleteDialog = true
+    },
+
+    deleteEmployee(){
+        this.deleteLoading = true
+        req.delete(this.serverUrl+'/api/admin/employee/'+this.delete.emp_id)
+        .then( (response) => {
+            this.deleteLoading = false
+
+
+            const index = this.employees.findIndex(employee => employee.emp_id === this.delete.emp_id);
+
+            if (index !== -1) {
+                this.employees.splice(index, 1);
+                this.deleteDialog = false
+                this.delete = new UserModel()
+                this.snackBar("Funcionário excluído com sucesso")
+            }
+        })
+        .catch( (reason) => {
+            this.deleteLoading = false
+        })
+    },
+
     init(){
-        this.getEmployeeTypes()
+        this.gettypes()
         this.getEmployees()
     }
 },
