@@ -26,6 +26,8 @@
                                             prepend-inner-icon="mdi-magnify"
                                             density="compact"
                                             label="Procurar"
+                                            v-model="searchQuery"
+                                            @keyup="filterEmployeesByName()"
                                         ></v-text-field>
                                     </v-col>    
                                 </v-row>
@@ -366,6 +368,7 @@ data() {
         showVerticalMenu: false,
         userStore: useUserStore(),
         display: useDisplay(),
+        searchQuery: null,
 
         
         registerDialog: false,
@@ -380,6 +383,7 @@ data() {
         employee: new UserModel(),
         messages: new UserModel(),
         employees: [],
+        backupEmployees: [],
         delete: new UserModel(),
 
         snackbar: {
@@ -490,8 +494,7 @@ methods: {
             if(response.data.employees){
                 this.resetModal()
                 this.employees = response.data.employees
-
-                console.log(this.employees)
+                this.backupEmployees = response.data.employees
             }
         })
     },
@@ -512,6 +515,8 @@ methods: {
 
             if (index !== -1) {
                 this.employees.splice(index, 1);
+                this.backupEmployees.splice(index, 1);
+
                 this.deleteDialog = false
                 this.delete = new UserModel()
                 this.snackBar("Funcionário excluído com sucesso")
@@ -520,6 +525,19 @@ methods: {
         .catch( (reason) => {
             this.deleteLoading = false
         })
+    },
+
+    filterEmployeesByName: function() {
+        const name = this.searchQuery.toLowerCase();
+
+        if(name.length > 0){
+            this.employees = this.employees.filter(employee => {
+                const fullName = `${employee.emp_first_name} ${employee.emp_last_name}`.toLowerCase();
+                return fullName.includes(name);
+            });
+        }else{
+            this.employees = this.backupEmployees
+        }
     },
 
     init(){
