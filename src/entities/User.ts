@@ -1,5 +1,6 @@
 // @ts-nocheck
 class User {
+    emp_id: ""
     emp_first_name: ""
     emp_last_name: ""
     emp_email: ""

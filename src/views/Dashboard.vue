@@ -8,8 +8,6 @@
         <v-main class="d-flex mx-4 my-4" style="min-height: 300px;">
             <div cols="12" >
                 <v-col cols="12" class="px-0 py-0 mb-10">
-                    <h4 class="text-center">Ubarber Places</h4>
-                    <p class="text-disabled">Seja bem-vindo 👋</p>
                     <h2>🏬 {{ place.pla_name }}</h2>
                     <p class="text-disabled">
                         {{placeAddress.plad_cep }} <br>

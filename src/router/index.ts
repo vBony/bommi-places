@@ -50,6 +50,11 @@ const routes = [
     name: 'Dashboard',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Dashboard.vue')
   },
+  {
+    path: '/cadastros/funcionarios',
+    name: 'Employee',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Employees.vue')
+  },
   { 
     path: "/:catchAll(.*)", 
     name: 'Not Found',

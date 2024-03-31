@@ -23,6 +23,7 @@
                     <v-col cols="12" class="px-0 py-0">
                         <v-text-field 
                           label="E-mail" 
+                          autocomplete="email"
                           variant="outlined" 
                           type="email" 
                           hide-details="auto" 
@@ -35,6 +36,7 @@
                         <v-text-field 
                             label="Senha" 
                             variant="outlined" 
+                            autocomplete="password"
                             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                             :type="visible ? 'text' : 'password'"
                             @click:append-inner="visible = !visible"
