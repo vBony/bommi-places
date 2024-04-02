@@ -61,7 +61,7 @@
                                                     <th class="text-left" width="80">
                                                         CPF
                                                     </th>
-                                                    <th class="text-left" width="150">
+                                                    <th class="text-left" width="100" style="min-width: 160px">
                                                         Tipo
                                                     </th>
                                                     <th class="text-left" width="20">
@@ -75,8 +75,8 @@
                                                     :key="item.emp_id"
                                                 >
                                                     <td width="280">{{ item.emp_first_name }} {{ item.emp_last_name }}</td>
-                                                    <td width="80">{{ item.emp_cpf }}</td>
-                                                    <td width="150">{{ item.emp_type_name }}</td>
+                                                    <td width="80" style="min-width: 160px">{{ this.cpfMask.masked(item.emp_cpf) }}</td>
+                                                    <td width="100">{{ item.emp_type_name }}</td>
                                                     <td width="20">
                                                         <v-btn 
                                                             elevation="0" 
@@ -148,10 +148,11 @@
                                     :loading="loading"
                                     @change="searchEmployeeByCPF()"
                                     :error-messages="messages.emp_cpf"
+                                    v-maska:[cpfMaskToken]
                                 ></v-text-field>
                             </v-col>
                         </v-row>
-    
+                        
                         <v-row>
                             <v-col cols="12" lg="6" md="6" class="pb-0">
                                 <v-text-field 
@@ -354,12 +355,15 @@ import req from '../helpers/http'
 import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
 import { useDisplay } from 'vuetify'
+import { vMaska, Mask } from "maska"
         
 const App = defineComponent({
 components: {
     VerticalMenu,
     AppBar
 },
+
+directives: { maska: vMaska },
 
 data() {
     return {
@@ -392,7 +396,10 @@ data() {
                 icon: 'mdi-check-circle-outline',
                 text: null
             }
-        }
+        },
+
+        cpfMaskToken: {mask:'###.###.###-##'},
+        cpfMask: null
     };
 },
 
@@ -403,6 +410,7 @@ beforeCreate(){
 
 created(){
     this.user = this.userStore.getUser ?? new UserModel()
+    this.cpfMask = new Mask(this.cpfMaskToken)
 },
 
 methods: {
@@ -418,10 +426,8 @@ methods: {
     },
 
     searchEmployeeByCPF(){
-        this.employee.emp_cpf = this.employee.emp_cpf.replace(/\D/g, '')
-
-        const cpf = structuredClone(this.employee.emp_cpf)
-        if(cpf.length >= 3 && cpf.length <= 11){
+        const cpf = structuredClone(this.cpfMask.unmasked(this.employee.emp_cpf))
+        if(cpf.length == 11){
             this.loading = true
             req.get(this.serverUrl+'/api/employee/?cpf='+cpf)
             .then( (response) => {

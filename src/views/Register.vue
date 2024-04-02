@@ -57,6 +57,7 @@
                                     hide-details="auto"
                                     type="text"
                                     :error-messages="messages.emp_cpf"
+                                    v-maska:[cpfMaskToken]
                                 ></v-text-field>
 
                             </v-col>
@@ -67,7 +68,7 @@
                                     label="Data de nascimento" 
                                     variant="outlined"
                                     hide-details="auto"
-                                    type="text"
+                                    type="date"
                                     :error-messages="messages.emp_birthdate"
                                 ></v-text-field>
                             </v-col>
@@ -120,16 +121,20 @@
 </template>
 
 <script lang='ts'>
+// @ts-nocheck
 import { defineComponent } from 'vue';
 import HelloWorld from '@/components/HelloWorld.vue'
 import axios from 'axios'
 import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
+import { vMaska, Mask } from "maska"
 
 const App = defineComponent({
   components: {
     HelloWorld
   },
+
+  directives: { maska: vMaska },
 
   data() {
     return {
@@ -144,16 +149,22 @@ const App = defineComponent({
         simNao: [
             { text: 'Sim', value: 1 },
             { text: 'Não', value: 0 }
-        ]
+        ],
+
+        cpfMaskToken: {mask:'###.###.###-##'},
+        cpfMask: null
     };
   },
   created(){
+    this.cpfMask = new Mask(this.cpfMaskToken)
   },
   methods: {
     register(){
         const userStore = useUserStore()
 
         this.loading = true
+
+        this.entidade.emp_cpf = this.cpfMask.unmasked(this.entidade.emp_cpf)
         axios.post(this.serverUrl+'/api/auth/employee', this.entidade)
         .then((response) => {
             this.loading = false

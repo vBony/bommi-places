@@ -56,6 +56,7 @@
                                         variant="outlined"
                                         hide-details="auto"
                                         type="text"
+                                        v-maska:[cpfMaskToken]
                                     ></v-text-field>
                                 </v-col>
     
@@ -66,7 +67,8 @@
                                         label="CNPJ" 
                                         variant="outlined"
                                         hide-details="auto"
-                                        type="text"                                        
+                                        type="text"    
+                                        v-maska:[cnpjMaskToken]                                    
                                     ></v-text-field>
                                 </v-col>
     
@@ -92,6 +94,7 @@
                                         hide-details="auto"
                                         type="text"
                                         hint="Como aparecerá no app"
+                                        v-maska:[phoneMaskToken]  
                                     ></v-text-field>
                                 </v-col>
     
@@ -219,12 +222,15 @@ import UserModel from '../entities/User'
 import Place from '@/entities/Place';
 import PlaceAddress from '@/entities/PlaceAddress';
 import UserMenu from '@/components/UserMenu.vue';
+import { vMaska, Mask } from "maska"
 
 const App = defineComponent({
 components: {
     HelloWorld,
     UserMenu
 },
+
+directives: { maska: vMaska },
 
 data() {
     return {
@@ -255,7 +261,16 @@ data() {
             { text: 'Não', value: 0 }
         ],
 
-        userStore: useUserStore()
+        userStore: useUserStore(),
+
+        cpfMaskToken: {mask:'###.###.###-##'},
+        cpfMask: null,
+
+        cnpjMaskToken: {mask:'##.###.###/####-##'},
+        cnpjMask: null,
+
+        phoneMaskToken: {mask:'(##) #####-####'},
+        phoneMask: null,
     };
 },
 created(){
@@ -269,6 +284,10 @@ created(){
 },
 methods: {
     init(){
+        this.cpfMask = new Mask(this.cpfMaskToken)
+        this.cnpjMask = new Mask(this.cnpjMaskToken)
+        this.phoneMask = new Mask(this.phoneMaskToken)
+
         this.getCategories()
     },
 
@@ -289,6 +308,11 @@ methods: {
     },
 
     register(){
+        this.place.pla_cnpj = this.cnpjMask.unmasked(this.place.pla_cnpj)
+        this.place.pla_phone_number = this.phoneMask.unmasked(this.place.pla_phone_number)
+
+        console.log(this.place)
+
         req.post(this.serverUrl+'/api/place', {place: this.place, placeAddress: this.placeAddress})
         .then( (response) => {
             this.resetMessages()
