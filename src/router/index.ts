@@ -36,12 +36,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "home" */ '@/views/Login.vue')
   },
   {
-    path: '/register',
+    path: '/criar-conta',
     name: 'Singup',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Register.vue')
   },
   {
-    path: '/places/register',
+    path: '/places/criar',
     name: 'Singup Places',
     component: () => import(/* webpackChunkName: "home" */ '@/views/RegisterPlaces.vue')
   },
@@ -52,8 +52,13 @@ const routes = [
   },
   {
     path: '/cadastros/funcionarios',
-    name: 'Employee',
+    name: 'Employees',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Employees.vue')
+  },
+  {
+    path: '/cadastros/servicos',
+    name: 'Services',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Services.vue')
   },
   { 
     path: "/:catchAll(.*)", 

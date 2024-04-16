@@ -36,8 +36,17 @@
                     prepend-icon="mdi-badge-account-horizontal-outline"
                     style="padding-inline-start: 25px !important"
                     link
-                    variant="tonal"
+                    variant="text"
                     to="/cadastros/funcionarios"
+                ></v-list-item>
+
+                <v-list-item 
+                    title="Serviços"
+                    prepend-icon="mdi-format-list-bulleted-type"
+                    style="padding-inline-start: 25px !important"
+                    link
+                    variant="text"
+                    to="/cadastros/servicos"
                 ></v-list-item>
             </v-list-group>
         </v-list>

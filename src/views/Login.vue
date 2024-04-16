@@ -57,7 +57,7 @@
                     </v-col>
 
                     <v-col cols="12" class="px-0 py-0 mt-5">
-                        <p class="text-center">Não tem cadastro? <router-link to="/register" class="text-black font-weight-bold">Cadastre seu Salão</router-link></p>
+                        <p class="text-center">Não tem cadastro? <router-link to="/criar-conta" class="text-black font-weight-bold">Cadastre seu Salão</router-link></p>
                     </v-col>
                 </v-form>
 
@@ -132,7 +132,7 @@ const App = defineComponent({
                   userStore.setToken(response.data.token)
 
                   if(response.status == 206){
-                    this.$router.replace('/places/register')
+                    this.$router.replace('/places/criar')
                   }else{
                     this.$router.replace('/dashboard')
                   }

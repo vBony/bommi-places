@@ -174,7 +174,7 @@ const App = defineComponent({
                 if(response.data.token !== undefined){
                     userStore.setToken(response.data.token)
                     
-                    this.$router.replace('/places/register')
+                    this.$router.replace('/places/criar')
                 }
             }
         })
