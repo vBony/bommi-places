@@ -39,11 +39,14 @@
                             </v-row>
                             <v-row>
                                 <v-select
-                                    v-model="idCategory"
+                                    v-model="category.case_id"
                                     label="Selecione uma categoria"
                                     no-data-text="Nenhuma categoria encontrada."
                                     variant="outlined"
                                     density="compact"
+                                    :items="categories"
+                                    item-title="case_name" 
+                                    item-value="case_id"
                                 ></v-select>'
                             </v-row>
                         </v-card>
@@ -84,13 +87,14 @@
                     <v-row>
                         <v-col cols="12" class="pb-0 mb-8">
                             <v-text-field 
-                                v-model="category"
+                                v-model="category.case_name"
                                 label="Nome da categoria" 
                                 type="text" 
                                 variant="outlined"
                                 hide-details="auto" 
                                 prepend-inner-icon="mdi-format-list-bulleted-type"
                                 :loading="loading"
+                                :error-messages="messages.category.case_name"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -117,6 +121,11 @@
             </v-card-actions>
         </v-card>
     </v-dialog>
+
+    <SnackBar
+        v-model="snackbar.show"
+        :text="snackbar.data.text"
+    />
 </v-app>
 </template>
         
@@ -125,6 +134,7 @@
 import { defineComponent } from 'vue';
 import VerticalMenu from '@/components/VerticalMenu.vue'
 import AppBar from '@/components/AppBar.vue'
+import SnackBar from '@/components/SnackBar.vue'
 import req from '../helpers/http'
 import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
@@ -134,7 +144,8 @@ import { vMaska, Mask } from "maska"
 const App = defineComponent({
 components: {
     VerticalMenu,
-    AppBar
+    AppBar,
+    SnackBar
 },
 
 directives: { maska: vMaska },
@@ -151,14 +162,24 @@ data() {
         user: new UserModel(),
 
 
-        idCategory: null,
-        category: null,
+        category: {
+            case_id: null,
+            case_name: null
+        },
+
         categories: [],
         categoryDialog: false,
 
         messages: {
-            category: null,
-        }
+            category: [],
+        },
+
+        snackbar: {
+            show: false,
+            data: {
+                text: null
+            }
+        },
     };
 },
 
@@ -172,13 +193,48 @@ methods: {
         this.showVerticalMenu = data
     },
 
-    createCategory(){
+    init(){
+        req.get(this.serverUrl+'/api/admin/category-services')
+        .then( (response) => {
+            this.categories = response.data.categories
+        })
+    },
 
+    createCategory(){
+        this.category.case_id = null
+        this.messages.category = []
+
+        this.loading = true
+        req.post(this.serverUrl+'/api/admin/category-services', this.category)
+        .then( (response) => {
+            this.loading = false
+
+            this.category.case_id = response.data.case_id
+            this.category.case_name = null
+
+            this.categories.unshift(response.data)
+
+            this.categoryDialog = false
+            this.snackBar("Categoria cadastrada com sucesso!")
+        })
+        .catch( (reason) => {
+            this.loading = false
+            this.messages.category = reason.response.data.errors
+        })
+    },
+
+    snackBar(text, icon = null){
+        if(icon){
+            this.snackbar.data.icon = icon
+        }
+
+        this.snackbar.data.text = text
+        this.snackbar.show = true
     }
 },
 
 mounted(){
-    
+    this.init()
 }
 });
         
