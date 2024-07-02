@@ -47,6 +47,7 @@
                                     :items="categories"
                                     item-title="case_name" 
                                     item-value="case_id"
+                                    @update:modelValue="getServices()"
                                 ></v-select>'
                             </v-row>
                         </v-card>
@@ -169,6 +170,7 @@ data() {
 
         categories: [],
         categoryDialog: false,
+        services: [],
 
         messages: {
             category: [],
@@ -194,7 +196,7 @@ methods: {
     },
 
     init(){
-        req.get(this.serverUrl+'/api/admin/category-services')
+        req.get(this.serverUrl+'/api/place/services/categories')
         .then( (response) => {
             this.categories = response.data.categories
         })
@@ -205,7 +207,7 @@ methods: {
         this.messages.category = []
 
         this.loading = true
-        req.post(this.serverUrl+'/api/admin/category-services', this.category)
+        req.post(this.serverUrl+'/api/place/services/categories', this.category)
         .then( (response) => {
             this.loading = false
 
@@ -230,6 +232,13 @@ methods: {
 
         this.snackbar.data.text = text
         this.snackbar.show = true
+    },
+
+    getServices(){
+        req.get(this.serverUrl+'/api/place/services/'+this.category.case_id)
+        .then( (response) => {
+            this.services = response.data.categories
+        })
     }
 },
 
