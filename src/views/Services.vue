@@ -3,6 +3,7 @@
     <v-layout class="rounded rounded-md">
         <AppBar @setToggleVerticalMenu="setToggleVerticalMenu" />
         <VerticalMenu :showVerticalMenu="showVerticalMenu" />
+        <LoadingOverlay :loading="loading"></LoadingOverlay>
     
         <v-main class="d-flex mx-lg-4 my-lg-4" style="min-height: 300px;">
             <v-container fluid>
@@ -49,6 +50,76 @@
                                     item-value="case_id"
                                     @update:modelValue="getServices()"
                                 ></v-select>'
+                            </v-row>
+
+                            <v-row cols="12" v-if="category.case_id">
+                                <h4>Serviços</h4>
+                                <v-divider class="mb-3"></v-divider>
+
+                                <v-col cols="12" md="12" lg="12" class="pa-0">
+                                    <v-text-field
+                                        v-if="services"
+                                        variant="outlined"
+                                        type="text"
+                                        prepend-inner-icon="mdi-magnify"
+                                        density="compact"
+                                        label="Procurar serviços"
+                                        v-model="searchQuery"
+                                        @keyup="filterEmployeesByName()"
+                                    ></v-text-field>
+                                </v-col> 
+
+                                <v-col cols="12" md="2" lg="2" class="pa-0">
+                                    <v-btn
+                                        prepend-icon="mdi-format-list-bulleted-type"
+                                        color="black"
+                                        block
+                                        size="small"
+                                        @click="registerDialog = true"
+                                    >
+                                        Novo
+                                    </v-btn>
+                                </v-col>
+
+                                <v-col cols="12" class="pa-0" v-if="services">
+                                    <v-table
+                                        height="300px"
+                                        fixed-header
+                                        hover
+                                    >
+                                        <thead>
+                                            <tr>
+                                                <th class="text-left" width="280">
+                                                    Nome
+                                                </th>
+                                                <th class="text-left" width="80">
+                                                    Preço
+                                                </th>
+                                                <th class="text-left" width="20">
+                                                    
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                v-for="item in services"
+                                                :key="item.sepl_id"
+                                            >
+                                                <td width="280">{{ item.sepl_name }}</td>
+                                                <td width="80">{{ item.sepl_price }}</td>
+                                                <td width="20">
+                                                    <v-btn 
+                                                        elevation="0" 
+                                                        icon="mdi-pencil" 
+                                                        size="small"
+                                                        @click="openDeleteDialog(item)"
+                                                    ></v-btn>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                    </v-table>
+                                </v-col>
                             </v-row>
                         </v-card>
                     </v-col>
@@ -141,12 +212,14 @@ import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
 import { useDisplay } from 'vuetify'
 import { vMaska, Mask } from "maska"
+import LoadingOverlay from '@/components/LoadingOverlay.vue';
         
 const App = defineComponent({
 components: {
     VerticalMenu,
     AppBar,
-    SnackBar
+    SnackBar,
+    LoadingOverlay
 },
 
 directives: { maska: vMaska },
@@ -196,8 +269,10 @@ methods: {
     },
 
     init(){
+        this.loading = true
         req.get(this.serverUrl+'/api/place/services/categories')
         .then( (response) => {
+            this.loading = false
             this.categories = response.data.categories
         })
     },
@@ -207,7 +282,7 @@ methods: {
         this.messages.category = []
 
         this.loading = true
-        req.post(this.serverUrl+'/api/place/services/categories', this.category)
+        req.post(this.serverUrl+'/api/admin/place/services/categories', this.category)
         .then( (response) => {
             this.loading = false
 
@@ -235,9 +310,11 @@ methods: {
     },
 
     getServices(){
+        this.loading = true
         req.get(this.serverUrl+'/api/place/services/'+this.category.case_id)
         .then( (response) => {
-            this.services = response.data.categories
+            this.loading = false
+            this.services = response.data.services
         })
     }
 },
