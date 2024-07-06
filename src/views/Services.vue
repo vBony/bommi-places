@@ -75,7 +75,7 @@
                                         color="black"
                                         block
                                         size="small"
-                                        @click="registerDialog = true"
+                                        @click="openDialogCreateService()"
                                     >
                                         Novo
                                     </v-btn>
@@ -194,6 +194,133 @@
         </v-card>
     </v-dialog>
 
+    <v-dialog
+        v-model="serviceDialog"
+        width="auto"
+        max-width="800"
+        transition="dialog-bottom-transition"
+    >
+        <v-card
+            max-width="800"
+            rounded="lg"
+        >
+            <v-card-title class="d-flex justify-space-between align-center">
+                <div class="text-h6 font-weight-black text-medium-emphasis ps-2">
+                    <v-icon class="me-2"> mdi-format-list-bulleted-type </v-icon>
+                    Criar Serviço
+                </div>
+
+                <v-btn
+                    icon="mdi-close"
+                    variant="text"
+                    @click="serviceDialog = false"
+                ></v-btn>
+            </v-card-title>
+
+            <v-divider class="mb-4"></v-divider>
+
+            <v-card-text>
+                <div class="text-medium-emphasis mb-4">
+                    Crie serviços que seu estabelecimento realiza
+                </div>
+                <v-form :disabled="loading" class="pa-0 pa-lg-2 pa-md-2 mb-8">
+                    <v-row>
+                        <v-col cols="12" class="pb-0">
+                            <v-text-field 
+                                v-model="service.sepl_name"
+                                label="Nome" 
+                                type="text" 
+                                variant="outlined"
+                                hide-details="auto" 
+                                density="compact"
+                                :error-messages="messages.sepl_name"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="6" class="pb-0">
+                            <v-text-field 
+                                v-model="service.sepl_price"
+                                label="Preço (R$)" 
+                                type="text" 
+                                variant="outlined"
+                                hide-details="auto" 
+                                density="compact"
+                                :error-messages="messages.sepl_price"
+                            ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="6" class="pb-0">
+                            <v-text-field 
+                                v-model="service.sepl_duration"
+                                label="Duração (HH:MM)" 
+                                type="text" 
+                                variant="outlined"
+                                hide-details="auto" 
+                                density="compact"
+                                :error-messages="messages.sepl_duration"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12" class="pb-0">
+                            <v-textarea 
+                                v-model="service.sepl_description"
+                                label="Descrição" 
+                                variant="outlined"
+                                hide-details="auto" 
+                                density="compact"
+                                :error-messages="messages.sepl_description"
+                            ></v-textarea>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12" class="pb-0">
+                            <v-divider class="my-3"></v-divider>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12" class="pb-0">
+                            <v-select
+                                v-model="category.case_id"
+                                label="Categoria"
+                                variant="outlined"
+                                density="compact"
+                                :items="categories"
+                                item-title="case_name" 
+                                item-value="case_id"
+                                disabled
+                            ></v-select>
+                        </v-col>
+                    </v-row>
+                </v-form>
+            </v-card-text>
+
+            <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                    text="Cancelar"
+                    variant="plain"
+                    class="px-4"
+                    @click="serviceDialog = false"
+                ></v-btn>
+
+                <v-btn
+                    color="grey-darken-4"
+                    text="Incluir"
+                    variant="tonal"
+                    class="px-4"
+                    @click="createService()"
+                ></v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
     <SnackBar
         v-model="snackbar.show"
         :text="snackbar.data.text"
@@ -210,6 +337,7 @@ import SnackBar from '@/components/SnackBar.vue'
 import req from '../helpers/http'
 import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
+import ServiceModel from '../entities/Service'
 import { useDisplay } from 'vuetify'
 import { vMaska, Mask } from "maska"
 import LoadingOverlay from '@/components/LoadingOverlay.vue';
@@ -243,10 +371,14 @@ data() {
 
         categories: [],
         categoryDialog: false,
+
         services: [],
+        serviceDialog: false,
+        service: new ServiceModel(),
 
         messages: {
             category: [],
+            service: []
         },
 
         snackbar: {
@@ -277,6 +409,11 @@ methods: {
         })
     },
 
+    openDialogCreateService(){
+        this.serviceDialog = true
+        this.service = new ServiceModel()
+    },  
+
     createCategory(){
         this.category.case_id = null
         this.messages.category = []
@@ -298,6 +435,13 @@ methods: {
             this.loading = false
             this.messages.category = reason.response.data.errors
         })
+    },
+
+    createService(){
+        this.service.sepl_case_id = this.category.case_id
+        this.messages.service = []
+
+        this.loading = true
     },
 
     snackBar(text, icon = null){
