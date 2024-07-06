@@ -233,7 +233,7 @@
                                 variant="outlined"
                                 hide-details="auto" 
                                 density="compact"
-                                :error-messages="messages.sepl_name"
+                                :error-messages="messages.service.sepl_name"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -247,7 +247,7 @@
                                 variant="outlined"
                                 hide-details="auto" 
                                 density="compact"
-                                :error-messages="messages.sepl_price"
+                                :error-messages="messages.service.sepl_price"
                             ></v-text-field>
                         </v-col>
 
@@ -259,7 +259,7 @@
                                 variant="outlined"
                                 hide-details="auto" 
                                 density="compact"
-                                :error-messages="messages.sepl_duration"
+                                :error-messages="messages.service.sepl_duration"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -272,7 +272,7 @@
                                 variant="outlined"
                                 hide-details="auto" 
                                 density="compact"
-                                :error-messages="messages.sepl_description"
+                                :error-messages="messages.service.sepl_description"
                             ></v-textarea>
                         </v-col>
                     </v-row>
@@ -412,6 +412,7 @@ methods: {
     openDialogCreateService(){
         this.serviceDialog = true
         this.service = new ServiceModel()
+        this.messages.service = []
     },  
 
     createCategory(){
@@ -419,7 +420,7 @@ methods: {
         this.messages.category = []
 
         this.loading = true
-        req.post(this.serverUrl+'/api/admin/place/services/categories', this.category)
+        req.post(this.serverUrl+'/api/admin/place/service/category', this.category)
         .then( (response) => {
             this.loading = false
 
@@ -442,6 +443,20 @@ methods: {
         this.messages.service = []
 
         this.loading = true
+        req.post(this.serverUrl+'/api/admin/place/service', this.service)
+        .then( (response) => {
+            this.loading = false
+            
+            this.services.unshift(response.data)
+            
+            this.serviceDialog = false
+            this.service = new ServiceModel()
+            this.snackBar("Serviço cadastrada com sucesso!")
+        })
+        .catch( (reason) => {
+            this.loading = false
+            this.messages.service = reason.response.data.errors
+        })
     },
 
     snackBar(text, icon = null){
