@@ -112,7 +112,7 @@
                                                         elevation="0" 
                                                         icon="mdi-pencil" 
                                                         size="small"
-                                                        @click="openDeleteDialog(item)"
+                                                        @click="openDialogEditService(item.sepl_id)"
                                                     ></v-btn>
                                                 </td>
                                             </tr>
@@ -196,7 +196,7 @@
 
     <v-dialog
         v-model="serviceDialog"
-        width="auto"
+        width="90%"
         max-width="800"
         transition="dialog-bottom-transition"
     >
@@ -207,7 +207,7 @@
             <v-card-title class="d-flex justify-space-between align-center">
                 <div class="text-h6 font-weight-black text-medium-emphasis ps-2">
                     <v-icon class="me-2"> mdi-format-list-bulleted-type </v-icon>
-                    Criar Serviço
+                    {{ (modeEditServiceDialog == true) ? "Alterar Serviço" : "Criar Serviço" }}
                 </div>
 
                 <v-btn
@@ -220,9 +220,13 @@
             <v-divider class="mb-4"></v-divider>
 
             <v-card-text>
-                <div class="text-medium-emphasis mb-4">
+                <div 
+                    v-if="modeEditServiceDialog == false" 
+                    class="text-medium-emphasis mb-4"
+                >
                     Crie serviços que seu estabelecimento realiza
                 </div>
+
                 <v-form :disabled="loading" class="pa-0 pa-lg-2 pa-md-2 mb-8">
                     <v-row>
                         <v-col cols="12" class="pb-0">
@@ -301,6 +305,16 @@
             </v-card-text>
 
             <v-card-actions>
+                <v-btn
+                    v-if="modeEditServiceDialog == true"
+                    class="text-none font-weight-regular"
+                    color="red"
+                    prepend-icon="mdi-trash-can"
+                    text="Excluir"
+                    variant="tonal"
+                    v-bind="activatorProps"
+                ></v-btn>
+
                 <v-spacer></v-spacer>
 
                 <v-btn
@@ -311,11 +325,21 @@
                 ></v-btn>
 
                 <v-btn
+                    v-if="modeEditServiceDialog == false"
                     color="grey-darken-4"
                     text="Incluir"
                     variant="tonal"
                     class="px-4"
                     @click="createService()"
+                ></v-btn>
+
+                <v-btn
+                    v-if="modeEditServiceDialog == true"
+                    color="grey-darken-4"
+                    text="Alterar"
+                    variant="tonal"
+                    class="px-4"
+                    @click="editService()"
                 ></v-btn>
             </v-card-actions>
         </v-card>
@@ -374,6 +398,7 @@ data() {
 
         services: [],
         serviceDialog: false,
+        modeEditServiceDialog: false,
         service: new ServiceModel(),
 
         messages: {
@@ -411,9 +436,20 @@ methods: {
 
     openDialogCreateService(){
         this.serviceDialog = true
+        this.modeEditServiceDialog = false
         this.service = new ServiceModel()
         this.messages.service = []
-    },  
+    },
+    
+    openDialogEditService(id){
+        this.service = new ServiceModel()
+        this.messages.service = []
+
+        this.getService(id)
+
+        this.serviceDialog = true
+        this.modeEditServiceDialog = true
+    },
 
     createCategory(){
         this.category.case_id = null
@@ -474,6 +510,15 @@ methods: {
         .then( (response) => {
             this.loading = false
             this.services = response.data.services
+        })
+    },
+
+    getService(id){
+        this.loading = true
+        req.get(this.serverUrl+'/api/place/service/'+id)
+        .then( (response) => {
+            this.loading = false
+            this.service = response.data
         })
     }
 },

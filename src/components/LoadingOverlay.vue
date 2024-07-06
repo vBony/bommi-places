@@ -4,6 +4,7 @@
       class="align-center justify-center"
       scroll-strategy="none"
       persistent
+      z-index="999999999999"
     >
         <v-progress-circular
             color="primary"
