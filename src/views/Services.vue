@@ -252,6 +252,7 @@
                                 hide-details="auto" 
                                 density="compact"
                                 :error-messages="messages.service.sepl_price"
+                                v-maska:[mt.money]
                             ></v-text-field>
                         </v-col>
 
@@ -264,6 +265,7 @@
                                 hide-details="auto" 
                                 density="compact"
                                 :error-messages="messages.service.sepl_duration"
+                                v-maska:[mt.hoursAndMinutes]
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -362,8 +364,8 @@ import req from '../helpers/http'
 import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
 import ServiceModel from '../entities/Service'
+import MaskTokens from '../entities/Masks'
 import { useDisplay } from 'vuetify'
-import { vMaska, Mask } from "maska"
 import LoadingOverlay from '@/components/LoadingOverlay.vue';
         
 const App = defineComponent({
@@ -374,8 +376,6 @@ components: {
     LoadingOverlay
 },
 
-directives: { maska: vMaska },
-
 data() {
     return {
         serverUrl: import.meta.env.VITE_SERVER_URL,
@@ -384,6 +384,7 @@ data() {
         userStore: useUserStore(),
         display: useDisplay(),
         searchQuery: null,
+        mt: new MaskTokens(),
         
         user: new UserModel(),
 
