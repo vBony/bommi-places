@@ -314,7 +314,7 @@
                     prepend-icon="mdi-trash-can"
                     text="Excluir"
                     variant="tonal"
-                    v-bind="activatorProps"
+                    @click="deleteServiceDialog = true"
                 ></v-btn>
 
                 <v-spacer></v-spacer>
@@ -342,6 +342,51 @@
                     variant="tonal"
                     class="px-4"
                     @click="editService()"
+                ></v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
+    <v-dialog
+        v-model="deleteServiceDialog"
+        width="auto"
+    >
+        <v-card
+            max-width="600"
+        >
+            <v-card-title class="d-flex justify-space-between align-center">
+                <div class="text-h6 font-weight-black text-medium-emphasis ps-2">
+                    <v-icon class="me-2"> mdi-format-list-bulleted-type </v-icon>
+                    Excluir serviço
+                </div>
+
+                <v-btn
+                    icon="mdi-close"
+                    variant="text"
+                    @click="deleteServiceDialog = false"
+                ></v-btn>
+            </v-card-title>
+            <v-card-text>
+                <p>Confirma a exclusão do servico <b class="text-decoration-underline">{{ this.service.sepl_name }}</b> ?</p>
+                <p class="text-disabled">
+                    Essa ação é irreversível
+                </p>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    text="Cancelar"
+                    variant="tonal"
+                    class="px-4 mr-4"
+                    @click="deleteServiceDialog = false"
+                ></v-btn>
+
+                <v-btn
+                    class="ms-auto"
+                    text="Sim, excluir"
+                    color="red"
+                    variant="tonal"
+                    @click="deleteService()"
                 ></v-btn>
             </v-card-actions>
         </v-card>
@@ -401,6 +446,7 @@ data() {
         serviceDialog: false,
         modeEditServiceDialog: false,
         service: new ServiceModel(),
+        deleteServiceDialog: false,
 
         messages: {
             category: [],
@@ -489,6 +535,32 @@ methods: {
             this.serviceDialog = false
             this.service = new ServiceModel()
             this.snackBar("Serviço cadastrada com sucesso!")
+        })
+        .catch( (reason) => {
+            this.loading = false
+            this.messages.service = reason.response.data.errors
+        })
+    },
+
+    deleteService(){
+        this.messages.service = []
+
+        this.loading = true
+        req.delete(this.serverUrl+'/api/admin/place/service/'+this.service.sepl_id )
+        .then( () => {
+            this.loading = false
+
+            const index = this.services.findIndex(service => service.sepl_id === this.service.sepl_id);
+
+            if (index !== -1) {
+                this.services.splice(index, 1);
+                
+                this.service = new ServiceModel()
+                
+                this.deleteServiceDialog = false
+                this.serviceDialog = false
+                this.snackBar("Serviço excluído com sucesso!")
+            }
         })
         .catch( (reason) => {
             this.loading = false
