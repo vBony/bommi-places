@@ -1,31 +1,23 @@
 <template>
-<v-app>
-    <v-layout class="rounded rounded-md">
-        <AppBar @setToggleVerticalMenu="setToggleVerticalMenu" />
-        
-        <VerticalMenu :showVerticalMenu="showVerticalMenu" />
-    
-        <v-main class="d-flex mx-4 my-4" style="min-height: 300px;">
-            <div cols="12" >
-                <v-col cols="12" class="px-0 py-0 mb-10">
-                    <h2>🏬 {{ place.pla_name }}</h2>
-                    <p class="text-disabled">
-                        {{placeAddress.plad_cep }} <br>
-                        {{placeAddress.plad_city}} - {{placeAddress.plad_uf}} <br>
-                        {{placeAddress.plad_district}} <br>
-                        {{placeAddress.plad_complement}}
-                    </p>
-                </v-col>
+<v-main class="d-flex mx-4 my-4" style="min-height: 300px;">
+    <div cols="12" >
+        <v-col cols="12" class="px-0 py-0 mb-10">
+            <h2>🏬 {{ place.pla_name }}</h2>
+            <p class="text-disabled">
+                {{placeAddress.plad_cep }} <br>
+                {{placeAddress.plad_city}} - {{placeAddress.plad_uf}} <br>
+                {{placeAddress.plad_district}} <br>
+                {{placeAddress.plad_complement}}
+            </p>
+        </v-col>
 
-                <v-col cols="12">
-                    <h4>🤵 Usuario</h4>
-                    <p>Nome: {{ user.emp_first_name + ' ' + user.emp_last_name }} </p>
-                    <p>Hierarquia: {{ user.emp_type_name }}</p>
-                </v-col>
-            </div>
-        </v-main>
-    </v-layout>
-</v-app>
+        <v-col cols="12">
+            <h4>🤵 Usuario</h4>
+            <p>Nome: {{ user.emp_first_name + ' ' + user.emp_last_name }} </p>
+            <p>Hierarquia: {{ user.emp_type_name }}</p>
+        </v-col>
+    </div>
+</v-main>
 </template>
     
 <script lang='ts'>
@@ -51,7 +43,6 @@ const App = defineComponent({
         return {
             serverUrl: import.meta.env.VITE_SERVER_URL,
             loading: false,
-            showVerticalMenu: false,
             userStore: useUserStore(),
             user: new UserModel(),
             place: new Place(),
@@ -73,14 +64,6 @@ const App = defineComponent({
             this.place = data.place
             this.placeAddress = data.place.address
         })
-    },
-    methods: {
-        setToggleVerticalMenu(data){
-            this.showVerticalMenu = data
-        }
-    },
-
-    mounted(){
     }
 });
     

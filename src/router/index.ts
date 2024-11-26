@@ -8,7 +8,7 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'Home',
+        name: 'home',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -22,7 +22,7 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'ApiTester',
+        name: 'apiTester',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -32,37 +32,37 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Login.vue')
   },
   {
     path: '/criar-conta',
-    name: 'Singup',
+    name: 'singup',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Register.vue')
   },
   {
     path: '/places/criar',
-    name: 'Singup Places',
+    name: 'singupPlaces',
     component: () => import(/* webpackChunkName: "home" */ '@/views/RegisterPlaces.vue')
   },
   {
     path: '/dashboard',
-    name: 'Dashboard',
+    name: 'dashboard',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Dashboard.vue')
   },
   {
     path: '/cadastros/funcionarios',
-    name: 'Employees',
+    name: 'employees',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Employees.vue')
   },
   {
     path: '/cadastros/servicos',
-    name: 'Services',
+    name: 'services',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Services.vue')
   },
   { 
     path: "/:catchAll(.*)", 
-    name: 'Not Found',
+    name: 'notFound',
     component: {
       template: '<p>Page Not Found</p>'
     }

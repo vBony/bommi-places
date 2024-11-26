@@ -1,132 +1,125 @@
 <template>
-<v-app>
-    <v-layout class="rounded rounded-md">
-        <AppBar @setToggleVerticalMenu="setToggleVerticalMenu" />
-        <VerticalMenu :showVerticalMenu="showVerticalMenu" />
-        <LoadingOverlay :loading="loading"></LoadingOverlay>
-    
-        <v-main class="d-flex mx-lg-4 my-lg-4" style="min-height: 300px;">
-            <v-container fluid>
-                <v-row justify="center">
-                    <v-col cols="12" md="8" sm="12">
-                        <h2>Cadastro de Serviços</h2>
-                        <v-breadcrumbs :items="['Cadastros', 'Serviços']">
-                            <template v-slot:divider>
-                                <v-icon icon="mdi-chevron-right"></v-icon>
-                            </template>
-                        </v-breadcrumbs>
-                    </v-col>
-                    
-                    <v-col cols="12" md="8" sm="12">
-                        <v-card class="elevation-4 pa-10">
-                            <v-row class="mb-4">
-                                <v-alert
-                                    text="Crie uma categoria para criar os serviços. As categorias são as modalidades de serviços que seu estabelecimento realiza."
-                                    type="info"
-                                    variant="tonal"
-                                ></v-alert>
-                            </v-row>
-                            <v-row>
-                                <v-btn
-                                    variant="text"
-                                    size="small"
-                                    prepend-icon="mdi-plus"
-                                    class="mb-2"
-                                    color="green"
-                                    @click="categoryDialog = true"
-                                >
-                                    Adicionar Categoria
-                                </v-btn>
-                            </v-row>
-                            <v-row>
-                                <v-select
-                                    v-model="category.case_id"
-                                    label="Selecione uma categoria"
-                                    no-data-text="Nenhuma categoria encontrada."
+    <v-main class="d-flex mx-lg-4 my-lg-4" style="min-height: 300px;">
+        <v-container fluid>
+            <v-row justify="center">
+                <v-col cols="12" md="8" sm="12">
+                    <h2>Cadastro de Serviços</h2>
+                    <v-breadcrumbs :items="['Cadastros', 'Serviços']">
+                        <template v-slot:divider>
+                            <v-icon icon="mdi-chevron-right"></v-icon>
+                        </template>
+                    </v-breadcrumbs>
+                </v-col>
+                
+                <v-col cols="12" md="8" sm="12">
+                    <v-card class="elevation-4 pa-10">
+                        <v-row class="mb-4">
+                            <v-alert
+                                text="Crie uma categoria para criar os serviços. As categorias são as modalidades de serviços que seu estabelecimento realiza."
+                                type="info"
+                                variant="tonal"
+                            ></v-alert>
+                        </v-row>
+                        <v-row>
+                            <v-btn
+                                variant="text"
+                                size="small"
+                                prepend-icon="mdi-plus"
+                                class="mb-2"
+                                color="green"
+                                @click="categoryDialog = true"
+                            >
+                                Adicionar Categoria
+                            </v-btn>
+                        </v-row>
+                        <v-row>
+                            <v-select
+                                v-model="category.case_id"
+                                label="Selecione uma categoria"
+                                no-data-text="Nenhuma categoria encontrada."
+                                variant="outlined"
+                                density="compact"
+                                :items="categories"
+                                item-title="case_name" 
+                                item-value="case_id"
+                                @update:modelValue="getServices()"
+                            ></v-select>'
+                        </v-row>
+
+                        <v-row cols="12" v-if="category.case_id">
+                            <h4>Serviços</h4>
+                            <v-divider class="mb-3"></v-divider>
+
+                            <v-col cols="12" md="12" lg="12" class="pa-0">
+                                <v-text-field
+                                    v-if="services"
                                     variant="outlined"
+                                    type="text"
+                                    prepend-inner-icon="mdi-magnify"
                                     density="compact"
-                                    :items="categories"
-                                    item-title="case_name" 
-                                    item-value="case_id"
-                                    @update:modelValue="getServices()"
-                                ></v-select>'
-                            </v-row>
+                                    label="Procurar serviços"
+                                    v-model="searchQuery"
+                                    @keyup="filterEmployeesByName()"
+                                ></v-text-field>
+                            </v-col> 
 
-                            <v-row cols="12" v-if="category.case_id">
-                                <h4>Serviços</h4>
-                                <v-divider class="mb-3"></v-divider>
+                            <v-col cols="12" md="2" lg="2" class="pa-0">
+                                <v-btn
+                                    prepend-icon="mdi-format-list-bulleted-type"
+                                    color="black"
+                                    block
+                                    size="small"
+                                    @click="openDialogCreateService()"
+                                >
+                                    Novo
+                                </v-btn>
+                            </v-col>
 
-                                <v-col cols="12" md="12" lg="12" class="pa-0">
-                                    <v-text-field
-                                        v-if="services"
-                                        variant="outlined"
-                                        type="text"
-                                        prepend-inner-icon="mdi-magnify"
-                                        density="compact"
-                                        label="Procurar serviços"
-                                        v-model="searchQuery"
-                                        @keyup="filterEmployeesByName()"
-                                    ></v-text-field>
-                                </v-col> 
+                            <v-col cols="12" class="pa-0" v-if="services">
+                                <v-table
+                                    height="300px"
+                                    fixed-header
+                                    hover
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left" width="280">
+                                                Nome
+                                            </th>
+                                            <th class="text-left" width="80">
+                                                Preço
+                                            </th>
+                                            <th class="text-left" width="20">
+                                                
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            v-for="item in services"
+                                            :key="item.sepl_id"
+                                        >
+                                            <td width="280">{{ item.sepl_name }}</td>
+                                            <td width="80">{{ item.sepl_price }}</td>
+                                            <td width="20">
+                                                <v-btn 
+                                                    elevation="0" 
+                                                    icon="mdi-pencil" 
+                                                    size="small"
+                                                    @click="openDialogEditService(item.sepl_id)"
+                                                ></v-btn>
+                                            </td>
+                                        </tr>
+                                    </tbody>
 
-                                <v-col cols="12" md="2" lg="2" class="pa-0">
-                                    <v-btn
-                                        prepend-icon="mdi-format-list-bulleted-type"
-                                        color="black"
-                                        block
-                                        size="small"
-                                        @click="openDialogCreateService()"
-                                    >
-                                        Novo
-                                    </v-btn>
-                                </v-col>
-
-                                <v-col cols="12" class="pa-0" v-if="services">
-                                    <v-table
-                                        height="300px"
-                                        fixed-header
-                                        hover
-                                    >
-                                        <thead>
-                                            <tr>
-                                                <th class="text-left" width="280">
-                                                    Nome
-                                                </th>
-                                                <th class="text-left" width="80">
-                                                    Preço
-                                                </th>
-                                                <th class="text-left" width="20">
-                                                    
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr
-                                                v-for="item in services"
-                                                :key="item.sepl_id"
-                                            >
-                                                <td width="280">{{ item.sepl_name }}</td>
-                                                <td width="80">{{ item.sepl_price }}</td>
-                                                <td width="20">
-                                                    <v-btn 
-                                                        elevation="0" 
-                                                        icon="mdi-pencil" 
-                                                        size="small"
-                                                        @click="openDialogEditService(item.sepl_id)"
-                                                    ></v-btn>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-
-                                    </v-table>
-                                </v-col>
-                            </v-row>
-                        </v-card>
-                    </v-col>
-                </v-row>
-            </v-container>
-        </v-main>
-    </v-layout>
+                                </v-table>
+                            </v-col>
+                        </v-row>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-container>
+    </v-main>
 
     <v-dialog
         v-model="categoryDialog"
@@ -396,7 +389,6 @@
         v-model="snackbar.show"
         :text="snackbar.data.text"
     />
-</v-app>
 </template>
         
 <script lang='ts'>
@@ -411,21 +403,17 @@ import UserModel from '../entities/User'
 import ServiceModel from '../entities/Service'
 import MaskTokens from '../entities/Masks'
 import { useDisplay } from 'vuetify'
-import LoadingOverlay from '@/components/LoadingOverlay.vue';
         
 const App = defineComponent({
 components: {
-    VerticalMenu,
     AppBar,
-    SnackBar,
-    LoadingOverlay
+    SnackBar
 },
 
 data() {
     return {
         serverUrl: import.meta.env.VITE_SERVER_URL,
         loading: false,
-        showVerticalMenu: false,
         userStore: useUserStore(),
         display: useDisplay(),
         searchQuery: null,
@@ -468,9 +456,6 @@ beforeCreate(){
 },
 
 methods: {
-    setToggleVerticalMenu(data){
-        this.showVerticalMenu = data
-    },
 
     init(){
         this.loading = true
