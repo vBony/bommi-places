@@ -313,7 +313,7 @@ methods: {
 
         console.log(this.place)
 
-        req.post(this.serverUrl+'/api/place', {place: this.place, placeAddress: this.placeAddress})
+        req.post(this.serverUrl+'/api/admin/place', {place: this.place, placeAddress: this.placeAddress})
         .then( (response) => {
             this.resetMessages()
             this.$router.replace('/dashboard')

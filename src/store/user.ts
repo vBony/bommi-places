@@ -46,8 +46,6 @@ export const useUserStore = defineStore('user', {
         setUser(userDestiny:object) {
             Object.assign(this.user, userDestiny);
             localStorage.setItem(this.prefix+'user', JSON.stringify(this.user))
-
-            console.log(JSON.stringify(this.user))
         },
 
         setToken(token:string){

@@ -12,8 +12,9 @@ import { createApp } from 'vue'
 
 // Plugins
 import { registerPlugins } from '@/plugins'
+import { vMaska } from "maska"
 
-const app = createApp(App)
+const app = createApp(App).directive("maska", vMaska)
 
 registerPlugins(app)
 
