@@ -578,6 +578,10 @@ methods: {
             this.loading = false
             this.service = response.data
         })
+    },
+
+    editService(){
+        // todo: criar edição
     }
 },
 
