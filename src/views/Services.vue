@@ -581,7 +581,30 @@ methods: {
     },
 
     editService(){
-        // todo: criar edição
+        this.loading = true
+        req.put(this.serverUrl+'/api/admin/place/service', this.service)
+        .then( (response) => {
+            this.loading = false
+
+            const index = this.services.findIndex(service => service.sepl_id === this.service.sepl_id);
+
+            if (index !== -1) {
+                this.services[index] = response.data;
+                
+                this.service = new ServiceModel()
+                
+                this.deleteServiceDialog = false
+                this.serviceDialog = false
+                this.snackBar("Serviço alterado com sucesso!")
+            }
+            console.log(response)
+            this.loading = false
+            // this.service = response.data
+        })
+        .catch( (reason) => {
+            this.loading = false
+            this.messages.service = reason.response.data.errors
+        })
     }
 },
 
