@@ -406,7 +406,7 @@ created(){
 
 methods: {
     gettypes(){
-        req.get(this.serverUrl+'/api/employees/types')
+        req.get(this.serverUrl+'/api/admin/employees/types')
         .then( (response) => {
             this.types = response.data.employeeTypes
         })

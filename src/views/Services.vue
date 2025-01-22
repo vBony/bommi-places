@@ -574,6 +574,33 @@ methods: {
         this.modeEditCategoryDialog = true
     },
 
+    editCategory(){
+        this.loading = true
+        req.put(this.serverUrl+'/api/admin/place/service/category', this.category)
+        .then( (response) => {
+            this.loading = false
+
+            const index = this.categories.findIndex(service => service.sepl_id === this.service.sepl_id);
+
+            if (index !== -1) {
+                this.categories[index] = response.data;
+                this.messages.category = []
+                
+                this.category = new CategoryModel()
+                
+                this.deleteCategoryDialog = false
+                this.categoryDialog = false
+                this.snackBar("Categoria alterada com sucesso!")
+            }
+            this.loading = false
+        })
+        .catch( (reason) => {
+            console.log(reason)
+            this.loading = false
+            this.messages.category = reason.response.data.errors
+        })
+    },
+
     deleteCategory(){
         const index = this.categories.findIndex(category => category.sepl_id === this.category.sepl_id);
 
