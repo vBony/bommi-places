@@ -20,16 +20,28 @@
                                 variant="tonal"
                             ></v-alert>
                         </v-row>
-                        <v-row>
+                        <v-row class="d-flex justify-space-between">
                             <v-btn
                                 variant="text"
                                 size="small"
                                 prepend-icon="mdi-plus"
                                 class="mb-2"
                                 color="green"
-                                @click="categoryDialog = true"
+                                @click="openDialogCreateCategory()"
                             >
-                                Adicionar Categoria
+                                Nova Categoria
+                            </v-btn>
+
+                            <v-btn
+                                v-if="this.category.case_id"
+                                variant="text"
+                                size="small"
+                                prepend-icon="mdi-pencil"
+                                class="mb-2"
+                                color="grey-darken-2"
+                                @click="openDialogEditCategory()"
+                            >
+                                Editar Categoria
                             </v-btn>
                         </v-row>
                         <v-row>
@@ -134,8 +146,8 @@
         >
             <v-card-title class="d-flex justify-space-between align-center">
                 <div class="text-h6 font-weight-black text-medium-emphasis ps-2">
-                    <v-icon class="me-2"> mdi-account-multiple-plus </v-icon>
-                    Criar categoria
+                    <v-icon class="me-2"> mdi-shape </v-icon>
+                    {{ (modeEditCategoryDialog == true) ? "Editar Categoria" : "Criar Categoria" }}
                 </div>
 
                 <v-btn
@@ -167,6 +179,16 @@
             </v-card-text>
 
             <v-card-actions>
+                <v-btn
+                    v-if="modeEditCategoryDialog == true"
+                    class="text-none font-weight-regular"
+                    color="red"
+                    prepend-icon="mdi-trash-can"
+                    text="Excluir"
+                    variant="tonal"
+                    @click="deleteCategoryDialog = true"
+                ></v-btn>
+
                 <v-spacer></v-spacer>
 
                 <v-btn
@@ -177,11 +199,21 @@
                 ></v-btn>
 
                 <v-btn
+                    v-if="!modeEditCategoryDialog"
                     color="grey-darken-4"
                     text="Incluir"
                     variant="tonal"
                     class="px-4"
                     @click="createCategory()"
+                ></v-btn>
+
+                <v-btn
+                    v-if="modeEditCategoryDialog"
+                    color="grey-darken-4"
+                    text="Alterar"
+                    variant="tonal"
+                    class="px-4"
+                    @click="editCategory()"
                 ></v-btn>
             </v-card-actions>
         </v-card>
@@ -385,6 +417,52 @@
         </v-card>
     </v-dialog>
 
+    <v-dialog
+        v-model="deleteCategoryDialog"
+        width="auto"
+    >
+        <v-card
+            max-width="600"
+        >
+            <v-card-title class="d-flex justify-space-between align-center">
+                <div class="text-h6 font-weight-black text-medium-emphasis ps-2">
+                    <v-icon class="me-2"> mdi-shape </v-icon>
+                    Excluir categoria
+                </div>
+
+                <v-btn
+                    icon="mdi-close"
+                    variant="text"
+                    @click="deleteCategoryDialog = false"
+                ></v-btn>
+            </v-card-title>
+            <v-card-text>
+                <p>Confirma a exclusão da categoria <b class="text-decoration-underline">{{ this.category.case_name }}</b> ?</p>
+                <p class="text-disabled">
+                    Essa ação é irreversível. <br>
+                    Obs: Todos os serviços da categoria serão excluídos
+                </p>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    text="Cancelar"
+                    variant="tonal"
+                    class="px-4 mr-4"
+                    @click="deleteCategoryDialog = false"
+                ></v-btn>
+
+                <v-btn
+                    class="ms-auto"
+                    text="Sim, excluir"
+                    color="red"
+                    variant="tonal"
+                    @click="deleteCategory()"
+                ></v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
     <SnackBar
         v-model="snackbar.show"
         :text="snackbar.data.text"
@@ -401,6 +479,7 @@ import req from '../helpers/http'
 import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
 import ServiceModel from '../entities/Service'
+import CategoryModel from '../entities/Category'
 import MaskTokens from '../entities/Masks'
 import { useDisplay } from 'vuetify'
         
@@ -422,13 +501,11 @@ data() {
         user: new UserModel(),
 
 
-        category: {
-            case_id: null,
-            case_name: null
-        },
-
         categories: [],
+        category: new CategoryModel(),
         categoryDialog: false,
+        modeEditCategoryDialog: false,
+        deleteCategoryDialog: false,
 
         services: [],
         serviceDialog: false,
@@ -481,6 +558,72 @@ methods: {
 
         this.serviceDialog = true
         this.modeEditServiceDialog = true
+    },
+
+    openDialogCreateCategory(){
+        this.categoryDialog = true
+        this.modeEditCategoryDialog = false
+        this.category = new CategoryModel()
+        this.messages.category = []
+    },
+
+    openDialogEditCategory(){
+        this.messages.category = []
+
+        this.categoryDialog = true
+        this.modeEditCategoryDialog = true
+    },
+
+    editCategory(){
+        this.loading = true
+        req.put(this.serverUrl+'/api/admin/place/service/category', this.category)
+        .then( (response) => {
+            this.loading = false
+
+            const index = this.categories.findIndex(service => service.sepl_id === this.service.sepl_id);
+
+            if (index !== -1) {
+                this.categories[index] = response.data;
+                this.messages.category = []
+                
+                this.category = new CategoryModel()
+                
+                this.deleteCategoryDialog = false
+                this.categoryDialog = false
+                this.snackBar("Categoria alterada com sucesso!")
+            }
+            this.loading = false
+        })
+        .catch( (reason) => {
+            console.log(reason)
+            this.loading = false
+            this.messages.category = reason.response.data.errors
+        })
+    },
+
+    deleteCategory(){
+        this.loading = true
+        req.delete(this.serverUrl+'/api/admin/place/service/category/'+this.category.case_id )
+        .then( () => {
+            this.loading = false
+
+            const index = this.categories.findIndex(category => category.sepl_id === this.category.sepl_id);
+
+            if (index !== -1) {
+                this.categories.splice(index, 1);
+                
+                this.category = new CategoryModel()
+                
+                this.deleteCategoryDialog = false
+                this.categoryDialog = false
+                this.snackBar("Categoria excluída com sucesso!")
+            }
+        })
+        .catch( (reason) => {
+            console.log(reason)
+            this.loading = false
+            this.messages.service = reason.response.data.errors
+        })
     },
 
     createCategory(){
@@ -564,6 +707,9 @@ methods: {
 
     getServices(){
         this.loading = true
+
+        this.category = this.categories.find(category => category.case_id === this.category.case_id);
+
         req.get(this.serverUrl+'/api/place/services/'+this.category.case_id)
         .then( (response) => {
             this.loading = false
@@ -577,6 +723,33 @@ methods: {
         .then( (response) => {
             this.loading = false
             this.service = response.data
+        })
+    },
+
+    editService(){
+        this.loading = true
+        req.put(this.serverUrl+'/api/admin/place/service', this.service)
+        .then( (response) => {
+            this.loading = false
+
+            const index = this.services.findIndex(service => service.sepl_id === this.service.sepl_id);
+
+            if (index !== -1) {
+                this.services[index] = response.data;
+                
+                this.service = new ServiceModel()
+                
+                this.deleteServiceDialog = false
+                this.serviceDialog = false
+                this.snackBar("Serviço alterado com sucesso!")
+            }
+            console.log(response)
+            this.loading = false
+            // this.service = response.data
+        })
+        .catch( (reason) => {
+            this.loading = false
+            this.messages.service = reason.response.data.errors
         })
     }
 },
