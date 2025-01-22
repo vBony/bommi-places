@@ -602,17 +602,28 @@ methods: {
     },
 
     deleteCategory(){
-        const index = this.categories.findIndex(category => category.sepl_id === this.category.sepl_id);
+        this.loading = true
+        req.delete(this.serverUrl+'/api/admin/place/service/category/'+this.category.case_id )
+        .then( () => {
+            this.loading = false
 
-        if (index !== -1) {
-            this.categories.splice(index, 1);
-            
-            this.category = new CategoryModel()
-            
-            this.deleteCategoryDialog = false
-            this.categoryDialog = false
-            this.snackBar("Categoria excluída com sucesso!")
-        }
+            const index = this.categories.findIndex(category => category.sepl_id === this.category.sepl_id);
+
+            if (index !== -1) {
+                this.categories.splice(index, 1);
+                
+                this.category = new CategoryModel()
+                
+                this.deleteCategoryDialog = false
+                this.categoryDialog = false
+                this.snackBar("Categoria excluída com sucesso!")
+            }
+        })
+        .catch( (reason) => {
+            console.log(reason)
+            this.loading = false
+            this.messages.service = reason.response.data.errors
+        })
     },
 
     createCategory(){
