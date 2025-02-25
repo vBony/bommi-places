@@ -26,7 +26,7 @@
                         </v-row>
 
                         <v-row>
-                            <v-col cols="12">
+                            <v-col cols="12" class="pa-0">
                                 <v-window v-model="tab">
                                     <v-window-item value="1">
                                         <v-row class="px-0 py-0 mt-4">
@@ -53,39 +53,41 @@
                                             </v-col>
                                         </v-row>
 
-                                            
-                                        <v-col cols="12" class="px-0 py-0 mt-4">
-                                            <v-text-field 
-                                                v-model="user.emp_cpf"
-                                                label="CPF do responsável legal" 
-                                                variant="outlined"
-                                                hide-details="auto"
-                                                type="text"
-                                                :error-messages="messages.emp_cpf"
-                                                v-maska:[mt.cpf]
-                                            ></v-text-field>
-                                        </v-col>
+                                        <v-row class="px-0 py-0 mt-4">
+                                            <v-col cols="12">
+                                                <v-text-field 
+                                                    v-model="user.emp_cpf"
+                                                    label="CPF do responsável legal" 
+                                                    variant="outlined"
+                                                    hide-details="auto"
+                                                    type="text"
+                                                    :error-messages="messages.emp_cpf"
+                                                    v-maska:[mt.cpf]
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
 
-                                        <v-col cols="12" class="px-0 py-0 mt-4">
-                                            <v-text-field 
-                                                v-model="user.emp_birthdate"
-                                                label="Data de nascimento" 
-                                                variant="outlined"
-                                                hide-details="auto"
-                                                type="date"
-                                                :error-messages="messages.emp_birthdate"
-                                            ></v-text-field>
-                                        </v-col>
+                                        <v-row class="px-0 py-0 mt-4">
+                                            <v-col cols="12">
+                                                <v-text-field 
+                                                    v-model="user.emp_birthdate"
+                                                    label="Data de nascimento" 
+                                                    variant="outlined"
+                                                    hide-details="auto"
+                                                    type="date"
+                                                    :error-messages="messages.emp_birthdate"
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
 
-                                        <v-row>
-                                            <v-col cols="12" class="pb-0">
+                                        <v-row class="px-0 py-0 mt-4">
+                                            <v-col cols="12">
                                                 <v-text-field 
                                                     v-model="user.emp_email"
                                                     label="E-mail" 
                                                     type="email" 
                                                     variant="outlined"
                                                     hide-details="auto" 
-                                                    density="compact"
                                                     :error-messages="messages.emp_email"
                                                 ></v-text-field>
                                             </v-col>
