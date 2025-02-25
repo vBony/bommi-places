@@ -1,79 +1,77 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Home from "../views/Home.vue"
-import Login from "../views/Login.vue"
-import CadastroFuncionario from "../views/CadastroFuncionario.vue"
-import Personalizar from "../views/Personalizar.vue"
-import DocumentMixin from '@/mixins/DocumentMixin'
-// import store from '@/store'
+// Composables
+import { createRouter, createWebHistory } from 'vue-router'
 
-const routes: Array<RouteRecordRaw> = [
-	{
-		path: '/',
-		name: 'Home',
-		component: Home,
-		beforeEnter: async (to, from, next) => {
-			const dm = new DocumentMixin()
-
-			/**
-			 * aguardando a resposta do backend, onde verifica
-			 * se o usuário está logado ou não
-			 */
-			const response = await dm.loggedIn()
-			if(response){
-				next()
-			}else{
-				next('login')
-			}
-		}
-	},
-	{
-		path: '/login',
-		name: 'Login',
-		component: Login,
-	},
-	{
-		path: '/cadastro/funcionario',
-		name: 'CadastroFuncionario',
-		component: CadastroFuncionario,
-		beforeEnter: async (to, from, next) => {
-			const dm = new DocumentMixin()
-
-			/**
-			 * aguardando a resposta do backend, onde verifica
-			 * se o usuário está logado ou não
-			 */
-			const response = await dm.loggedIn()
-			if(response){
-				next()
-			}else{
-				next('login')
-			}
-		}
-	},
-	{
-		path: '/personalizar',
-		name: 'Personalizar',
-		component: Personalizar,
-		beforeEnter: async (to, from, next) => {
-			const dm = new DocumentMixin()
-
-			/**
-			 * aguardando a resposta do backend, onde verifica
-			 * se o usuário está logado ou não
-			 */
-			const response = await dm.loggedIn()
-			if(response){
-				next()
-			}else{
-				next('login')
-			}
-		}
-	}
+const routes = [
+  {
+    path: '/',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'home',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+      },
+    ],
+  },
+  {
+    path: '/api-tester',
+    // component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'apiTester',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/ApiTester.vue'),
+      },
+    ],
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Login.vue')
+  },
+  {
+    path: '/criar-conta',
+    name: 'singup',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Register.vue')
+  },
+  {
+    path: '/places/criar',
+    name: 'singupPlaces',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/RegisterPlaces.vue')
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Dashboard.vue')
+  },
+  {
+    path: '/cadastros/funcionarios',
+    name: 'employees',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Employees.vue')
+  },
+  {
+    path: '/cadastros/servicos',
+    name: 'services',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Services.vue')
+  },
+  { 
+    path: "/:catchAll(.*)", 
+    name: 'notFound',
+    component: {
+      template: '<p>Page Not Found</p>'
+    }
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
 })
 
 export default router
