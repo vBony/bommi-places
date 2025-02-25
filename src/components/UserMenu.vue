@@ -47,7 +47,7 @@
         </v-list>
 
         <v-list>
-            <v-list-item prepend-icon="mdi-cog" link>
+            <v-list-item prepend-icon="mdi-cog" link to="/meu-perfil">
                 <v-list-item-subtitle>Configurações</v-list-item-subtitle>
             </v-list-item>
             <v-list-item prepend-icon="mdi-exit-to-app" link>
