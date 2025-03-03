@@ -8,8 +8,8 @@
 
                 <v-col cols="12" md="8" sm="12">
                     <v-card class="elevation-4 pa-10">
+                        <app-label text="CPF" />
                         <text-field
-                            label="CPF"
                             v-maska:[mt.cpf]
                         />
                     </v-card>
@@ -26,11 +26,13 @@ import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
 import MaskTokens from '../entities/Masks'
 import TextField from '@/components/fields/TextField.vue';
+import AppLabel from "@/components/fields/LabelField.vue";
         
 const App = defineComponent({
 
     components: {
-        TextField
+        TextField,
+        AppLabel
     },
 
 data() {

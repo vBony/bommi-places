@@ -1,7 +1,6 @@
 <template>
     <v-text-field
         v-model="model"
-        :label="label"
         variant="outlined"
         :type="type"
         hide-details="auto"
@@ -9,52 +8,50 @@
         v-bind="$attrs"
         v-maska:[mask]
         density="compact"
+        single-line
+        :label="label"
     />
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
-import { vMaska } from "maska"
-import type { PropType } from 'vue';
+import { defineComponent, computed } from "vue";
+import { vMaska } from "maska";
+import type { PropType } from "vue";
 
 export default defineComponent({
-    name: 'AppInput',
+    name: "AppInput",
     directives: { maska: vMaska },
     props: {
         modelValue: {
             type: [String, Number] as PropType<string | number>,
-            default: '',
+            default: "",
         },
         label: {
             type: String,
-            default: '',
+            default: "",
         },
-        // variant: {
-        //     type: String,
-        //     default: 'outlined',
-        // },
         type: {
             type: String,
-            default: 'text',
+            default: "text",
         },
         hideDetails: {
             type: String,
-            default: 'auto',
+            default: "auto",
         },
         errorMessages: {
             type: Array as PropType<string[]>,
             default: () => [],
         },
-        mask: {}
+        mask: {},
     },
-    emits: ['update:modelValue'],
+    emits: ["update:modelValue"],
     setup(props, { emit }) {
         const model = computed({
             get: () => props.modelValue,
-            set: (value) => emit('update:modelValue', value),
+            set: (value) => emit("update:modelValue", value),
         });
 
         return { model };
-    }
+    },
 });
 </script>
