@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar title="" class="elevation-0 d-flex align-center justify-space-between">
+    <v-app-bar title="" class="elevation-4 d-flex align-center justify-space-between">
         <v-row no-gutters class="d-flex align-center justify-space-between pe-4">
             <div class="d-inline-flex text-center align-center" :class="{ 'ps-4': display.mdAndDown == false }">
                 <v-app-bar-nav-icon @click="toggleVerticalMenu()" v-show="display.mdAndDown == true"></v-app-bar-nav-icon>

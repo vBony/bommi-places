@@ -1,10 +1,10 @@
 <template>
 <v-app>
     <v-layout class="rounded rounded-md">
-        <AppBar @setToggleVerticalMenu="setToggleVerticalMenu" v-if="shouldShowMenu" />
         <VerticalMenu :showVerticalMenu="showVerticalMenu" v-if="shouldShowMenu" />
+        <AppBar @setToggleVerticalMenu="setToggleVerticalMenu" v-if="shouldShowMenu" />
 
-        <RouterView />
+        <RouterView id="routerview" />
     </v-layout>
 </v-app>
 </template>
@@ -81,6 +81,9 @@ export default App
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+    #routerview{
+        background-color: #f5f5fa !important;
+    }
     * {
         font-family: 'Poppins', sans-serif;
     }

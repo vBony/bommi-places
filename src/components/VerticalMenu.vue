@@ -1,5 +1,6 @@
 <template>
     <v-navigation-drawer
+        elevation="4"
         class="border-0"
         :model-value="this.display.lgAndUp == true || showVerticalMenu == true"
         :temporary="display.lg.value == false"
