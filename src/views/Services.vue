@@ -55,7 +55,7 @@
                                 item-title="case_name" 
                                 item-value="case_id"
                                 @update:modelValue="getServices()"
-                            ></v-select>'
+                            ></v-select>
                         </v-row>
 
                         <v-row cols="12" v-if="category.case_id">
