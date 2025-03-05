@@ -462,12 +462,24 @@ methods: {
         formData.append("emp_cpf", this.user.emp_cpf);
         formData.append("emp_birthdate", this.user.emp_birthdate);
         
-        if (this.userAvatar.value) {
-            formData.append("emp_avatar", this.userAvatar);
+        if (this.userAvatar) {
+            formData.append("avatar", this.userAvatar);
         }
 
-
-        
+        // Laravel não aceita form-data no put, foi necessário realizar um method spoofing
+        req.post(
+            this.serverUrl+'/api/admin/employee?_method=PUT', 
+            formData, 
+            { 
+                headers: { "Content-Type": "multipart/form-data" } 
+            }
+        )
+        .then( (response) => {
+            
+        })
+        .catch( (reason) => {
+            this.messages = reason.response.data.errors
+        })
     },
 
     deleteService(id){
