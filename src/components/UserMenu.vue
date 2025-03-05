@@ -14,7 +14,7 @@
             pill
         >
             <v-avatar start>
-                <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+                <v-img :src="user_avatar_url"></v-img>
             </v-avatar>
             
             {{ first_name }}
@@ -25,7 +25,7 @@
         <v-list bg-color="black">
             <v-list-item>
                 <template v-slot:prepend>
-                    <v-avatar image="https://randomuser.me/api/portraits/men/85.jpg"></v-avatar>
+                    <v-avatar :image="user_avatar_url"></v-avatar>
                 </template>
 
                 <v-list-item-title>{{ first_name }}</v-list-item-title>
@@ -68,6 +68,7 @@ import UserModel from '../entities/User'
 export default {
     props: {
         first_name: "",
+        user_avatar_url: "",
         user_type: ""
     },
     

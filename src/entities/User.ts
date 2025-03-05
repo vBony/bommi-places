@@ -10,6 +10,8 @@ class User {
     emp_cpf = ""
     emp_type = ""
     emp_type_name = ""
+    emp_avatar = ""
+    emp_avatar_url = ""
 }
 
 export default User

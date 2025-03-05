@@ -57,6 +57,7 @@
                                                                 style="display: none" 
                                                                 id="avatar"
                                                                 accept="image/jpeg, image/jpg, image/png"
+                                                                @change="handleFileUpload"
                                                             >
                                                             
                                                             <v-img
@@ -65,7 +66,7 @@
                                                                 height="90"
                                                                 aspect-ratio="1/1"
                                                                 cover
-                                                                src="https://randomuser.me/api/portraits/men/85.jpg"
+                                                                :src="this.userAvatarPreview ? this.userAvatarPreview : this.user.emp_avatar_url"
                                                             ></v-img>
                                                             <div cols="12">
                                                                 <div class="font-weight-bold text-truncate"> {{ user.emp_first_name }} </div>
@@ -128,22 +129,12 @@
                                             </v-col>
                                         </v-row>
 
-                                        <v-row class="px-0 py-0 mt-4 mb-4">
-                                            <v-col cols="12">
-                                                <app-label text="E-mail" />
-                                                <text-field
-                                                    v-model="user.emp_email"
-                                                    :error-messages="messages.emp_email"
-                                                    type="email"
-                                                />
-                                            </v-col>
-                                        </v-row>
-
                                         <v-row>
                                             <v-col cols="12">
                                                 <v-btn
                                                     prepend-icon="mdi-pencil-outline"
                                                     color="black"
+                                                    @click="updateEmployee()"
                                                 >
                                                     Salvar Alterações
                                                 </v-btn>
@@ -350,6 +341,8 @@ data() {
         
         tab: '1',
         user: new UserModel(),
+        userAvatar: null,
+        userAvatarPreview: null,
 
         categories: [],
         services: [],
@@ -447,6 +440,34 @@ methods: {
     snackBar(text){
         this.snackbar.text = text
         this.snackbar.show = true
+    },
+
+    handleFileUpload(event){
+        const file = event.target.files[0];
+        if (file) {
+            this.userAvatar = event.target.files[0]
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.userAvatarPreview = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    },
+
+    updateEmployee(){
+        const formData = new FormData();
+        formData.append("emp_first_name", this.user.emp_first_name);
+        formData.append("emp_last_name", this.user.emp_last_name);
+        formData.append("emp_cpf", this.user.emp_cpf);
+        formData.append("emp_birthdate", this.user.emp_birthdate);
+        
+        if (this.userAvatar.value) {
+            formData.append("emp_avatar", this.userAvatar);
+        }
+
+
+        
     },
 
     deleteService(id){

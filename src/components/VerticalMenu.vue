@@ -6,7 +6,7 @@
         :temporary="display.lg.value == false"
     >
         <v-list-item
-            prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
+            :prepend-avatar="user.emp_avatar_url"
             nav
             class="px-3 py-5"
         >

@@ -10,6 +10,7 @@
                 <UserMenu
                     :first_name="user.emp_first_name"
                     :user_type="user.emp_type_name"
+                    :user_avatar_url="user.emp_avatar_url"
                 />
             </div> 
         </v-row>
