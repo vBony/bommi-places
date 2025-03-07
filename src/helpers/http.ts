@@ -15,21 +15,21 @@ const req = () => {
   
     // Set the AUTH token for any request
     instance.interceptors.request.use(function (config) {
-        $('#loading').show()
+        $('#loading').fadeToggle(500)
         const token = useUserStore().getToken;
         config.headers.Authorization =  token ? `Bearer ${token}` : '';
         return config;
     },
     (error) => {
-        $('#loading').hide()
+        $('#loading').fadeToggle(500)
         return Promise.reject(error);
     });
 
     instance.interceptors.response.use((response) => {
-        $('#loading').hide()
+        $('#loading').fadeToggle(500)
         return response;
     }, (error) => {
-        $('#loading').hide()
+        $('#loading').fadeToggle(500)
         return Promise.reject(error);
     });
   

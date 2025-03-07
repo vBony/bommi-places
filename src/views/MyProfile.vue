@@ -475,7 +475,9 @@ methods: {
             }
         )
         .then( (response) => {
-            
+            if(response.data.employee !== undefined){
+                window.location.reload();
+            }
         })
         .catch( (reason) => {
             this.messages = reason.response.data.errors
