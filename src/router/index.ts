@@ -60,6 +60,16 @@ const routes = [
     name: 'services',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Services.vue')
   },
+  {
+    path: '/meu-perfil',
+    name: 'myProfile',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/MyProfile.vue')
+  },
+  {
+    path: '/playground',
+    name: 'playGround',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/PlayGround.vue')
+  },
   { 
     path: "/:catchAll(.*)", 
     name: 'notFound',

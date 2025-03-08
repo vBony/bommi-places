@@ -445,7 +445,7 @@ methods: {
 
     create(){
         this.loading = true
-        req.post(this.serverUrl+'/api/employee/', {employee: this.employee, reuse: this.founded})
+        req.post(this.serverUrl+'/api/admin/employee/', {employee: this.employee, reuse: this.founded})
         .then( (response) => {
             this.loading = false
             if(response.data.employee){

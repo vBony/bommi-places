@@ -55,7 +55,7 @@
                                 item-title="case_name" 
                                 item-value="case_id"
                                 @update:modelValue="getServices()"
-                            ></v-select>'
+                            ></v-select>
                         </v-row>
 
                         <v-row cols="12" v-if="category.case_id">
@@ -255,55 +255,48 @@
                 <v-form :disabled="loading" class="pa-0 pa-lg-2 pa-md-2 mb-8">
                     <v-row>
                         <v-col cols="12" class="pb-0">
-                            <v-text-field 
+                            <app-label text="Nome" />
+                            <text-field
+                                label="Nome do serviço"
                                 v-model="service.sepl_name"
-                                label="Nome" 
-                                type="text" 
-                                variant="outlined"
-                                hide-details="auto" 
-                                density="compact"
                                 :error-messages="messages.service.sepl_name"
-                            ></v-text-field>
+                            />
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col cols="6" class="pb-0">
-                            <v-text-field 
+                            <app-label text="Preço" />
+                            <text-field
                                 v-model="service.sepl_price"
-                                label="Preço (R$)" 
-                                type="text" 
-                                variant="outlined"
-                                hide-details="auto" 
-                                density="compact"
-                                :error-messages="messages.service.sepl_price"
+                                label="R$ 99.99"
                                 v-maska:[mt.money]
-                            ></v-text-field>
+                                :error-messages="messages.service.sepl_price"
+                            />
                         </v-col>
 
                         <v-col cols="6" class="pb-0">
-                            <v-text-field 
+                            <app-label text="Duração" />
+                            <text-field 
                                 v-model="service.sepl_duration"
-                                label="Duração (HH:MM)" 
-                                type="text" 
-                                variant="outlined"
-                                hide-details="auto" 
-                                density="compact"
+                                label="HH:MM" 
                                 :error-messages="messages.service.sepl_duration"
                                 v-maska:[mt.hoursAndMinutes]
-                            ></v-text-field>
+                            ></text-field>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col cols="12" class="pb-0">
+                            <app-label text="Descrição" />
                             <v-textarea 
                                 v-model="service.sepl_description"
-                                label="Descrição" 
-                                variant="outlined"
-                                hide-details="auto" 
-                                density="compact"
+                                label="Uma breve descrição sobre o produto" 
                                 :error-messages="messages.service.sepl_description"
+                                variant="outlined"
+                                hide-details="auto"
+                                density="compact"
+                                single-line
                             ></v-textarea>
                         </v-col>
                     </v-row>
@@ -472,8 +465,6 @@
 <script lang='ts'>
 // @ts-nocheck
 import { defineComponent } from 'vue';
-import VerticalMenu from '@/components/VerticalMenu.vue'
-import AppBar from '@/components/AppBar.vue'
 import SnackBar from '@/components/SnackBar.vue'
 import req from '../helpers/http'
 import { useUserStore } from '../store/user'
@@ -482,11 +473,16 @@ import ServiceModel from '../entities/Service'
 import CategoryModel from '../entities/Category'
 import MaskTokens from '../entities/Masks'
 import { useDisplay } from 'vuetify'
+import TextField from '@/components/fields/TextField.vue';
+import AppLabel from "@/components/fields/LabelField.vue";
+
+
         
 const App = defineComponent({
 components: {
-    AppBar,
-    SnackBar
+    SnackBar,
+    TextField,
+    AppLabel
 },
 
 data() {

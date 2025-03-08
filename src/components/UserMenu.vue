@@ -14,7 +14,7 @@
             pill
         >
             <v-avatar start>
-                <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+                <v-img :src="user_avatar_url"></v-img>
             </v-avatar>
             
             {{ first_name }}
@@ -25,7 +25,7 @@
         <v-list bg-color="black">
             <v-list-item>
                 <template v-slot:prepend>
-                    <v-avatar image="https://cdn.vuetifyjs.com/images/john.png"></v-avatar>
+                    <v-avatar :image="user_avatar_url"></v-avatar>
                 </template>
 
                 <v-list-item-title>{{ first_name }}</v-list-item-title>
@@ -47,8 +47,11 @@
         </v-list>
 
         <v-list>
-            <v-list-item prepend-icon="mdi-cog" link>
+            <v-list-item prepend-icon="mdi-cog" link to="/meu-perfil">
                 <v-list-item-subtitle>Configurações</v-list-item-subtitle>
+            </v-list-item>
+            <v-list-item prepend-icon="mdi-card-multiple-outline" link to="/meu-perfil">
+                <v-list-item-subtitle>Mudar de estabelecimento</v-list-item-subtitle>
             </v-list-item>
             <v-list-item prepend-icon="mdi-exit-to-app" link>
                 <v-list-item-subtitle>Sair</v-list-item-subtitle>
@@ -65,6 +68,7 @@ import UserModel from '../entities/User'
 export default {
     props: {
         first_name: "",
+        user_avatar_url: "",
         user_type: ""
     },
     
