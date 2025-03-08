@@ -148,6 +148,8 @@
                                                 <h3>Serviços</h3>
                                                 <p class="text-disabled">Defina os serviços que você realiza atendimento</p>
                                             </v-col>
+
+                                            <v-divider></v-divider>
                                         </v-row>
 
                                         <v-row class="px-0 py-0 mt-4">
@@ -248,6 +250,47 @@
                                                 <h3>Atendimento</h3>
                                                 <p class="text-disabled">Dados sobre atendimento</p>
                                             </v-col>
+
+                                            <v-divider></v-divider>
+                                        </v-row>
+
+                                        <v-row class="px-0 py-0 mt-4">
+                                            <v-col cols="12">
+                                                <h4>Horário de atendimento</h4>
+                                                <p class="text-disabled">Defina o horário que você irá atender os seus clientes</p>
+                                            </v-col>
+                                        </v-row>
+
+                                        <v-row>
+                                            <v-col cols="12" lg="3" md="3">
+                                                <app-label text="Início" />
+                                                <text-field
+                                                    v-model="attendance.ep_clock_in"
+                                                    :error-messages="messages.ep_clock_in"
+                                                    v-maska:[mt.hoursAndMinutes]
+                                                /> 
+                                            </v-col>
+                                        
+                                            <v-col cols="12" lg="3" md="3">
+                                                <app-label text="Fim" />
+                                                <text-field
+                                                    v-model="attendance.ep_clock_out"
+                                                    :error-messages="messages.ep_clock_out"
+                                                    v-maska:[mt.hoursAndMinutes]
+                                                /> 
+                                            </v-col>
+                                        </v-row>
+
+                                        <v-row>
+                                            <v-col cols="12">
+                                                <v-btn
+                                                    prepend-icon="mdi-pencil-outline"
+                                                    color="black"
+                                                    @click="updateAttendance()"
+                                                >
+                                                    Salvar Alterações
+                                                </v-btn>
+                                            </v-col>
                                         </v-row>
                                     </v-window-item>
                                 </v-window>
@@ -346,6 +389,10 @@ data() {
 
         categories: [],
         services: [],
+        attendance: {
+            ep_clock_in: null,
+            ep_clock_out: null
+        },
 
         employeeService: {
             idCategory: null,
@@ -391,6 +438,7 @@ methods: {
     init(){
         this.getCategories()
         this.getEmployeeServices()
+        this.getAttendance()
     },
 
     getCategories(){
@@ -478,6 +526,31 @@ methods: {
             if(response.data.employee !== undefined){
                 window.location.reload();
             }
+        })
+        .catch( (reason) => {
+            this.messages = reason.response.data.errors
+        })
+    },
+
+    updateAttendance(){
+        req.put(
+            this.serverUrl+'/api/admin/employee/attendance?_method=PUT', 
+            this.attendance
+        )
+        .then( (response) => {
+            this.snackBar("Dados alterados com sucesso!")
+        })
+        .catch( (reason) => {
+            this.messages = reason.response.data.errors
+        })
+    },
+
+    getAttendance(){
+        req.get(
+            this.serverUrl+'/api/admin/employee/attendance'
+        )
+        .then( (response) => {
+            this.attendance = response.data
         })
         .catch( (reason) => {
             this.messages = reason.response.data.errors
