@@ -47,16 +47,8 @@ const App = defineComponent({
 
     created(){
         this.user = this.userStore.getUser ?? new UserModel()
-
-        
-
-        req.post(this.serverUrl+'/api/dashboard/init', {})
-        .then( (response) => {
-            // let data = response.data
-            // this.place = data.place
-            // this.placeAddress = data.place.address
-        })
     },
+    
     methods: {
         setToggleVerticalMenu(data){
             this.showVerticalMenu = data

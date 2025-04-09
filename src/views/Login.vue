@@ -130,6 +130,7 @@ const App = defineComponent({
 
               if(response.data.token !== undefined){
                 userStore.setToken(response.data.token)
+                this.$router.replace("dashboard")
               }
           }
       })

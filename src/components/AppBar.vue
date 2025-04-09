@@ -8,9 +8,9 @@
     
             <div>
                 <UserMenu
-                    :first_name="user.emp_first_name"
-                    :user_type="user.emp_type_name"
-                    :user_avatar_url="user.emp_avatar_url"
+                    :first_name="user.firstName"
+                    :user_type="user.typeName"
+                    :user_avatar_url="user.avatarUrl"
                 />
             </div> 
         </v-row>
