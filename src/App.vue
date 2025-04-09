@@ -52,9 +52,9 @@ const App = defineComponent({
 
         req.post(this.serverUrl+'/api/dashboard/init', {})
         .then( (response) => {
-            let data = response.data
-            this.place = data.place
-            this.placeAddress = data.place.address
+            // let data = response.data
+            // this.place = data.place
+            // this.placeAddress = data.place.address
         })
     },
     methods: {
@@ -63,12 +63,14 @@ const App = defineComponent({
         },
 
         getHiddenMenuRoutes(){
-            return ['login', 'singup']
+            return ['login', 'singup', 'singupPlaces']
         }
     },
     computed: {
         shouldShowMenu(){
             const routes = this.getHiddenMenuRoutes()
+
+            // console.log(this.$route.name)
             
             // Se ta na lista, não mostra o menu
             return !routes.includes(this.$route.name)

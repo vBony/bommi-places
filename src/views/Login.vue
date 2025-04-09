@@ -27,8 +27,8 @@
                           variant="outlined" 
                           type="email" 
                           hide-details="auto" 
-                          :error-messages="messages.emp_email"
-                          v-model="entity.emp_email"
+                          :error-messages="messages.email"
+                          v-model="entity.email"
                         ></v-text-field>
                     </v-col>
                     
@@ -41,8 +41,8 @@
                             :type="visible ? 'text' : 'password'"
                             @click:append-inner="visible = !visible"
                             hide-details="auto"
-                            :error-messages="messages.emp_password"
-                            v-model="entity.emp_password"
+                            :error-messages="messages.password"
+                            v-model="entity.password"
                         ></v-text-field>
                     </v-col>
 
@@ -87,12 +87,12 @@ const App = defineComponent({
         serverUrl: import.meta.env.VITE_SERVER_URL,
         loading: false,
         messages: {
-          emp_email: "",
-          emp_password: ""
+          email: "",
+          password: ""
         },
         entity: {
-          emp_email: null,
-          emp_password: null
+          email: null,
+          password: null
         }
     };
   },
@@ -129,13 +129,7 @@ const App = defineComponent({
               userStore.setUser(response.data.user)
 
               if(response.data.token !== undefined){
-                  userStore.setToken(response.data.token)
-
-                  if(response.status == 206){
-                    this.$router.replace('/places/criar')
-                  }else{
-                    this.$router.replace('/dashboard')
-                  }
+                userStore.setToken(response.data.token)
               }
           }
       })

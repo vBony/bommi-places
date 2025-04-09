@@ -60,9 +60,9 @@ const App = defineComponent({
 
         req.post(this.serverUrl+'/api/dashboard/init', {})
         .then( (response) => {
-            let data = response.data
-            this.place = data.place
-            this.placeAddress = data.place.address
+            // let data = response.data
+            // this.place = data.place
+            // this.placeAddress = data.place.address
         })
     }
 });
