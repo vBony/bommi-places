@@ -66,11 +66,11 @@
                                     <tbody>
                                         <tr
                                             v-for="item in employees"
-                                            :key="item.emp_id"
+                                            :key="item.id"
                                         >
-                                            <td width="280">{{ item.emp_first_name }} {{ item.emp_last_name }}</td>
-                                            <td width="80" style="min-width: 160px">{{ this.cpfMask.masked(item.emp_cpf) }}</td>
-                                            <td width="100">{{ item.emp_type_name }}</td>
+                                            <td width="280">{{ item.firstName }} {{ item.lastName }}</td>
+                                            <td width="80" style="min-width: 160px">{{ this.cpfMask.masked(item.cpf) }}</td>
+                                            <td width="100">{{ item.typeName }}</td>
                                             <td width="20">
                                                 <v-btn 
                                                     elevation="0" 
@@ -132,7 +132,7 @@
                     <v-row>
                         <v-col cols="12" class="pb-0 mb-8">
                             <v-text-field 
-                                v-model="employee.emp_cpf"
+                                v-model="employee.cpf"
                                 label="CPF" 
                                 type="text" 
                                 variant="outlined"
@@ -140,7 +140,7 @@
                                 prepend-inner-icon="mdi-magnify"
                                 :loading="loading"
                                 @change="searchEmployeeByCPF()"
-                                :error-messages="messages.emp_cpf"
+                                :error-messages="messages.cpf"
                                 v-maska:[cpfMaskToken]
                             ></v-text-field>
                         </v-col>
@@ -149,27 +149,27 @@
                     <v-row>
                         <v-col cols="12" lg="6" md="6" class="pb-0">
                             <v-text-field 
-                                v-model="employee.emp_first_name"
+                                v-model="employee.firstName"
                                 :disabled="founded"
                                 label="Nome" 
                                 type="text" 
                                 variant="outlined"
                                 hide-details="auto" 
                                 density="compact"
-                                :error-messages="messages.emp_first_name"
+                                :error-messages="messages.firstName"
                             ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" lg="6" md="6" class="pb-0">
                             <v-text-field 
-                                v-model="employee.emp_last_name"
+                                v-model="employee.lastName"
                                 :disabled="founded"
                                 label="Sobrenome" 
                                 type="text" 
                                 variant="outlined"
                                 hide-details="auto" 
                                 density="compact"
-                                :error-messages="messages.emp_last_name"
+                                :error-messages="messages.lastName"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -177,14 +177,14 @@
                     <v-row>
                         <v-col cols="12" class="pb-0">
                             <v-text-field 
-                                v-model="employee.emp_birthdate"
+                                v-model="employee.birthdate"
                                 :disabled="founded"
                                 label="Data de nascimento" 
                                 type="date" 
                                 variant="outlined"
                                 hide-details="auto" 
                                 density="compact"
-                                :error-messages="messages.emp_birthdate"
+                                :error-messages="messages.birthdate"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -199,15 +199,15 @@
                     <v-row>
                         <v-col cols="12">
                             <v-select
-                                v-model="employee.emp_type"
-                                :disabled="founded && !employee.emp_cpf"
+                                v-model="employee.type"
+                                :disabled="founded && !employee.cpf"
                                 label="Tipos"
                                 variant="outlined"
                                 :items="types"
                                 item-title="text" 
                                 item-value="value"
                                 density="compact"
-                                :error-messages="messages.emp_type"
+                                :error-messages="messages.type"
                             ></v-select>
                         </v-col>
                     </v-row>
@@ -222,14 +222,14 @@
                     <v-row>
                         <v-col cols="12" class="pb-0">
                             <v-text-field 
-                                v-model="employee.emp_email"
+                                v-model="employee.email"
                                 :disabled="founded"
                                 label="E-mail" 
                                 type="email" 
                                 variant="outlined"
                                 hide-details="auto" 
                                 density="compact"
-                                :error-messages="messages.emp_email"
+                                :error-messages="messages.email"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -244,9 +244,9 @@
                                 hide-details="auto"
                                 density="compact"
                                 variant="outlined"
-                                v-model="employee.emp_password"
+                                v-model="employee.password"
                                 :disabled="founded"
-                                :error-messages="messages.emp_password"
+                                :error-messages="messages.password"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -294,7 +294,7 @@
                 ></v-btn>
             </v-card-title>
             <v-card-text>
-                <p>Confirma a exclusão do funcionário <b class="text-decoration-underline">{{ this.delete.emp_first_name }}</b> ?</p>
+                <p>Confirma a exclusão do funcionário <b class="text-decoration-underline">{{ this.delete.firstName }}</b> ?</p>
                 <p class="text-disabled">
                     Essa ação é irreversível
                 </p>
@@ -340,7 +340,7 @@
         
 <script lang='ts'>
 // @ts-nocheck
-import { defineComponent } from 'vue';
+import { defineComponent, toRaw } from 'vue';
 import VerticalMenu from '@/components/VerticalMenu.vue'
 import AppBar from '@/components/AppBar.vue'
 import req from '../helpers/http'
@@ -408,23 +408,23 @@ methods: {
     gettypes(){
         req.get(this.serverUrl+'/api/admin/employees/types')
         .then( (response) => {
-            this.types = response.data.employeeTypes
+            this.types = response.data
         })
     },
 
     searchEmployeeByCPF(){
-        const cpf = structuredClone(this.cpfMask.unmasked(this.employee.emp_cpf))
+        const cpf = structuredClone(this.cpfMask.unmasked(this.employee.cpf))
         if(cpf.length == 11){
             this.loading = true
-            req.get(this.serverUrl+'/api/employee/?cpf='+cpf)
+            req.get(this.serverUrl+'/api/admin/employee/?cpf='+cpf)
             .then( (response) => {
                 this.loading = false
                 this.founded = true
                 this.messages = new UserModel()
 
-                this.employee = response.data.employee
-                this.employee.emp_type = null
-                this.employee.emp_type_name = null
+                this.employee = response.data
+                this.employee.type = null
+                this.employee.typeName = null
             }).catch ( (reason) => {
                 this.loading = false
 
@@ -437,7 +437,7 @@ methods: {
                 if(reason.request.status == 404){
                     this.founded = false
                     this.employee = new UserModel()
-                    this.employee.emp_cpf = cpf
+                    this.employee.cpf = cpf
                 }
             })
         }
@@ -445,12 +445,15 @@ methods: {
 
     create(){
         this.loading = true
-        req.post(this.serverUrl+'/api/admin/employee/', {employee: this.employee, reuse: this.founded})
+        let emp = structuredClone(toRaw(this.employee))
+        emp.cpf = this.cpfMask.unmasked(emp.cpf)
+
+        req.post(this.serverUrl+'/api/admin/employee/', emp)
         .then( (response) => {
             this.loading = false
-            if(response.data.employee){
+            if(response.data){
                 this.resetModal()
-                this.employees.unshift(response.data.employee)
+                this.employees.unshift(response.data)
                 
                 this.snackBar("Funcionário cadastrado com sucesso")
             }
@@ -482,12 +485,12 @@ methods: {
     },
 
     getEmployees(){
-        req.get(this.serverUrl+'/api/admin/employees', {employee: this.employee, reuse: this.founded})
+        req.get(this.serverUrl+'/api/admin/employees')
         .then( (response) => {
-            if(response.data.employees){
+            if(response.data){
                 this.resetModal()
-                this.employees = response.data.employees
-                this.backupEmployees = response.data.employees
+                this.employees = response.data
+                this.backupEmployees = response.data
             }
         })
     },
@@ -497,26 +500,23 @@ methods: {
         this.deleteDialog = true
     },
 
-    deleteEmployee(){
+    deleteEmployee() {
         this.deleteLoading = true
-        req.delete(this.serverUrl+'/api/admin/employee/'+this.delete.emp_id)
-        .then( (response) => {
+
+        req.delete(`${this.serverUrl}/api/admin/employee/${this.delete.id}`)
+        .then(() => {
             this.deleteLoading = false
 
+            this.employees = this.employees.filter(e => e.id !== this.delete.id)
+            this.backupEmployees = this.backupEmployees.filter(e => e.id !== this.delete.id)
 
-            const index = this.employees.findIndex(employee => employee.emp_id === this.delete.emp_id);
-
-            if (index !== -1) {
-                this.employees.splice(index, 1);
-                this.backupEmployees.splice(index, 1);
-
-                this.deleteDialog = false
-                this.delete = new UserModel()
-                this.snackBar("Funcionário excluído com sucesso")
-            }
+            this.deleteDialog = false
+            this.delete = new UserModel()
+            this.snackBar("Funcionário excluído com sucesso")
         })
-        .catch( (reason) => {
+        .catch(() => {
             this.deleteLoading = false
+            this.snackBar("Erro ao excluir funcionário")
         })
     },
 
@@ -525,7 +525,7 @@ methods: {
 
         if(name.length > 0){
             this.employees = this.employees.filter(employee => {
-                const fullName = `${employee.emp_first_name} ${employee.emp_last_name}`.toLowerCase();
+                const fullName = `${employee.firstName} ${employee.lastName}`.toLowerCase();
                 return fullName.includes(name);
             });
         }else{

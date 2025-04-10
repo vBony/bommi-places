@@ -4,7 +4,7 @@
         <VerticalMenu :showVerticalMenu="showVerticalMenu" v-if="shouldShowMenu" />
         <AppBar @setToggleVerticalMenu="setToggleVerticalMenu" v-if="shouldShowMenu" />
 
-        <RouterView id="routerview" />
+        <RouterView/>
     </v-layout>
 </v-app>
 </template>
