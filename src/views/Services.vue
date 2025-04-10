@@ -33,7 +33,7 @@
                             </v-btn>
 
                             <v-btn
-                                v-if="this.category.case_id"
+                                v-if="this.category.id"
                                 variant="text"
                                 size="small"
                                 prepend-icon="mdi-pencil"
@@ -46,19 +46,19 @@
                         </v-row>
                         <v-row>
                             <v-select
-                                v-model="category.case_id"
+                                v-model="category.id"
                                 label="Selecione uma categoria"
                                 no-data-text="Nenhuma categoria encontrada."
                                 variant="outlined"
                                 density="compact"
                                 :items="categories"
-                                item-title="case_name" 
-                                item-value="case_id"
+                                item-title="name" 
+                                item-value="id"
                                 @update:modelValue="getServices()"
                             ></v-select>
                         </v-row>
 
-                        <v-row cols="12" v-if="category.case_id">
+                        <v-row cols="12" v-if="category.id">
                             <h4>Serviços</h4>
                             <v-divider class="mb-3"></v-divider>
 
@@ -109,16 +109,16 @@
                                     <tbody>
                                         <tr
                                             v-for="item in services"
-                                            :key="item.sepl_id"
+                                            :key="item.id"
                                         >
-                                            <td width="280">{{ item.sepl_name }}</td>
-                                            <td width="80">{{ item.sepl_price }}</td>
+                                            <td width="280">{{ item.name }}</td>
+                                            <td width="80">{{ item.price }}</td>
                                             <td width="20">
                                                 <v-btn 
                                                     elevation="0" 
                                                     icon="mdi-pencil" 
                                                     size="small"
-                                                    @click="openDialogEditService(item.sepl_id)"
+                                                    @click="openDialogEditService(item.id)"
                                                 ></v-btn>
                                             </td>
                                         </tr>
@@ -164,14 +164,14 @@
                     <v-row>
                         <v-col cols="12" class="pb-0 mb-8">
                             <v-text-field 
-                                v-model="category.case_name"
+                                v-model="category.name"
                                 label="Nome da categoria" 
                                 type="text" 
                                 variant="outlined"
                                 hide-details="auto" 
                                 prepend-inner-icon="mdi-format-list-bulleted-type"
                                 :loading="loading"
-                                :error-messages="messages.category.case_name"
+                                :error-messages="messages.category.name"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -258,8 +258,8 @@
                             <app-label text="Nome" />
                             <text-field
                                 label="Nome do serviço"
-                                v-model="service.sepl_name"
-                                :error-messages="messages.service.sepl_name"
+                                v-model="service.name"
+                                :error-messages="messages.service.name"
                             />
                         </v-col>
                     </v-row>
@@ -268,19 +268,19 @@
                         <v-col cols="6" class="pb-0">
                             <app-label text="Preço" />
                             <text-field
-                                v-model="service.sepl_price"
+                                v-model="service.price"
                                 label="R$ 99.99"
                                 v-maska:[mt.money]
-                                :error-messages="messages.service.sepl_price"
+                                :error-messages="messages.service.price"
                             />
                         </v-col>
 
                         <v-col cols="6" class="pb-0">
                             <app-label text="Duração" />
                             <text-field 
-                                v-model="service.sepl_duration"
+                                v-model="service.duration"
                                 label="HH:MM" 
-                                :error-messages="messages.service.sepl_duration"
+                                :error-messages="messages.service.duration"
                                 v-maska:[mt.hoursAndMinutes]
                             ></text-field>
                         </v-col>
@@ -290,9 +290,9 @@
                         <v-col cols="12" class="pb-0">
                             <app-label text="Descrição" />
                             <v-textarea 
-                                v-model="service.sepl_description"
+                                v-model="service.description"
                                 label="Uma breve descrição sobre o produto" 
-                                :error-messages="messages.service.sepl_description"
+                                :error-messages="messages.service.description"
                                 variant="outlined"
                                 hide-details="auto"
                                 density="compact"
@@ -310,13 +310,13 @@
                     <v-row>
                         <v-col cols="12" class="pb-0">
                             <v-select
-                                v-model="category.case_id"
+                                v-model="category.id"
                                 label="Categoria"
                                 variant="outlined"
                                 density="compact"
                                 :items="categories"
-                                item-title="case_name" 
-                                item-value="case_id"
+                                item-title="name" 
+                                item-value="id"
                                 disabled
                             ></v-select>
                         </v-col>
@@ -385,7 +385,7 @@
                 ></v-btn>
             </v-card-title>
             <v-card-text>
-                <p>Confirma a exclusão do servico <b class="text-decoration-underline">{{ this.service.sepl_name }}</b> ?</p>
+                <p>Confirma a exclusão do servico <b class="text-decoration-underline">{{ this.service.name }}</b> ?</p>
                 <p class="text-disabled">
                     Essa ação é irreversível
                 </p>
@@ -430,7 +430,7 @@
                 ></v-btn>
             </v-card-title>
             <v-card-text>
-                <p>Confirma a exclusão da categoria <b class="text-decoration-underline">{{ this.category.case_name }}</b> ?</p>
+                <p>Confirma a exclusão da categoria <b class="text-decoration-underline">{{ this.category.name }}</b> ?</p>
                 <p class="text-disabled">
                     Essa ação é irreversível. <br>
                     Obs: Todos os serviços da categoria serão excluídos
@@ -532,10 +532,10 @@ methods: {
 
     init(){
         this.loading = true
-        req.get(this.serverUrl+'/api/place/services/categories')
+        req.get(this.serverUrl+'/api/admin/place/services/categories')
         .then( (response) => {
             this.loading = false
-            this.categories = response.data.categories
+            this.categories = response.data
         })
     },
 
@@ -576,13 +576,11 @@ methods: {
         .then( (response) => {
             this.loading = false
 
-            const index = this.categories.findIndex(service => service.sepl_id === this.service.sepl_id);
+            const index = this.categories.findIndex(category => category.id === this.category.id);
 
             if (index !== -1) {
                 this.categories[index] = response.data;
                 this.messages.category = []
-                
-                this.category = new CategoryModel()
                 
                 this.deleteCategoryDialog = false
                 this.categoryDialog = false
@@ -599,11 +597,11 @@ methods: {
 
     deleteCategory(){
         this.loading = true
-        req.delete(this.serverUrl+'/api/admin/place/service/category/'+this.category.case_id )
+        req.delete(this.serverUrl+'/api/admin/place/service/category/'+this.category.id )
         .then( () => {
             this.loading = false
 
-            const index = this.categories.findIndex(category => category.sepl_id === this.category.sepl_id);
+            const index = this.categories.findIndex(category => category.id === this.category.id);
 
             if (index !== -1) {
                 this.categories.splice(index, 1);
@@ -623,7 +621,7 @@ methods: {
     },
 
     createCategory(){
-        this.category.case_id = null
+        this.category.id = null
         this.messages.category = []
 
         this.loading = true
@@ -631,8 +629,8 @@ methods: {
         .then( (response) => {
             this.loading = false
 
-            this.category.case_id = response.data.case_id
-            this.category.case_name = null
+            this.category.id = response.data.id
+            this.category.name = null
 
             this.categories.unshift(response.data)
 
@@ -646,7 +644,7 @@ methods: {
     },
 
     createService(){
-        this.service.sepl_case_id = this.category.case_id
+        this.service.idCategory = this.category.id
         this.messages.service = []
 
         this.loading = true
@@ -670,11 +668,11 @@ methods: {
         this.messages.service = []
 
         this.loading = true
-        req.delete(this.serverUrl+'/api/admin/place/service/'+this.service.sepl_id )
+        req.delete(this.serverUrl+'/api/admin/place/service/'+this.service.id )
         .then( () => {
             this.loading = false
 
-            const index = this.services.findIndex(service => service.sepl_id === this.service.sepl_id);
+            const index = this.services.findIndex(service => service.id === this.service.id);
 
             if (index !== -1) {
                 this.services.splice(index, 1);
@@ -704,18 +702,21 @@ methods: {
     getServices(){
         this.loading = true
 
-        this.category = this.categories.find(category => category.case_id === this.category.case_id);
+        this.category = this.categories.find(category => category.id === this.category.id);
 
-        req.get(this.serverUrl+'/api/place/services/'+this.category.case_id)
+        req.get(this.serverUrl+'/api/admin/place/services/'+this.category.id)
         .then( (response) => {
             this.loading = false
-            this.services = response.data.services
+            this.services = response.data
+        })
+        .catch( (reason) => {
+            this.loading = false
         })
     },
 
     getService(id){
         this.loading = true
-        req.get(this.serverUrl+'/api/place/service/'+id)
+        req.get(this.serverUrl+'/api/admin/place/service/'+id)
         .then( (response) => {
             this.loading = false
             this.service = response.data
@@ -728,7 +729,7 @@ methods: {
         .then( (response) => {
             this.loading = false
 
-            const index = this.services.findIndex(service => service.sepl_id === this.service.sepl_id);
+            const index = this.services.findIndex(service => service.id === this.service.id);
 
             if (index !== -1) {
                 this.services[index] = response.data;
