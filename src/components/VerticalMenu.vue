@@ -6,13 +6,13 @@
         :temporary="display.lg.value == false"
     >
         <v-list-item
-            :prepend-avatar="user.emp_avatar_url"
+            :prepend-avatar="user.avatarUrl"
             nav
             class="px-3 py-5"
         >
             <div cols="12">
-                <div class="font-weight-bold text-truncate"> {{ user.emp_first_name }} </div>
-                <div class="text-disabled text-subtitle-2"> {{ user.emp_type_name }} </div>
+                <div class="font-weight-bold text-truncate"> {{ user.firstName }} </div>
+                <div class="text-disabled text-subtitle-2"> {{ user.typeName }} </div>
             </div>
         </v-list-item>
 

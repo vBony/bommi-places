@@ -13,8 +13,8 @@
 
         <v-col cols="12">
             <h4>🤵 Usuario</h4>
-            <p>Nome: {{ user.emp_first_name + ' ' + user.emp_last_name }} </p>
-            <p>Hierarquia: {{ user.emp_type_name }}</p>
+            <p>Nome: {{ user.firstName + ' ' + user.lastName }} </p>
+            <p>Hierarquia: {{ user.typeName }}</p>
         </v-col>
     </div>
 </v-main>

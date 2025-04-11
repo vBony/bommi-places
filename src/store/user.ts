@@ -1,20 +1,11 @@
 import { defineStore } from 'pinia'
 import router from '@/router'
+import User from '@/entities/User'
 
 export const useUserStore = defineStore('user', {
     state: () => {
         return { 
-            user: {
-                emp_id: null,
-                emp_first_name: null,
-                emp_last_name: null,
-                emp_email: null,
-                emp_password: null,
-                emp_phone_number: null,
-                emp_birthdate: null,
-                emp_cpf: null,
-            },
-
+            user: new User(),
             token: "",
             prefix: 'bommi_'
         }

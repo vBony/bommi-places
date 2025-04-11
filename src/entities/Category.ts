@@ -1,7 +1,7 @@
 // @ts-nocheck
 class Category {
-    case_id = ""
-    case_name = ""
+    id = ""
+    name = ""
 }
 
 export default Category

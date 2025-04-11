@@ -4,7 +4,7 @@
         <VerticalMenu :showVerticalMenu="showVerticalMenu" v-if="shouldShowMenu" />
         <AppBar @setToggleVerticalMenu="setToggleVerticalMenu" v-if="shouldShowMenu" />
 
-        <RouterView id="routerview" />
+        <RouterView/>
     </v-layout>
 </v-app>
 </template>
@@ -47,28 +47,22 @@ const App = defineComponent({
 
     created(){
         this.user = this.userStore.getUser ?? new UserModel()
-
-        
-
-        req.post(this.serverUrl+'/api/dashboard/init', {})
-        .then( (response) => {
-            let data = response.data
-            this.place = data.place
-            this.placeAddress = data.place.address
-        })
     },
+    
     methods: {
         setToggleVerticalMenu(data){
             this.showVerticalMenu = data
         },
 
         getHiddenMenuRoutes(){
-            return ['login', 'singup']
+            return ['login', 'singup', 'singupPlaces']
         }
     },
     computed: {
         shouldShowMenu(){
             const routes = this.getHiddenMenuRoutes()
+
+            // console.log(this.$route.name)
             
             // Se ta na lista, não mostra o menu
             return !routes.includes(this.$route.name)

@@ -66,11 +66,11 @@
                                                                 height="90"
                                                                 aspect-ratio="1/1"
                                                                 cover
-                                                                :src="this.userAvatarPreview ? this.userAvatarPreview : this.user.emp_avatar_url"
+                                                                :src="this.userAvatarPreview ? this.userAvatarPreview : this.user.avatarUrl"
                                                             ></v-img>
                                                             <div cols="12">
-                                                                <div class="font-weight-bold text-truncate"> {{ user.emp_first_name }} </div>
-                                                                <div class="text-disabled text-subtitle-2"> {{ user.emp_type_name }} </div>
+                                                                <div class="font-weight-bold text-truncate"> {{ user.firstName }} </div>
+                                                                <div class="text-disabled text-subtitle-2"> {{ user.typeName }} </div>
                                                             </div>
                                                         </div>
     
@@ -93,16 +93,16 @@
                                             <v-col cols="12" lg="6" md="6">
                                                 <app-label text="Nome" />
                                                 <text-field
-                                                    v-model="user.emp_first_name"
-                                                    :error-messages="messages.emp_first_name"
+                                                    v-model="user.firstName"
+                                                    :error-messages="messages.firstName"
                                                 />
                                             </v-col>
                 
                                             <v-col cols="12" lg="6" md="6" sm="12">
                                                 <app-label text="Sobrenome" />
                                                 <text-field
-                                                    v-model="user.emp_last_name"
-                                                    :error-messages="messages.emp_last_name"
+                                                    v-model="user.lastName"
+                                                    :error-messages="messages.lastName"
                                                 />
                                             </v-col>
                                         </v-row>
@@ -111,8 +111,8 @@
                                             <v-col cols="12">
                                                 <app-label text="CPF" />
                                                 <text-field
-                                                    v-model="user.emp_cpf"
-                                                    :error-messages="messages.emp_cpf"
+                                                    v-model="user.cpf"
+                                                    :error-messages="messages.cpf"
                                                     v-maska:[mt.cpf]
                                                 />                                                
                                             </v-col>
@@ -122,8 +122,8 @@
                                             <v-col cols="12">
                                                 <app-label text="Data de nascimento" />
                                                 <text-field
-                                                    v-model="user.emp_birthdate"
-                                                    :error-messages="messages.emp_birthdate"
+                                                    v-model="user.birthdate"
+                                                    :error-messages="messages.birthdate"
                                                     type="date"
                                                 />
                                             </v-col>
@@ -162,8 +162,8 @@
                                                     variant="outlined"
                                                     density="compact"
                                                     :items="categories"
-                                                    item-title="case_name" 
-                                                    item-value="case_id"
+                                                    item-title="name" 
+                                                    item-value="id"
                                                     single-line
                                                     @update:modelValue="getServices()"
                                                 ></v-select>
@@ -172,15 +172,15 @@
                                             <v-col cols="12" lg="4" md="4" sm="12">
                                                 <app-label text="Serviço" />
                                                 <v-select
-                                                    v-model="employeeService.emse_sepl_id"
-                                                    :error-messages="messages.emse_sepl_id"
+                                                    v-model="employeeService.idService"
+                                                    :error-messages="messages.idService"
                                                     label="Selecione um serviço"
                                                     no-data-text="Nenhum serviço encontrado."
                                                     variant="outlined"
                                                     density="compact"
                                                     :items="services"
-                                                    item-title="sepl_name" 
-                                                    item-value="sepl_id"
+                                                    item-title="name" 
+                                                    item-value="id"
                                                     single-line
                                                 ></v-select>
                                             </v-col>
@@ -191,7 +191,7 @@
                                                     prepend-icon="mdi-plus"
                                                     color="black"
                                                     block
-                                                    :disabled="(employeeService.idCategory == null || employeeService.emse_sepl_id == null)"
+                                                    :disabled="(employeeService.idCategory == null || employeeService.idService == null)"
                                                     @click="createEmployeeService()"
                                                 >
                                                     Adicionar serviço
@@ -226,14 +226,14 @@
                                                             v-for="item in employeeServices"
                                                             :key="item.usser_id"
                                                         >
-                                                            <td width="280">{{ item.service_place.sepl_name }}</td>
-                                                            <td width="280">{{ item.service_place.category_service.case_name }}</td>
+                                                            <td width="280">{{ item.service.name }}</td>
+                                                            <td width="280">{{ item.service.category.name }}</td>
                                                             <td width="20">
                                                                 <v-btn 
                                                                     elevation="0" 
                                                                     icon="mdi-delete-outline" 
                                                                     size="small"
-                                                                    @click="openDialogDeleteService(item.emse_id)"
+                                                                    @click="openDialogDeleteService(item.id)"
                                                                 ></v-btn>
                                                             </td>
                                                         </tr>
@@ -265,8 +265,8 @@
                                             <v-col cols="12" lg="3" md="3">
                                                 <app-label text="Início" />
                                                 <text-field
-                                                    v-model="attendance.ep_clock_in"
-                                                    :error-messages="messages.ep_clock_in"
+                                                    v-model="attendance.clockIn"
+                                                    :error-messages="messages.clockIn"
                                                     v-maska:[mt.hoursAndMinutes]
                                                 /> 
                                             </v-col>
@@ -274,8 +274,8 @@
                                             <v-col cols="12" lg="3" md="3">
                                                 <app-label text="Fim" />
                                                 <text-field
-                                                    v-model="attendance.ep_clock_out"
-                                                    :error-messages="messages.ep_clock_out"
+                                                    v-model="attendance.clockOut"
+                                                    :error-messages="messages.clockOut"
                                                     v-maska:[mt.hoursAndMinutes]
                                                 /> 
                                             </v-col>
@@ -327,7 +327,7 @@
                 ></v-btn>
             </v-card-title>
             <v-card-text>
-                <p>Tem certeza de que deseja desvincular o serviço <b class="text-decoration-underline">{{ employeeServiceDelete.service_place.sepl_name }}</b>?</p>
+                <p>Tem certeza de que deseja desvincular o serviço <b class="text-decoration-underline">{{ employeeServiceDelete.service.name }}</b>?</p>
                 <!-- <p class="text-disabled">
                     Essa ação é irreversível. <br>
                 </p> -->
@@ -346,7 +346,7 @@
                     text="Sim"
                     color="red"
                     variant="tonal"
-                    @click="deleteService(employeeServiceDelete.emse_id)"
+                    @click="deleteService(employeeServiceDelete.id)"
                 ></v-btn>
             </v-card-actions>
         </v-card>
@@ -360,11 +360,12 @@ import req from '../helpers/http'
 import { useUserStore } from '../store/user'
 import UserModel from '../entities/User'
 import { useDisplay } from 'vuetify'
-import { vMaska, Mask } from "maska"
+import { vMaska, Mask, unmask } from "maska"
 import MaskTokens from '../entities/Masks'
 import TextField from '@/components/fields/TextField.vue';
 import AppLabel from "@/components/fields/LabelField.vue";
 import SnackBar from '@/components/SnackBar.vue'
+import { maska } from 'maska'
         
 const App = defineComponent({
 components: {
@@ -390,17 +391,17 @@ data() {
         categories: [],
         services: [],
         attendance: {
-            ep_clock_in: null,
-            ep_clock_out: null
+            clockIn: null,
+            clockOut: null
         },
 
         employeeService: {
             idCategory: null,
-            emse_sepl_id: null
+            idService: null
         },
 
         messages: {
-            emse_sepl_id: ""
+            idService: ""
         },
 
         employeeServices: [],
@@ -412,7 +413,9 @@ data() {
             text: null
         },
 
-        deleteServiceDialog: false
+        deleteServiceDialog: false,
+
+        cpfMask: null
     };
 },
 
@@ -423,6 +426,7 @@ beforeCreate(){
 
 created(){
     this.user = this.userStore.getUser ?? new UserModel()
+    this.cpfMask = new Mask(this.mt.cpf)
 },
 
 mounted(){
@@ -442,9 +446,9 @@ methods: {
     },
 
     getCategories(){
-        req.get(this.serverUrl+'/api/place/services/categories')
+        req.get(this.serverUrl+'/api/admin/place/services/categories')
         .then( (response) => {
-            this.categories = response.data.categories
+            this.categories = response.data
         })
     },
 
@@ -452,23 +456,23 @@ methods: {
         this.employeeService.emse_sepl_id = null
         this.services = []
 
-        req.get(this.serverUrl+'/api/place/services/'+this.employeeService.idCategory)
+        req.get(this.serverUrl+'/api/admin/place/services/'+this.employeeService.idCategory)
         .then( (response) => {
-            this.services = response.data.services
+            this.services = response.data
         })
     },
 
     getEmployeeServices(){
         req.get(this.serverUrl+'/api/admin/employee/services')
         .then( (response) => {
-            this.employeeServices = response.data.employeeServices
+            this.employeeServices = response.data
         })
     },
 
     createEmployeeService(){
-        this.messages = {emse_sepl_id: ""}
+        this.messages = {idService: ""}
 
-        req.post(this.serverUrl+'/api/admin/employee/service/', {employeeService: this.employeeService})
+        req.post(this.serverUrl+'/api/admin/employee/service/', this.employeeService)
         .then( (response) => {
             this.employeeServices.unshift(response.data)
 
@@ -482,7 +486,7 @@ methods: {
     openDialogDeleteService(id){
         this.deleteServiceDialog = true
 
-        this.employeeServiceDelete = this.employeeServices.find(employeeServices => employeeServices.emse_id === id);
+        this.employeeServiceDelete = this.employeeServices.find(employeeService => employeeService.id === id);
     },
 
     snackBar(text){
@@ -505,13 +509,13 @@ methods: {
 
     updateEmployee(){
         const formData = new FormData();
-        formData.append("emp_first_name", this.user.emp_first_name);
-        formData.append("emp_last_name", this.user.emp_last_name);
-        formData.append("emp_cpf", this.user.emp_cpf);
-        formData.append("emp_birthdate", this.user.emp_birthdate);
+        formData.append("firstName", this.user.firstName);
+        formData.append("lastName", this.user.lastName);
+        formData.append("cpf", structuredClone(this.cpfMask.unmasked(this.user.cpf)));
+        formData.append("birthdate", this.user.birthdate);
         
         if (this.userAvatar) {
-            formData.append("avatar", this.userAvatar);
+            formData.append("uploadedAvatar", this.userAvatar);
         }
 
         // Laravel não aceita form-data no put, foi necessário realizar um method spoofing
@@ -523,8 +527,14 @@ methods: {
             }
         )
         .then( (response) => {
-            if(response.data.employee !== undefined){
-                window.location.reload();
+            if(response.data){
+                this.userStore.setUser(response.data)
+                this.user = this.userStore.getUser
+
+                this.snackBar("Dados pessoais alterados com sucesso")
+                setInterval(() => {
+                    window.location.reload();
+                }, 1000);
             }
         })
         .catch( (reason) => {
@@ -534,10 +544,11 @@ methods: {
 
     updateAttendance(){
         req.put(
-            this.serverUrl+'/api/admin/employee/attendance?_method=PUT', 
+            this.serverUrl+'/api/admin/employee/attendance', 
             this.attendance
         )
         .then( (response) => {
+            ['clockIn', 'clockOut'].forEach(key => key in this.messages && delete this.messages[key]);
             this.snackBar("Dados alterados com sucesso!")
         })
         .catch( (reason) => {
@@ -560,7 +571,7 @@ methods: {
     deleteService(id){
         req.delete(this.serverUrl+'/api/admin/employee/service/'+id)
         .then( () => {
-            const index = this.employeeServices.findIndex(service => service.emse_id === id);
+            const index = this.employeeServices.findIndex(service => service.id === id);
 
             if (index !== -1) {
                 this.employeeServices.splice(index, 1);

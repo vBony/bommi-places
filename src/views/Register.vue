@@ -27,23 +27,23 @@
                             <v-row class="px-0 py-0 mt-4">
                                 <v-col cols="12" lg="6" md="6">
                                     <v-text-field 
-                                        v-model="entidade.emp_first_name"
+                                        v-model="entidade.firstName"
                                         label="Nome" 
                                         variant="outlined" 
                                         type="text" 
                                         hide-details="auto" 
-                                        :error-messages="messages.emp_first_name"
+                                        :error-messages="messages.firstName"
                                     ></v-text-field>
                                 </v-col>
     
                                 <v-col cols="12" lg="6" md="6" sm="12">
                                     <v-text-field 
-                                        v-model="entidade.emp_last_name"
+                                        v-model="entidade.lastName"
                                         label="Sobrenome" 
                                         variant="outlined" 
                                         type="text" 
                                         hide-details="auto" 
-                                        :error-messages="messages.emp_last_name"
+                                        :error-messages="messages.lastName"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -51,12 +51,12 @@
                                 
                             <v-col cols="12" class="px-0 py-0 mt-4">
                                 <v-text-field 
-                                    v-model="entidade.emp_cpf"
+                                    v-model="entidade.cpf"
                                     label="CPF do responsável legal" 
                                     variant="outlined"
                                     hide-details="auto"
                                     type="text"
-                                    :error-messages="messages.emp_cpf"
+                                    :error-messages="messages.cpf"
                                     v-maska:[cpfMaskToken]
                                 ></v-text-field>
 
@@ -64,12 +64,12 @@
 
                             <v-col cols="12" class="px-0 py-0 mt-4">
                                 <v-text-field 
-                                    v-model="entidade.emp_birthdate"
+                                    v-model="entidade.birthdate"
                                     label="Data de nascimento" 
                                     variant="outlined"
                                     hide-details="auto"
                                     type="date"
-                                    :error-messages="messages.emp_birthdate"
+                                    :error-messages="messages.birthdate"
                                 ></v-text-field>
                             </v-col>
 
@@ -80,26 +80,26 @@
 
                             <v-col cols="12" class="px-0 py-0 mt-4">
                                 <v-text-field 
-                                    v-model="entidade.emp_email"
+                                    v-model="entidade.email"
                                     label="E-mail" 
                                     variant="outlined" 
                                     type="email" 
                                     hide-details="auto" 
-                                    :error-messages="messages.emp_email"
+                                    :error-messages="messages.email"
                                 >
                                 </v-text-field>
                             </v-col>
 
                             <v-col cols="12" class="px-0 py-0 mt-4">
                                 <v-text-field 
-                                    v-model="entidade.emp_password"
+                                    v-model="entidade.password"
                                     label="Senha" 
                                     variant="outlined" 
                                     :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                                     :type="visible ? 'text' : 'password'"
                                     @click:append-inner="visible = !visible"
                                     hide-details="auto"
-                                    :error-messages="messages.emp_password"
+                                    :error-messages="messages.password"
                                 ></v-text-field>
                             </v-col>
                         </div>
@@ -164,7 +164,7 @@ const App = defineComponent({
 
         this.loading = true
 
-        this.entidade.emp_cpf = this.cpfMask.unmasked(this.entidade.emp_cpf)
+        this.entidade.cpf = this.cpfMask.unmasked(this.entidade.cpf)
         axios.post(this.serverUrl+'/api/auth/employee', this.entidade)
         .then((response) => {
             this.loading = false

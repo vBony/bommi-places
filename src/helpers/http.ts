@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useUserStore } from '@/store/user';
 import $ from "jquery";
+import router from '@/router'
 
 const req = () => {
     const defaultOptions = {
@@ -27,6 +28,12 @@ const req = () => {
 
     instance.interceptors.response.use((response) => {
         $('#loading').fadeToggle(500)
+
+        // redireciona baseado no status
+        if (response.status === 206) {
+            router.replace('/places/criar')
+        }
+
         return response;
     }, (error) => {
         $('#loading').fadeToggle(500)

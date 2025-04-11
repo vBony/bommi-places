@@ -37,20 +37,20 @@
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-select
-                                        v-model="place.pla_has_cnpj"
+                                        v-model="place.hasCnpj"
                                         item-title="text" 
                                         item-value="value"
                                         label="Possui CNPJ?"
                                         :items="simNao"
                                         variant="outlined"
                                         hide-details="auto"
-                                        :error-messages="messages.place.pla_has_cnpj"
+                                        :error-messages="messages.hasCnpj"
                                     ></v-select>
                                 </v-col>
     
-                                <v-col cols="12" class="px-0 py-0 mt-4" v-if="place.pla_has_cnpj == 0">
+                                <v-col cols="12" class="px-0 py-0 mt-4" v-if="place.hasCnpj == 0">
                                     <v-text-field
-                                        v-model="user.emp_cpf"
+                                        v-model="user.cpf"
                                         disabled
                                         label="CPF do responsável legal" 
                                         variant="outlined"
@@ -60,10 +60,10 @@
                                     ></v-text-field>
                                 </v-col>
     
-                                <v-col cols="12" class="px-0 py-0 mt-4" v-if="place.pla_has_cnpj == 1">
+                                <v-col cols="12" class="px-0 py-0 mt-4" v-if="place.hasCnpj == 1">
                                     <v-text-field 
-                                        v-model="place.pla_cnpj"
-                                        :error-messages="messages.place.pla_cnpj"
+                                        v-model="place.cnpj"
+                                        :error-messages="messages.cnpj"
                                         label="CNPJ" 
                                         variant="outlined"
                                         hide-details="auto"
@@ -74,8 +74,8 @@
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-text-field 
-                                        v-model="place.pla_name"
-                                        :error-messages="messages.place.pla_name"
+                                        v-model="place.name"
+                                        :error-messages="messages.name"
                                         label="Nome do estabelecimento" 
                                         variant="outlined"
                                         hide-details="auto"
@@ -87,8 +87,8 @@
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-text-field 
-                                        v-model="place.pla_phone_number"
-                                        :error-messages="messages.place.pla_phone_number"
+                                        v-model="place.phoneNumber"
+                                        :error-messages="messages.phoneNumber"
                                         label="Telefone ou Celular do estabelecimento" 
                                         variant="outlined"
                                         hide-details="auto"
@@ -100,10 +100,10 @@
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-select
-                                        v-model="place.pla_category_id"
-                                        :error-messages="messages.place.pla_category_id"
-                                        item-title="capl_name" 
-                                        item-value="capl_id"
+                                        v-model="place.idCategory"
+                                        :error-messages="messages.idCategory"
+                                        item-title="name" 
+                                        item-value="id"
                                         label="Segmento"
                                         :items="categories"
                                         variant="outlined"
@@ -120,8 +120,8 @@
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-text-field
-                                        v-model="placeAddress.plad_cep"
-                                        :error-messages="messages.placeAddress.plad_cep"
+                                        v-model="place.address.cep"
+                                        :error-messages="messages.address.cep"
                                         label="CEP" 
                                         variant="outlined"
                                         hide-details="auto"
@@ -140,8 +140,8 @@
                                 <v-row class="px-0 py-0 mt-4">
                                     <v-col cols="12" lg="3" md="3">
                                         <v-text-field
-                                            v-model="placeAddress.plad_uf"
-                                            :error-messages="messages.placeAddress.plad_uf"
+                                            v-model="place.address.uf"
+                                            :error-messages="messages.address.uf"
                                             disabled
                                             label="Estado" 
                                             variant="outlined"
@@ -152,8 +152,8 @@
     
                                     <v-col cols="12" lg="9" md="9">
                                         <v-text-field
-                                            v-model="placeAddress.plad_city"
-                                            :error-messages="messages.placeAddress.plad_city"
+                                            v-model="place.address.city"
+                                            :error-messages="messages.address.city"
                                             disabled
                                             label="Cidade" 
                                             variant="outlined"
@@ -165,8 +165,8 @@
     
                                 <v-col cols="12" class="px-0 py-0 mt-4">
                                     <v-text-field
-                                        v-model="placeAddress.plad_district"
-                                        :error-messages="messages.placeAddress.plad_district"
+                                        v-model="place.address.district"
+                                        :error-messages="messages.address.district"
                                         label="Bairro" 
                                         variant="outlined"
                                         hide-details="auto"
@@ -178,8 +178,8 @@
                                 <v-row class="px-0 py-0 mt-4">
                                     <v-col cols="12" lg="3" md="3" class="pt-0">
                                         <v-text-field
-                                            v-model="placeAddress.plad_number"
-                                            :error-messages="messages.placeAddress.plad_number"
+                                            v-model="place.address.number"
+                                            :error-messages="messages.address.number"
                                             label="Número" 
                                             variant="outlined"
                                             hide-details="auto"
@@ -189,8 +189,8 @@
     
                                     <v-col cols="12" lg="9" md="9" class="pt-0">
                                         <v-text-field
-                                            v-model="placeAddress.plad_complement"
-                                            :error-messages="messages.placeAddress.plad_complement"
+                                            v-model="place.address.complement"
+                                            :error-messages="messages.address.complement"
                                             label="Complemento" 
                                             variant="outlined"
                                             hide-details="auto"
@@ -247,14 +247,10 @@ data() {
         user: new UserModel(),
 
         place: new Place(),
-        placeAddress: new PlaceAddress(),
 
         categories: [],
 
-        messages: {
-            place: new Place(),
-            placeAddress: new PlaceAddress()
-        },
+        messages:  new Place(),
 
         simNao: [
             { text: 'Sim', value: 1 },
@@ -308,12 +304,10 @@ methods: {
     },
 
     register(){
-        this.place.pla_cnpj = this.cnpjMask.unmasked(this.place.pla_cnpj)
-        this.place.pla_phone_number = this.phoneMask.unmasked(this.place.pla_phone_number)
+        this.place.cnpj = this.cnpjMask.unmasked(this.place.cnpj)
+        this.place.phoneNumber = this.phoneMask.unmasked(this.place.phoneNumber)
 
-        console.log(this.place)
-
-        req.post(this.serverUrl+'/api/admin/place', {place: this.place, placeAddress: this.placeAddress})
+        req.post(this.serverUrl+'/api/admin/place', this.place)
         .then( (response) => {
             this.resetMessages()
             this.$router.replace('/dashboard')
@@ -322,78 +316,71 @@ methods: {
             this.loading = false
             if(reason.response.data.errors !== undefined){
                 this.messages = reason.response.data.errors
-
-                if(reason.response.data.errors.place !== undefined){
+                
+                if(reason.response.data.errors.address === undefined){
+                    this.resetAddressMessages()
                     this.previous()
                 }else{
                     this.resetPlaceMessage()
-                }
-
-                if(reason.response.data.errors.placeAddress === undefined){
-                    this.resetAddressMessages()
                 }
             }
         })
     },
 
     searchAddress(){
-        this.placeAddress.plad_cep = this.placeAddress.plad_cep.replace(/\D/g, '')
+        this.place.address.cep = this.place.address.cep.replace(/\D/g, '')
 
-        if (this.placeAddress.plad_cep != "") {
+        if (this.place.address.cep != "") {
             let validaCep = /^[0-9]{8}$/
             let errorMessage = "Houve um problema na requisicao, tente novamente mais tarde."
             this.resetAddressMessages()
 
 
-            if(validaCep.test(this.placeAddress.plad_cep)){
+            if(validaCep.test(this.place.address.cep)){
                 this.loading = true
 
-                req.get("https://viacep.com.br/ws/"+ this.placeAddress.plad_cep +"/json/")
+                req.get("https://viacep.com.br/ws/"+ this.place.address.cep +"/json/")
                 .then( (response) => {
                     this.loading = false
                     let data = response.data
 
                     if(data){
-                        this.placeAddress.plad_district = data.bairro
-                        this.placeAddress.plad_city = data.localidade
-                        this.placeAddress.plad_uf = data.uf
-                        this.placeAddress.plad_complement = data.complemento
+                        this.place.address.district = data.bairro
+                        this.place.address.city = data.localidade
+                        this.place.address.uf = data.uf
+                        this.place.address.complement = data.complemento
                     }else{
-                        this.messages.placeAddress.plad_cep = errorMessage
+                        this.messages.place.address.cep = errorMessage
                     }
                 })
                 .catch( (response) => {
                     this.loading = false
-                    this.messages.placeAddress.plad_cep = errorMessage
+                    this.messages.place.address.cep = errorMessage
                 })
             }
         }
     },
 
     getCategories(){
-        req.get(this.serverUrl+'/api/place/categories')
+        req.get(this.serverUrl+'/api/admin/place/categories')
         .then( (response) => {
-            this.categories = response.data.categories
+            this.categories = response.data
         })
     },
 
     resetMessages(){
-        this.messages = {
-            place: new Place(),
-            placeAddress: new PlaceAddress()
-        }
+        this.messages = new Place()
     },
 
     resetPlaceMessage(){
-        this.messages.place = new Place()
+        let message = structuredClone(this.messages.address);
+        this.messages = new Place()
+        this.messages.address = message
     },
 
     resetAddressMessages(){
-        this.messages.placeAddress = new PlaceAddress()
+        this.messages.address = new PlaceAddress()
     }
-},
-
-mounted(){
 }
 });
 
