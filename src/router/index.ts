@@ -70,6 +70,11 @@ const routes = [
     name: 'playGround',
     component: () => import(/* webpackChunkName: "home" */ '@/views/PlayGround.vue')
   },
+  {
+    path: '/agenda',
+    name: 'agenda',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Schedule.vue')
+  },
   { 
     path: "/:catchAll(.*)", 
     name: 'notFound',

@@ -18,6 +18,13 @@
 
         <v-list density="comfortable" nav>
             <v-list-item 
+                prepend-icon="mdi-calendar-edit" 
+                title="Agenda" 
+                value="home"
+                to="/agenda"
+            ></v-list-item>
+
+            <v-list-item 
                 prepend-icon="mdi-view-dashboard" 
                 title="Dashboard" 
                 value="home"
