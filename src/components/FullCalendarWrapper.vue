@@ -45,10 +45,17 @@ export default {
     emits: ['eventClicked'],
     data() {
         return {
+            colorsEvents: [
+                { 0: '#607D8B' }, // Pendente (cinza azulado escuro)
+                { 1: '#2C6B2F' }, // Confirmado (verde musgo)
+                { 2: '#3F51B5' }, // Finalizado (azul escuro)
+                { 3: '#D32F2F' }  // Cancelado (vermelho escuro)
+            ],
             events: {},
 
             calendarOptions: {
                 plugins: [ dayGridPlugin, interactionPlugin, timeGridPlugin ],
+                nowIndicator: true,
                 initialView: 'timeGridDay',
                 locale: 'pt-BR',
                 height:600,
@@ -105,7 +112,7 @@ export default {
                     title: event.client.name,
                     start: event.date,
                     end: event.dateEnd,
-                    color: '#283593',
+                    color: this.colorsEvents[event.status] ? Object.values(this.colorsEvents[event.status])[0] : '#FFFFFF'
                 }));
 
                 successCallback(events);
