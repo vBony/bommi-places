@@ -47,10 +47,10 @@
         </v-list>
 
         <v-list>
-            <v-list-item prepend-icon="mdi-cog" link to="/meu-perfil">
+            <v-list-item prepend-icon="mdi-cog" link to="/meu-perfil" :active="this.$route.fullPath == '/meu-perfil'">
                 <v-list-item-subtitle>Configurações</v-list-item-subtitle>
             </v-list-item>
-            <v-list-item prepend-icon="mdi-card-multiple-outline" link to="/meu-perfil">
+            <v-list-item prepend-icon="mdi-card-multiple-outline" link to="/mudar-estabelecimento" :active="this.$route.fullPath == '/mudar-estabelecimento'">
                 <v-list-item-subtitle>Mudar de estabelecimento</v-list-item-subtitle>
             </v-list-item>
             <v-list-item prepend-icon="mdi-exit-to-app" link>

@@ -1,7 +1,7 @@
 <template>
 <v-app>
     <v-layout class="rounded rounded-md">
-        <VerticalMenu :showVerticalMenu="showVerticalMenu" v-if="shouldShowMenu" />
+        <VerticalMenu ref="verticalMenu" v-if="shouldShowMenu" />
         <AppBar @setToggleVerticalMenu="setToggleVerticalMenu" v-if="shouldShowMenu" />
 
         <RouterView/>
@@ -14,7 +14,6 @@
 import { defineComponent } from 'vue';
 import VerticalMenu from '@/components/VerticalMenu.vue'
 import AppBar from '@/components/AppBar.vue'
-import req from './helpers/http'
 import { useUserStore } from './store/user'
 import UserModel from './entities/User'
 import Place from '@/entities/Place';
@@ -50,8 +49,10 @@ const App = defineComponent({
     },
     
     methods: {
-        setToggleVerticalMenu(data){
-            this.showVerticalMenu = data
+        // esse método é chamado no componente AppBar.vue, ao clicar no botão de abrir menu lateral
+        // chamando evento dentro do verticalMenu, para abrir o menu
+        setToggleVerticalMenu(){
+            this.$refs.verticalMenu?.toggleDrawer();
         },
 
         getHiddenMenuRoutes(){

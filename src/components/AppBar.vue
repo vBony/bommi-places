@@ -44,8 +44,8 @@ export default {
 
     methods: {
         toggleVerticalMenu(){
-            this.showVerticalMenu = this.showVerticalMenu == true ? false : true
-            this.$emit("setToggleVerticalMenu", this.showVerticalMenu);
+            // chamando evento dentro do App.vue ao clicar no botão de abrir menu lateral
+            this.$emit("setToggleVerticalMenu");
         }
     }
 }

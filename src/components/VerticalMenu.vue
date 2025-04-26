@@ -2,8 +2,9 @@
     <v-navigation-drawer
         elevation="4"
         class="border-0"
-        :model-value="this.display.lgAndUp == true || showVerticalMenu == true"
+        :model-value="this.display.lgAndUp == true || show == true"
         :temporary="display.lg.value == false"
+        @update:model-value="(val) => {show = val;}"
     >
         <v-list-item
             :prepend-avatar="user.avatarUrl"
@@ -22,6 +23,7 @@
                 title="Agenda" 
                 value="home"
                 to="/agenda"
+                :active="this.$route.fullPath == '/agenda'"
             ></v-list-item>
 
             <v-list-item 
@@ -29,6 +31,7 @@
                 title="Dashboard" 
                 value="home"
                 to="/dashboard"
+                :active="this.$route.fullPath == '/dashboard'"
             ></v-list-item>
             <v-list-group value="Cadastros">
                 <template v-slot:activator="{ props }">
@@ -46,6 +49,7 @@
                     link
                     variant="text"
                     to="/cadastros/funcionarios"
+                    :active="this.$route.fullPath == '/cadastros/funcionarios'"
                 ></v-list-item>
 
                 <v-list-item 
@@ -55,6 +59,7 @@
                     link
                     variant="text"
                     to="/cadastros/servicos"
+                    :active="this.$route.fullPath == '/cadastros/servicos'"
                 ></v-list-item>
             </v-list-group>
         </v-list>
@@ -68,20 +73,24 @@ import UserModel from '../entities/User'
 import { useDisplay } from 'vuetify'
 
 export default {
-    props: {
-        showVerticalMenu: false
-    },
 
     data () {
         return {
+            show: false,
             userStore: useUserStore(),
             user: new UserModel(),
-            display: useDisplay()
+            display: useDisplay(),
         }
     },
 
     created(){
         this.user = this.userStore.getUser ?? new UserModel()
+    },
+
+    methods: {
+        toggleDrawer() {
+            this.show = !this.show;
+        }
     }
 }
 </script>
