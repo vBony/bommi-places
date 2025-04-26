@@ -12,6 +12,9 @@ class User {
     typeName = ""
     avatar = ""
     avatarUrl = ""
+    employeePlace = {
+        typeName: ""
+    }
 }
 
 export default User

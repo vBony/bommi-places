@@ -70,7 +70,7 @@
                                         >
                                             <td width="280">{{ item.firstName }} {{ item.lastName }}</td>
                                             <td width="80" style="min-width: 160px">{{ this.cpfMask.masked(item.cpf) }}</td>
-                                            <td width="100">{{ item.typeName }}</td>
+                                            <td width="100">{{ item.employeePlace.typeName }}</td>
                                             <td width="20">
                                                 <v-btn 
                                                     elevation="0" 

@@ -70,7 +70,7 @@
                                                             ></v-img>
                                                             <div cols="12">
                                                                 <div class="font-weight-bold text-truncate"> {{ user.firstName }} </div>
-                                                                <div class="text-disabled text-subtitle-2"> {{ user.typeName }} </div>
+                                                                <div class="text-disabled text-subtitle-2"> {{ user.employeePlace.typeName }} </div>
                                                             </div>
                                                         </div>
     

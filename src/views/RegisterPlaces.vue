@@ -304,11 +304,14 @@ methods: {
     },
 
     register(){
+        const userStore = useUserStore()
+        
         this.place.cnpj = this.cnpjMask.unmasked(this.place.cnpj)
         this.place.phoneNumber = this.phoneMask.unmasked(this.place.phoneNumber)
 
         req.post(this.serverUrl+'/api/admin/place', this.place)
         .then( (response) => {
+            userStore.setUser(response.data)
             this.resetMessages()
             this.$router.replace('/dashboard')
         })

@@ -9,7 +9,7 @@
             <div>
                 <UserMenu
                     :first_name="user.firstName"
-                    :user_type="user.typeName"
+                    :user_type="user.employeePlace.typeName"
                     :user_avatar_url="user.avatarUrl"
                 />
             </div> 
