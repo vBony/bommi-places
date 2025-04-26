@@ -46,7 +46,7 @@
                         </v-row>
                         <v-row>
                             <v-select
-                                v-model="category.id"
+                                v-model="idCategorySelected"
                                 label="Selecione uma categoria"
                                 no-data-text="Nenhuma categoria encontrada."
                                 variant="outlined"
@@ -58,7 +58,7 @@
                             ></v-select>
                         </v-row>
 
-                        <v-row cols="12" v-if="category.id">
+                        <v-row cols="12" v-if="idCategorySelected">
                             <h4>Serviços</h4>
                             <v-divider class="mb-3"></v-divider>
 
@@ -497,6 +497,7 @@ data() {
         user: new UserModel(),
 
 
+        idCategorySelected: null,
         categories: [],
         category: new CategoryModel(),
         categoryDialog: false,
@@ -576,7 +577,7 @@ methods: {
         .then( (response) => {
             this.loading = false
 
-            const index = this.categories.findIndex(category => category.id === this.category.id);
+            const index = this.categories.findIndex(category => category.id === this.idCategorySelected);
 
             if (index !== -1) {
                 this.categories[index] = response.data;
@@ -597,16 +598,17 @@ methods: {
 
     deleteCategory(){
         this.loading = true
-        req.delete(this.serverUrl+'/api/admin/place/service/category/'+this.category.id )
+        req.delete(this.serverUrl+'/api/admin/place/service/category/'+this.idCategorySelected )
         .then( () => {
             this.loading = false
 
-            const index = this.categories.findIndex(category => category.id === this.category.id);
+            const index = this.categories.findIndex(category => category.id === this.idCategorySelected);
 
             if (index !== -1) {
                 this.categories.splice(index, 1);
                 
                 this.category = new CategoryModel()
+                this.idCategorySelected = null
                 
                 this.deleteCategoryDialog = false
                 this.categoryDialog = false
@@ -621,6 +623,7 @@ methods: {
     },
 
     createCategory(){
+        this.idCategorySelected = null
         this.category.id = null
         this.messages.category = []
 
@@ -629,6 +632,7 @@ methods: {
         .then( (response) => {
             this.loading = false
 
+            this.idCategorySelected = response.data.id
             this.category.id = response.data.id
             this.category.name = null
 
@@ -644,7 +648,7 @@ methods: {
     },
 
     createService(){
-        this.service.idCategory = this.category.id
+        this.service.idCategory = this.idCategorySelected
         this.messages.service = []
 
         this.loading = true
@@ -702,7 +706,7 @@ methods: {
     getServices(){
         this.loading = true
 
-        this.category = this.categories.find(category => category.id === this.category.id);
+        this.category = this.categories.find(category => category.id === this.idCategorySelected);
 
         req.get(this.serverUrl+'/api/admin/place/services/'+this.category.id)
         .then( (response) => {
